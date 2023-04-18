@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'; 
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 import { Recipe } from '@/client/types'
 
@@ -28,7 +28,8 @@ export const RecipeContainer :React.FC = ()=> {
     }
   
     return (
-        <div>
+        <div className="main-container">
+            <Link to='/recipes'>Back to Recipes</Link>
             <DeleteRecipe titleID = {recipe.titleID} />
             <EditRecipe titleID = {recipe.titleID} />
             <Title title = {recipe.title} />

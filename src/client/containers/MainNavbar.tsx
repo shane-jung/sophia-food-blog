@@ -1,30 +1,33 @@
+
+import { NavLink } from 'react-router-dom';
+
 export default function MainNavbar() {
     return (
         <nav>
             <ul>
                 <li>
-                    <a href="/">Home</a>
+                    <NavLink to="/">Home</NavLink>
                 </li>
                 <li>
-                    <a href="/recipes">All Recipes</a>
+                    <NavLink to="/recipes">All Recipes</NavLink>
                 </li>
                 <li>
-                    <a href="/about">Breakfast</a>
+                    <NavLink to="/about">Breakfast</NavLink>
                 </li>
                 <li>
-                    <a href="/about">Lunch</a>
+                    <NavLink to="/about">Lunch</NavLink>
                 </li>
                 <li>
-                    <a href="/about">Dinner</a>
+                    <NavLink to="/about">Dinner</NavLink>
                 </li>
                 <li>
-                    <a href="/about">Desert</a>
+                    <NavLink to="/about">Desert</NavLink>
                 </li>
                 <li>
-                    <a href="/about">Snack</a>
+                    <NavLink to="/about">Snack</NavLink>
                 </li>
                 <li>
-                    <a href="/recipes/create">Create New Recipe</a>
+                    <NavLink to="/recipes/create">Create New Recipe</NavLink>
                 </li>
             </ul>
         </nav>

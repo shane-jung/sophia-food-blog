@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'; 
 import { Recipe } from '@/client/types'
+import { NavLink } from 'react-router-dom';
 
 export default function Recipes(){
 
@@ -14,14 +15,15 @@ export default function Recipes(){
 
     {console.dir(recipes)}
     return (
-        <div>
+        <div className = "main-container">
+            <h1>All Recipes</h1>
             <ul> 
                 { recipes.map(recipe=> (
                     <li
                     key={recipe._id}
                     className="recipe-card"
                     >
-                        <a href={`/recipes/${recipe.titleID}`}>{recipe.title}</a>
+                        <NavLink to={`/recipes/${recipe.titleID}`}>{recipe.title}</NavLink>
                     </li>
                 ))}
             </ul>

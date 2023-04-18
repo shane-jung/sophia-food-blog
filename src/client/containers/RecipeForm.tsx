@@ -17,25 +17,10 @@ export default function RecipeForm(){
     return (
         <form onSubmit= {handleSubmit} action='/api/recipes/create' method='POST'  encType="multipart/form-data">
             <h1>New Recipe</h1>
-            <label>
-                <span> Recipe Title </span>
-                <input type='text' name='title' required/>
-            </label>
-
-            <label>
-                <span>Recipe ID (A short Identifier for the recipe, used in the URL. Example: mac-and-cheese, or 'mashed-potato-paprikish'). </span> 
-                <input type="text" name='titleID' required/>
-            </label>
-
-            <label>
-                Recipe Description
-                <textarea name='description' required/>
-            </label>
-
-            <label>
-                Recipe Instructions 
-                <textarea name='instructions' required/>
-            </label>
+            <input type='text' name='title' required placeholder="Recipe Title" />
+            <input type="text" name='titleID' placeholder="Title ID (A short Identifier for the recipe, used in the URL. Example: mac-and-cheese, or 'mashed-potato-paprikish)" required/>
+            <textarea name='description' placeholder = "Recipe Description" required/>
+            <textarea name='instructions' placeholder = "Recipe Instructions" required/>
 
             <button type='submit'>Submit</button>
         </form>
