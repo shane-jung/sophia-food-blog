@@ -1,0 +1,16 @@
+{
+  "verbose": true,
+  "ignore": [
+      ".git",
+      "node_modules/**/node_modules"
+  ],
+  "watch": [
+      "src/server/"
+    ],
+  "execMap":{
+    "ts": "ts-node",
+    "tsx": "ts-node"
+  },
+  "ext": "ts,tsx",
+  "legacy-watch": true
+}

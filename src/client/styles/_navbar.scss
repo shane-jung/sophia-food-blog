@@ -1,0 +1,12 @@
+nav {
+    background-color: $light-theme-background;
+    ul {
+        display: flex;
+        flex: {
+            direction: row;
+            wrap: nowrap;
+        }
+        justify-content: space-around;  
+        list-style-type: none;
+    }
+}
