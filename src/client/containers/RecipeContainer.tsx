@@ -3,40 +3,40 @@ import { Link, useLoaderData } from 'react-router-dom';
 
 import { Recipe } from '@/client/types'
 
-
+import RecipeElement from '@/client/components/Recipe/RecipeElement';
 import Title from '@/client/components/Recipe/Title';
-import Date from '@/client/components/Recipe/Date';
-import Description from '@/client/components/Recipe/Description';
-import Ingredients from '@/client/components/Recipe/Ingredients';
-import Instructions from '@/client/components/Recipe/Instructions';
+import RecipeCard from '@/client/components/Recipe/RecipeCard';
+import RecipeToolbar from '@/client/components/Recipe/RecipeToolbar'
 import DeleteRecipe from '@/client/components/DeleteRecipe';
 import EditRecipe from '@/client/components/EditRecipe';
 
 export const RecipeContainer :React.FC = ()=> {
-    //const recipe = useLoaderData() as Recipe;
 
+ 
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const loaderRecipe = useLoaderData() as Recipe;
     useEffect(() =>{
         setRecipe(loaderRecipe);
     }, []);
-    if(recipe == null) return <div>Recipe is null</div>
+    console.log()
 
-    const dates = { 
-        dateEdited: recipe.dateEdited,
-        dateCreated: recipe.dateCreated
-    }
-  
+    if(recipe == null) return <div>Recipe is null</div>;
+
+    const isAuthorized = true;
+    const text =  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo illum nihil earum sit veritatis,
+    accusamus aliquid deserunt cum et voluptatibus aut, eos perferendis aliquam eaque ratione 
+    asperiores culpa. Molestias, impedit.</p>;
     return (
-        <div className="main-container">
+        <div className = "recipe-container">
+            <RecipeElement isAuthorized = { isAuthorized } children = { <Title title = {recipe.title} /> } />
+            <RecipeElement isAuthorized = { isAuthorized } children = { <RecipeToolbar /> } />
+            <RecipeElement isAuthorized = { isAuthorized } children = { text } />
+            
+           
+            <RecipeElement isAuthorized = { isAuthorized } children = { <RecipeCard recipe = {recipe} /> } />
             <Link to='/recipes'>Back to Recipes</Link>
             <DeleteRecipe titleID = {recipe.titleID} />
             <EditRecipe titleID = {recipe.titleID} />
-            <Title title = {recipe.title} />
-            <Date dates = { dates } />
-            <Description description = {recipe.description}/>
-            {/* <Ingredients ingredients = {recipe.ingredients}/>
-            <Instructions instructions = {recipe.instructions}/> */}
         </div>
     );
 }

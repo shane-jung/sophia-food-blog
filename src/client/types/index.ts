@@ -2,12 +2,12 @@ export type Recipe = {
     _id: string;
     title: string;
     titleID: string;
-    dateCreated?: Date;
-    dateEdited?: Date;
+    dateCreated: string;
+    dateEdited: string;
     description: string;
     author?: Author;
     ingredients : Ingredient[];
-    instructions?: string[];
+    directions: string;
     imageURLs?: string[];
     comments?: Comment[];
     tags? : string [];

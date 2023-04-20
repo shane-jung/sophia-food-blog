@@ -13,15 +13,14 @@ export default function Recipes(){
         .catch(error => console.log(error));
     }, []);
 
-    {console.dir(recipes)}
     return (
-        <div className = "main-container">
+        <div>
             <h1>All Recipes</h1>
             <ul> 
                 { recipes.map(recipe=> (
                     <li
                     key={recipe._id}
-                    className="recipe-card"
+                    className="recipe-thumbnail"
                     >
                         <NavLink to={`/recipes/${recipe.titleID}`}>{recipe.title}</NavLink>
                     </li>

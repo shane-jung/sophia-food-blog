@@ -16,9 +16,10 @@ const router = createBrowserRouter(
       <Route index element = {<HomePage/>} />
       <Route path = "recipes">
         <Route index element= {<Recipes/>}/>
-        <Route path = "create" element = {<RecipeForm />}/>
-        <Route path = ":titleID" loader = {recipeLoader} element = {<RecipeContainer />}>
-          <Route path = "edit" element = {<RecipeForm />} />
+        <Route path = "create" element = {<RecipeForm/>}/>
+        <Route path = ":titleID" element ={undefined}>
+          <Route index  loader = {recipeLoader } element = {<RecipeContainer/>} />
+          <Route path = "edit" loader = {recipeLoader } element = {<RecipeForm/>} />
         </Route>
       </Route>
     </Route>
@@ -33,7 +34,7 @@ export const App: React.FC = () => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>Sophia Recipe Blog</title>
-        <link rel="canonical" href="https://takenote.dev" />
+        <link rel="canonical" href="/" />
       </Helmet>
       <RouterProvider router = {router}/>
     </HelmetProvider>

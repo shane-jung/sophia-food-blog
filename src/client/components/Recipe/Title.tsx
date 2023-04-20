@@ -1,5 +1,9 @@
-export default function Title( props: {title: string}){
+interface TitleProps{
+    title:string;
+}
+
+export default function Title( props : TitleProps){
     return(
-        <h1>Recipe Title: {props.title}</h1>
+        <h1 className = "recipe-title header" >{props.title}</h1>
     )
 }

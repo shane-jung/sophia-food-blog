@@ -9,13 +9,13 @@ async function insertFakeRecipes(numRecipes: number): Promise<void> {
   for (let i = 0; i < numRecipes; i++) {
     const title = "test recipe " + (i+1);
     const ingredients = generateFakeIngredients(Math.round(Math.random() * 10) + 1);
-    const instructions = [ " These ", " are ", " fake ", " instructions "];
+    const directions = [ " These ", " are ", " fake ", " directions "];
     const titleID = "test-recipe-" + (i+1);
     const fakeRecipe = {
       title,
       titleID, 
       ingredients,
-      instructions,
+      directions,
     };
     console.dir(fakeRecipe);
     await recipesCollection.insertOne(fakeRecipe);

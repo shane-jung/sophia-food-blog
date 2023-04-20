@@ -1,5 +1,11 @@
-export default function Description(props: {description: string}){
+import { useRef } from "react";
+
+interface DescriptionProps {
+    description:string;
+}
+
+export default function Description(props: DescriptionProps){
     return(
-        <p>Description: {props.description}</p>
+        <p  className = "recipe-description" dangerouslySetInnerHTML ={{__html: props.description}}></p>
     )
 }

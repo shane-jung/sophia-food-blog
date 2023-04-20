@@ -5,7 +5,6 @@ export default function DeleteRecipe(props: {titleID: string}){
         }).then(() => {
             window.location.href = '/recipes';
         });
-        alert('Delete Recipe button clicked')
     }
         
     return(

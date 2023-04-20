@@ -1,14 +1,19 @@
-export default function Ingredients(props: {recipe: Recipe}){
-    var ingredientsList = props.recipe.ingredients.map((ingredient) => {
+import { Ingredient } from '@/client/types';
+
+interface IngredientProps{
+    ingredients: Ingredient[];
+}
+
+export default function Ingredients(props: IngredientProps){
+    var ingredientsList = props.ingredients.map((ingredient) => {
         return <li> {ingredient.quantity + " " + ingredient.name} </li>
     });
+
     return (
         <div>
             <h2>Ingredients</h2>
             <ul>
-                {props.recipe.ingredients.map(ingredient => (
-                    <li key={ingredient}>{ingredient}</li>
-                ))}
+               { ingredientsList } 
             </ul>
         </div>
     );

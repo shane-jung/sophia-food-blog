@@ -1,12 +1,36 @@
 nav {
-    background-color: $light-theme-background;
+    background-color: $accent; 
+    margin:.5em 0;     
     ul {
+
         display: flex;
         flex: {
             direction: row;
             wrap: nowrap;
         }
-        justify-content: space-around;  
+        justify-content: space-between;  
         list-style-type: none;
+
+        li{
+            //border:1px solid $accent-gray;
+            border-radius:.25em;
+            transition: background-color .2s ease-out;
+            &:hover{
+                background-color: $accent-dark;
+            }
+            a{
+                display:inline-block;
+                padding:.25em;
+                height:100%;
+                color: $font-color;
+                text-decoration: none;
+                font-size: 1.1em;
+                font-weight: 500;
+                transition:color .5s ease-out;
+                &:hover{
+                    color: $font-color;
+                }
+            }
+        }
     }
 }

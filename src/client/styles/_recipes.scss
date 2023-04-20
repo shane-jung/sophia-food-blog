@@ -13,6 +13,57 @@ ul {
 .main-container{
     width: 60%;
     margin: auto;
+    border:2px solid $accent-gray;
+}
+
+.recipe-container{
+    padding:1em 1.5em;
+}
+
+.recipe-element{
+    display: flex; 
+    flex-direction:row;
+}
+.recipe-element.editing * {
+    content-editable:true;
+}
+.recipe-component{ 
+
+}
+.recipe-title{
+    font-size:2.75em;
+    margin:.125em auto;
+}
+
+.recipe-title-id{
+    margin: auto;
+}
+
+.recipe-description{
+    width:80%;
+    text-overflow: wrap;
+    text-align:center;
+    font-style: italic;
+    font-size: 1em;
+    margin:.5em auto;
 }
 
 
+.recipe-dates{
+    font-size:.875em;
+    font-style: italic;
+    color: $font-color-light;
+    margin: .5em auto;
+}
+
+
+.recipe-card{
+    background:#f0f7ff;
+    outline:.125rem solid black;
+    width:70%;  
+    margin:auto;
+    box-shadow: 0 0 .5rem .0625rem $accent-lightgray;
+    .header{
+        font-size:1.75em;
+    }
+}

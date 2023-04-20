@@ -21,6 +21,7 @@ router.post('/create', upload.none(), recipeController.createRecipe);
 
 
 router.route('/:titleID/edit')
-    .put(recipeController.updateRecipe);
+    .get(recipeController.getRecipeById)
+    .put(upload.none(), recipeController.updateRecipe);
 
 export default router; 

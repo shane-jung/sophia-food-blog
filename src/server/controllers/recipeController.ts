@@ -30,12 +30,13 @@ const recipeController ={
         if(typedRecipe._id!=null) typedRecipe._id= typedRecipe._id.toString();
         return res.status(200).json(recipe);
     }  catch(error) {
-        console.log(error);
         return res.status(500).json({ message: 'Internal server error' });
     }
   },
   createRecipe: async (req: Request, res: Response) => {
+    console.log(req);
     const recipe = req.body;
+    console.log(recipe);
     try{
         const db = await connectToDatabase();
         const result = await db.collection('Recipes').insertOne({ _id : new ObjectId(), 
@@ -49,19 +50,15 @@ const recipeController ={
     }
     return;
   },
-  updateRecipe: async (ID: string) => {
+  updateRecipe: async (req: Request, res: Response) => {
+
+    const recipe = req.body;
+    console.log(req);
     try{
         const db = await connectToDatabase();
-        const recipe = {
-            title: "Updated Recipe",
-            author: "Test",
-            description: "Updated this",
-            ingredients: "Test",
-            comments: "Test",
-        }
-
-        const result = await db.collection('Recipes').updateOne({'_id': new ObjectId(ID)}, {"$set": recipe});
-        return result;
+        const result = await db.collection('Recipes').updateOne({'titleID': recipe.titleID}, {"$set": recipe});
+        console.log(result);
+        return res.status(200).json({message: "Recipe updated successfully"});
     } catch (error) {
         console.error(`Error fetching recipe in updateRecipe: ${error}`);
         throw error;

@@ -1,19 +1,15 @@
 %forms {
-    display: block;
-    border-radius: 0.3rem;
-    border: 1px solid $accent-gray;
-    padding: 0.75rem;
+    display: block;   
+    background:none;
     outline: none;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 100%;
+    border:none; 
+    text-align: center; 
+    border-radius:.5rem; 
   }
   
   %forms-focus {
-    outline: 0;
-    border: 1px solid lighten($primary, 15%);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+
+    outline:1px solid $primary;
   }
   
   #{$forms} {
@@ -25,3 +21,32 @@
     }
   }
   
+
+
+.ql-container{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 1.125em;
+  position: relative;
+}
+
+.quill {
+  position:relative;
+}
+
+.ql-toolbar.ql-snow {
+  display:none;
+  .ql-formats{
+    button{
+      font-size:1.25em;
+      margin: .25em 0;
+    }
+  }
+
+  transition:top .5s ease-out;
+}
+
+
+.ql-editor{
+  line-height:1.75em;
+  border: 1px solid black;
+}
