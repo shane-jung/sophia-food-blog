@@ -8,10 +8,10 @@ let cachedDb: Db;
 export default async function connectToDatabase(): Promise<Db>{
   
   if (cachedDb) {
-    console.log("Existing cached connection found!");
+    // console.log("Existing cached connection found!");
     return cachedDb;
   }
-  console.log("Aquiring new DB connection....");
+  // console.log("Aquiring new DB connection....");
   try {
     // Connect to our MongoDB database hosted on MongoDB Atlas
 

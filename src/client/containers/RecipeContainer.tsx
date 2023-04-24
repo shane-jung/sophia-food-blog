@@ -1,42 +1,38 @@
-import React, { useEffect, useState } from 'react'; 
+import { useEffect, useState } from 'react'; 
 import { Link, useLoaderData } from 'react-router-dom';
 
-import { Recipe } from '@/client/types'
+import { Recipe,EmptyRecipe } from '@/client/types'
 
-import RecipeElement from '@/client/components/Recipe/RecipeElement';
-import Title from '@/client/components/Recipe/Title';
 import RecipeCard from '@/client/components/Recipe/RecipeCard';
 import RecipeToolbar from '@/client/components/Recipe/RecipeToolbar'
-import DeleteRecipe from '@/client/components/DeleteRecipe';
-import EditRecipe from '@/client/components/EditRecipe';
+import Comments from '@/client/components/other/Comments'
+import AuthorSnippet from '../components/Recipe/AuthorSnippet';
 
-export const RecipeContainer :React.FC = ()=> {
+import SimpleTextRecipeComponent from '../components/Recipe/SimpleTextRecipeComponent';
+import RichTextRecipeComponent from '../components/Recipe/RichTextRecipeComponent';
 
- 
-    const [recipe, setRecipe] = useState<Recipe | null>(null);
-    const loaderRecipe = useLoaderData() as Recipe;
-    useEffect(() =>{
-        setRecipe(loaderRecipe);
-    }, []);
-    console.log()
+import { _viewMode } from '../enums';
+import TitleID from '../components/Recipe/TitleID';
 
-    if(recipe == null) return <div>Recipe is null</div>;
+interface RecipeContainerProps{
+    viewMode : _viewMode,
+    recipe: Recipe,
+}
 
-    const isAuthorized = true;
-    const text =  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo illum nihil earum sit veritatis,
-    accusamus aliquid deserunt cum et voluptatibus aut, eos perferendis aliquam eaque ratione 
-    asperiores culpa. Molestias, impedit.</p>;
+import { CommentType } from '@/client/types';
+
+export default function RecipeContainer({viewMode, recipe}: RecipeContainerProps) {
     return (
         <div className = "recipe-container">
-            <RecipeElement isAuthorized = { isAuthorized } children = { <Title title = {recipe.title} /> } />
-            <RecipeElement isAuthorized = { isAuthorized } children = { <RecipeToolbar /> } />
-            <RecipeElement isAuthorized = { isAuthorized } children = { text } />
-            
-           
-            <RecipeElement isAuthorized = { isAuthorized } children = { <RecipeCard recipe = {recipe} /> } />
-            <Link to='/recipes'>Back to Recipes</Link>
-            <DeleteRecipe titleID = {recipe.titleID} />
-            <EditRecipe titleID = {recipe.titleID} />
+            <SimpleTextRecipeComponent name="title" className = "recipe-title" value = {recipe.title} />
+            <AuthorSnippet author = {recipe.author}/>
+            <TitleID value = {recipe.titleID}/>
+            <RecipeToolbar /> 
+            <RichTextRecipeComponent name="background" className = "recipe-background" value = {recipe.background}/>
+            <RecipeCard recipe = {recipe} /> 
         </div>
     );
 }
+
+
+                    

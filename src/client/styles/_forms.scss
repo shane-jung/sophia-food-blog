@@ -9,12 +9,12 @@
   
   %forms-focus {
 
-    outline:1px solid $primary;
+   // outline:1px solid $primary;
   }
   
   #{$forms} {
     @extend %forms;
-  
+    
     &:focus,
     &:active {
       @extend %forms-focus;
@@ -23,30 +23,103 @@
   
 
 
-.ql-container{
+.ql-container.ql-snow{
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 1.125em;
   position: relative;
+  outline:none;
+  border:none;
 }
 
 .quill {
   position:relative;
+  
 }
 
 .ql-toolbar.ql-snow {
   display:none;
+  position:absolute;
+  right:0;
+  flex-direction:column;
+  transform:translate(150%,-50%);
+  top:55%;
+  background:white;
+  box-shadow: 0 0 5px 1px rgb(113, 113, 113);
   .ql-formats{
+    display:flex;
+    flex-direction:column;
+    margin:.25em;
     button{
       font-size:1.25em;
       margin: .25em 0;
+      padding:0;
     }
   }
 
-  transition:top .5s ease-out;
+  transition:height .5s ease-out;
+}
+
+.quill:focus-within {
+  .ql-toolbar.ql-snow{ 
+    display:flex;
+  }
+  .ql-editor{
+    
+    outline: 2px solid $accent
+  }
+}
+
+.ql-editor{
+  line-height: inherit;
+  font-size:inherit; 
+  font-style: inherit;
+  width:100%;
+  height:100%;  
+  border:none;
+  outline:.125em solid transparent;
+  transition: .1s outline ease-out;
+  border-radius: .25em;
+  margin:0;
+  padding:.5em .75em;
+  ol{
+    padding-left:.5em;
+  }
 }
 
 
-.ql-editor{
-  line-height:1.75em;
-  border: 1px solid black;
+.hidden-input{
+  display:none;
+}
+
+.input-field:focus-within{
+  //outline:1px solid black;
+
+}
+
+input{
+  display:block;
+  width:100%;
+}
+
+.quill, .ql-container, .ql-editor{
+}
+
+strong{
+  font-weight:bold;
+}
+
+
+.user-form{
+  font-family:inherit;
+  width: clamp(300px, 50%, 600px);
+  margin:auto;
+  outline:2px solid black;
+  input{
+    width: 80%;
+    margin:.5em auto;
+    border-radius:.25em;
+    padding:.25em;
+    outline:1px solid black;
+    font-size:1.0625em;
+  }
 }

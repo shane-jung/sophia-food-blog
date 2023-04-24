@@ -1,3 +1,5 @@
+import { sampleAuthor } from "@/server/seed";
+
 export type Recipe = {
     _id: string;
     title: string;
@@ -5,18 +7,19 @@ export type Recipe = {
     dateCreated: string;
     dateEdited: string;
     description: string;
-    author?: Author;
-    ingredients : Ingredient[];
+    author: Author;
+    background : string;
+    ingredients : string[];
+    // ingredients : Ingredient[];
     directions: string;
     imageURLs?: string[];
-    comments?: Comment[];
+    comments: string[];
     tags? : string [];
     ingredientTags? : string[];
     prepTime? : string;
     cookTime? : string; 
     ratings? : Rating [];
     notes? : string [];
-    children? : JSX.Element | JSX.Element[];
 
 }
 
@@ -29,7 +32,8 @@ export type Ingredient = {
 
 export type Profile = {
     _id: string;
-    name: string;
+    firstName: string;
+    lastName: string;   
     email: string;
     password: string;  
     savedRecipes: Recipe[];
@@ -42,12 +46,12 @@ export interface Author extends Profile {
     recipes: Recipe[];
 }
 
-export type Comment = {
+export type CommentType= {
     _id: string;
-    profile: Profile;
+    profile?: Profile;
     content: string;
-    date: Date;
-    replies: Comment[];
+    date: string;
+    replies?: CommentType[];
     rating?: Rating;
 }
 
@@ -55,6 +59,20 @@ export type Rating = {
     _id: string;
     profile?: Profile;
     rating: number;
-    date: Date;
+    date: string;
 
+}
+
+export const EmptyRecipe:Recipe = {
+    _id: "",
+    title: "",
+    titleID: "",
+    dateCreated: "",
+    dateEdited: "",
+    description: "",
+    background : "",
+    author: sampleAuthor,
+    ingredients : [],
+    directions: "",
+    comments: []
 }

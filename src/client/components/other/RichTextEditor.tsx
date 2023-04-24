@@ -1,16 +1,19 @@
-import { useState, useRef } from "react"
+import { EditableContext } from "@/client/contexts/EditableContext";
+import { useState, useRef, useContext, useEffect } from "react"
 import  ReactQuill from "react-quill"
 
 
 
 interface RichTextEditorProps {
-    reference: any;
+    // reference: any;
+    className: string;
+    placeholder : string;
     
 }
 export default function RichTextEditor(props:RichTextEditorProps){
 
-    const [state, setState] = useState({ text: '' })
-    
+    const [state, setState] = useState({ content: '' })
+    const isEditable = useContext(EditableContext);
 
     const modules = {
         toolbar: [
@@ -20,6 +23,8 @@ export default function RichTextEditor(props:RichTextEditorProps){
           ['clean']
         ],
       }
+
+    
     
     const formats = [
         'bold', 'italic', 'underline', 'strike', 'blockquote',
@@ -30,8 +35,8 @@ export default function RichTextEditor(props:RichTextEditorProps){
     
 
     function onChange(value:string){
-        setState({ text: value })
+        setState({ content: value })
     }
-    return <ReactQuill theme="snow" modules = {modules} formats = {formats} ref = {props.reference} onChange = {onChange}/>
+    return <ReactQuill readOnly = {!isEditable} defaultValue={props.placeholder} className= {props.className} theme="snow" modules = {modules} formats = {formats} onChange = {onChange}/>
 
 }
