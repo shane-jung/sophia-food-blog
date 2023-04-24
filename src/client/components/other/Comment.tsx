@@ -7,7 +7,7 @@ export default function Comment({comment}:CommentProps){
     return(
         <div className = "comment">
             <p className = "comment-content">{comment.content}</p>
-            <p className = "comment-date">{comment.date}</p>
+            <p className = "comment-date">{comment.date.toLocaleString()}</p>
             <CommentToolbar></CommentToolbar>
         </div>
 

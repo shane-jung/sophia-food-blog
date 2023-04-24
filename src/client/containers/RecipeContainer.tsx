@@ -20,11 +20,13 @@ interface RecipeContainerProps{
 }
 
 import { CommentType } from '@/client/types';
+import RatingBar from '../components/Recipe/RatingBar';
 
 export default function RecipeContainer({viewMode, recipe}: RecipeContainerProps) {
     return (
         <div className = "recipe-container">
             <SimpleTextRecipeComponent name="title" className = "recipe-title" value = {recipe.title} />
+            {/* <RatingBar/> */}
             <AuthorSnippet author = {recipe.author}/>
             <TitleID value = {recipe.titleID}/>
             <RecipeToolbar /> 

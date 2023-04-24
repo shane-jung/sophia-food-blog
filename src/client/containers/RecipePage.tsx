@@ -33,6 +33,7 @@ export default function RecipePage() {
     //         <button onClick = {toggle}>{text}</button>
     //     )
     // }
+    const [viewMode, setViewMode] = useState(isAuthenticated)
     
     const inner = isAuthenticated ? <RecipeForm recipe={recipe} /> : <RecipeContainer recipe={recipe} viewMode = {_viewMode.VIEWING}/>
     return (  
@@ -41,7 +42,7 @@ export default function RecipePage() {
             <AuthenticationContext.Provider value = {isAuthenticated}>
                 <>
                     {inner}
-                    <Comments/>
+                    { recipe.titleID && <Comments/> }
                     <Link to='/recipes'>Back to Recipes</Link>
                 </>
             </AuthenticationContext.Provider>

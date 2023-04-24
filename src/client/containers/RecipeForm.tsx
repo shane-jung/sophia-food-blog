@@ -28,7 +28,7 @@ export default function RecipeForm({recipe}:RecipeFormProps){
         const data = new FormData(event.currentTarget);
         if(!verifyInputs(data)) return;
         data.set('dateEdited', new Date().toISOString());
-        let reqLink, method, redirect;
+        let reqLink, method, redirect :string;
         if(viewMode == _viewMode.EDITING){  //In the case that the recipe already exists, we just want to update the recipe. 
             method = 'POST';
             reqLink = `/api/recipes/${recipe.titleID}`;
@@ -44,6 +44,8 @@ export default function RecipeForm({recipe}:RecipeFormProps){
         fetch(reqLink, {
             method: method,
             body: data, 
+        }).then(()=>{
+            if(redirect) window.location.href = redirect;
         })
     }
 
