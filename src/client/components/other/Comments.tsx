@@ -3,15 +3,17 @@ import { CommentType } from '@/client/types';
 import { useLoaderData } from 'react-router';
 
 import { Recipe } from '@/client/types';
+import { useState } from 'react';
 
 export default function Comments(){
-    const [recipeLoaderData, comments] = useLoaderData() as [Recipe, CommentType[]];
+    const [recipeLoaderData, commentLoaderData] = useLoaderData() as [Recipe, CommentType[]];
+    const [comments, setComments] = useState(commentLoaderData);
     function handleSubmit(event:any){
-
         event.preventDefault();
         let data = new FormData(event.currentTarget);
-        data.append('date', new Date().toString());
-
+        data.append('date', new Date().toISOString());
+        let content = data.get("content") as string;
+        let date = data.get("date") as string;
         fetch(`/api/comments`,
         {
             method:"POST",
@@ -19,6 +21,8 @@ export default function Comments(){
         }
         ).then(async (response)=>{
             const commentId = (await response.json()).insertedId;
+            let newComment :CommentType= {content: content, date: date, _id: commentId};
+            setComments([...comments, newComment])
             const data = new FormData();
             data.append("commentId", commentId);
             return fetch(`/api/recipes/${recipeLoaderData.titleID}/comment`, 
@@ -40,7 +44,7 @@ export default function Comments(){
             </div>
             <form className="comment-form" onSubmit={handleSubmit} method="POST">
                 <input type='text' name="content" className = "comment-textarea" placeholder='Add a comment...'/>
-                <input type="submit" value="Submit"></input>
+                <button type="submit" className="simple-button comment-submit-button">Submit</button>
             </form>
            
         </div>
