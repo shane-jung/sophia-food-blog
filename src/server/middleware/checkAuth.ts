@@ -1,3 +1,3 @@
 export default function checkAuth(){
-    console.log('here');
+    //console.log('here');
 }

@@ -1,5 +1,9 @@
 export default function DeleteRecipe(props: {titleID: string}){
     function handleClick(){
+        
+    }
+
+    function handleDelete(){
         fetch(`/api/recipes/${props.titleID}`, {
             method: 'DELETE',   
         }).then(() => {
@@ -8,6 +12,6 @@ export default function DeleteRecipe(props: {titleID: string}){
     }
         
     return(
-        <button onClick= {handleClick}> Delete this Recipe</button>
+        <button className= "delete-button simple-button" onClick= {handleClick}> Delete this Recipe</button>
     )
 }

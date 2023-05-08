@@ -7,21 +7,18 @@ var upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 
+router.post('/create', upload.none(), recipeController.createRecipe);
+
+router.post('/:titleID/comment', upload.none(), recipeController.addCommentToRecipe)
+
 router.route('/:titleID')
     .get(recipeController.getRecipeById)
-    .put(checkAuth, recipeController.updateRecipe)
+    .post(upload.none(), recipeController.updateRecipe)
     .delete(recipeController.deleteRecipe);
 
 
 router.route('/')
     .get(recipeController.getAllRecipes)
     .post(recipeController.createRecipe);
-
-router.post('/create', upload.none(), recipeController.createRecipe);
-
-
-router.route('/:titleID/edit')
-    .get(recipeController.getRecipeById)
-    .put(upload.none(), recipeController.updateRecipe);
-
+    
 export default router; 

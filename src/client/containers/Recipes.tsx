@@ -16,7 +16,7 @@ export default function Recipes(){
     return (
         <div>
             <h1>All Recipes</h1>
-            <ul> 
+            <ul className = "recipes-grid"> 
                 { recipes.map(recipe=> (
                     <li
                     key={recipe._id}

@@ -1,8 +1,8 @@
  
 import DateComponent from "./DateComponent"
-import Description from "./Description"
-import Directions from "./Directions"
-import Title from "./Title"
+import SimpleTextRecipeComponent from "./SimpleTextRecipeComponent"
+import RichTextRecipeComponent from "./RichTextRecipeComponent"
+import Ingredients from "./Ingredients"
 
 import { Recipe } from "@/client/types"
 
@@ -13,11 +13,13 @@ interface RecipeCardProps {
 export default function RecipeCard(recipeProps:RecipeCardProps){
     const recipe = recipeProps.recipe;
     return (
-        <div className="recipe-card">
-            <Title title = {recipe.title}/>
+        <div className="recipe-card"> 
+            <SimpleTextRecipeComponent name="card-title" className = "recipe-title header" value = {recipe.title} />
             <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  />
-            <Description description = {recipe.description}/>
-            <Directions directions = {recipe.directions}/>
+            <RichTextRecipeComponent name="description" className = "recipe-description" value = {recipe.description}/>
+            <Ingredients ingredients = {recipe.ingredients} />
+
+            <RichTextRecipeComponent name="directions" className = "recipe-directions" value = {recipe.directions}/>
         </div>
       
     );

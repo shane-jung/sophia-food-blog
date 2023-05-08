@@ -1,8 +1,13 @@
+import express, { Router } from 'express'
+
+const app = express()
+app.use(express.urlencoded({extended:true}))
+app.use(express.json())
+
 import path from 'path'
 import { fileURLToPath } from 'url';
 
 
-import express, { Router } from 'express'
 import cookieParser from 'cookie-parser'
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,7 +21,8 @@ const __dirname = path.dirname(__filename);
 // import compression from 'compression'
 
 export default function initializeServer(router: Router) {
-  const app = express()
+  
+  
   const isProduction = process.env.NODE_ENV === 'production'
   const origin = { origin: isProduction ? false : '*' }
 
@@ -25,8 +31,6 @@ export default function initializeServer(router: Router) {
 //   app.use(cors(origin))  
 //   app.use(helmet())
 //   app.use(compression())
-  app.use(express.urlencoded({ extended: true }))
-  app.use(express.json())
 
   // app.use((request, response, next) => {
   //   response.header('Content-Security-Policy', "img-src 'self' *.githubusercontent.com")

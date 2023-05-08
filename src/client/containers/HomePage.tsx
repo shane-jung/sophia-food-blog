@@ -1,14 +1,15 @@
 import { NavLink } from "react-router-dom";
+import MainNavbar from "./MainNavbar";
 
 export default function HomePage(){
     return (
-        
-        <div>
-            <h1>Sophia's Food Blog</h1>
-            <NavLink to="/recipes/create">
-                Create New Recipe
-            </NavLink>
-        </div>
+        <>
+            <div>
+                <NavLink to="/recipes/create">
+                    Create New Recipe
+                </NavLink>
+            </div>
+        </>
 
         
        
