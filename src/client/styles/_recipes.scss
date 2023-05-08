@@ -114,6 +114,7 @@ form input:focus:not(:read-only){
     border-top:2px solid rgb(74, 74, 74);
     padding:.5em 0;
     margin:.25em 0;
+
 }
 .comment-content{
     margin:0;
@@ -189,4 +190,30 @@ form input:focus:not(:read-only){
 
 .login-button{
     text-align:right;
+}
+
+
+.rating-bar{
+    display:block;
+}
+.rating-star{
+    display:inline-block;
+    height:1em;
+    width:1em;
+    cursor:pointer;
+    border-radius:100%;
+    border:1px solid black;
+    margin: .0625em;
+    &:hover{
+        background:rgb(253, 224, 3);
+    }
+}
+.rating-star.checked{
+        background:rgb(253, 224, 3);
+}
+.rating-star-input{
+    display:inline;
+    width:0;
+    height:0;
+    appearance:none;
 }
