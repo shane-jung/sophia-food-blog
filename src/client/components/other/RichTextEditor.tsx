@@ -1,4 +1,4 @@
-import { EditableContext } from "@/client/contexts/EditableContext";
+import { EditableContext } from "@/client/contexts/EditableContext"
 import { useState, useRef, useContext, useEffect } from "react"
 import  ReactQuill from "react-quill"
 

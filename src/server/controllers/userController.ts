@@ -17,15 +17,16 @@ const userController = {
     }
   },
   createUser: async (req: Request, res: Response) => {
-    return res.status(200).json({message:"Need to implement"});
-    const user = req.body;
+    //return res.status(200).json({message:"Need to implement"});
+    const user = res.locals.user;
+    console.log("USER IN CREATE USER: " , user);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Users').insertOne({ _id : new ObjectId(), 
+        const result = await db.collection('Profiles').insertOne({ _id : new ObjectId(), 
             ...user
         });
-        
-        return res.status(200).json({message: "User created successfully"});
+        console.log(result);
+        return res.json({message: "User created successfully"});
     } catch (error) {
         console.error(`Error creating user in createUser: ${error}`);
         throw error;

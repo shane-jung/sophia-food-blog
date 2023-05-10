@@ -8,6 +8,8 @@ export default defineConfig({
   build: {
     outDir: 'public',
     rollupOptions: {
+        external: ['nock', 'mock-aws-s3', 'aws-sdk'],
+
         // overwrite default .html entry
         input: './src/client/main.tsx',
       }
@@ -18,7 +20,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:5173',
         changeOrigin: true,
       },
     },
@@ -27,5 +29,6 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-  }
+  },
+  optimizeDeps: {},
 })
