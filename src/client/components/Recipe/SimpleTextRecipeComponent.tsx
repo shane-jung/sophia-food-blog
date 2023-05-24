@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { EditableContext } from "../../contexts/EditableContext"
-import { AuthenticationContext } from "../../contexts/AuthenticationContext"
+import useAuth  from "@/client/utils/useAuth"
 
 interface SimpleTextRecipeComponentProps{
     className: string;
@@ -9,12 +9,12 @@ interface SimpleTextRecipeComponentProps{
 }
 export default function SimpleTextRecipeComponent(props:SimpleTextRecipeComponentProps){
     const isEditable = useContext(EditableContext);
-    const isAuthenticated = useContext(AuthenticationContext);
+    const { auth } = useAuth();
     const placeholder = "Recipe " + props.name;
     return (
         <>  
             {
-                isAuthenticated  ?
+                auth?.accessToken  ?
                     <input name= {props.name} className ={props.className + " input-field"} defaultValue = {props.value} placeholder={placeholder} readOnly = {!isEditable} required></input>
                 :
                     <div className = {props.className}>{props.value}</div>

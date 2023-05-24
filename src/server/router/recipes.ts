@@ -7,7 +7,7 @@ var upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 
-router.post('/create', upload.none(), recipeController.createRecipe);
+router.post('/create', checkAuth, upload.none(), recipeController.createRecipe);
 
 router.post('/:titleID/comment', upload.none(), recipeController.addCommentToRecipe)
 

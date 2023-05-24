@@ -1,7 +1,9 @@
 
 import { NavLink } from 'react-router-dom';
+import useAuth from '../utils/useAuth';
 
 export default function MainNavbar() {
+    const { auth } = useAuth();
     return (
         <nav>
             <ul>
@@ -26,9 +28,11 @@ export default function MainNavbar() {
                 <li>
                     <NavLink to="/">Snack</NavLink>
                 </li>
-                <li>
-                    <NavLink to="/recipes/create">Create New Recipe</NavLink>
-                </li>
+                { auth?.roles?.find((role:any) => role == 1000) &&
+                    <li>
+                        <NavLink to="/recipes/create">Create New Recipe</NavLink>
+                    </li>
+                }
             </ul>
         </nav>
     );

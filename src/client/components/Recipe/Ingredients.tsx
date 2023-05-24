@@ -1,4 +1,5 @@
-import { AuthenticationContext } from "@/client/contexts/AuthenticationContext";
+import useAuth from "@/client/utils/useAuth"
+
 import { EditableContext } from "@/client/contexts/EditableContext";
 import { useState } from "react";
 import { useContext } from "react"
@@ -8,7 +9,8 @@ interface IngredientProps{
 }
 
 export default function Ingredients(props: IngredientProps){
-    const isAuthenticated = useContext(AuthenticationContext)
+    const { auth } = useAuth()
+    console.log(auth?.auth);
     const isEditable = useContext(EditableContext);
     const [ingredientsList, setIngredientsList] = useState(props.ingredients || []);
     
@@ -32,7 +34,7 @@ export default function Ingredients(props: IngredientProps){
                     })
                 }
             </ul>
-            {isAuthenticated && isEditable && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
+            {auth?.accessToken && isEditable && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
         </div>
     );
 }

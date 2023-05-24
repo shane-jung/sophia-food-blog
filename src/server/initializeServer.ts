@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import express, { Router } from 'express'
 
 const app = express()
@@ -11,6 +14,7 @@ import cookieParser from 'cookie-parser'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 
 
@@ -28,7 +32,7 @@ export default function initializeServer(router: Router) {
  // app.set('trust proxy', 1)
   app.use(express.urlencoded({extended:true}))
   app.use(express.json())
-//   app.use(cookieParser())
+  app.use(cookieParser())
 //   app.use(cors(origin))  
 //   app.use(helmet())
 //   app.use(compression())

@@ -1,19 +1,47 @@
 import { Request, Response } from 'express';
 import { MongoClient, ObjectId} from 'mongodb'
 import connectToDatabase from '../database/mongodb';
+import jwt from "jsonwebtoken"; 
+import bcrypt from 'bcryptjs';
+
 
 
 
 const userController = {
-  getUser: async (req: Request, res: Response) => {
-    const email = req.params.email;
-    try{
-        const db = await connectToDatabase();
-        const user = await db.collection('Users').findOne({'email':email});
-        return res.json(user);
-    } catch (error) {
-        console.error(`Error fetching user in getUser: ${error}`);
-        throw error;
+  handleLogin: async (req: Request, res: Response, next: any) => {
+    const user = req.body;
+    console.log(user);
+    const db = await connectToDatabase();
+    const DBUser = await db.collection('Profiles').findOne({'email':user.email});
+    console.log(DBUser);
+    if(!DBUser) return res.sendStatus(401);
+    console.log(DBUser.password, user.password);
+    const match = await bcrypt.compare(user.password, DBUser.password)
+    console.log("MATCH: ", match);
+    if(match) {
+      const accessToken = jwt.sign(
+        {
+          email: DBUser.email, 
+          name: DBUser.name
+        }, 
+        process.env.SECRET_KEY as string, 
+        {expiresIn: '1h'}
+      );
+      const refreshToken = jwt.sign(
+        { 
+          "email" : DBUser.email 
+        }, 
+        process.env.SECRET_KEY as string,
+        {
+          expiresIn: '1d'
+        }
+      );
+      res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000});
+      DBUser["refresh-token"] = refreshToken;
+      res.json({accessToken: accessToken, roles: [1000]}); 
+    }
+    else {
+      res.status(401);
     }
   },
   createUser: async (req: Request, res: Response) => {
@@ -34,5 +62,16 @@ const userController = {
     return;
   },
 };
+// function verifyUserPassword(password: string, userPassword: string){
+//   console.log(password, userPassword);
+//     return new Promise((resolve, reject) => {
+//         bcrypt.compare(userPassword, password, function(err, result) {
+//             if(err) reject(err);
+//             resolve(result);
+//         });
+//     });
+// }
 
 export default userController;
+
+
