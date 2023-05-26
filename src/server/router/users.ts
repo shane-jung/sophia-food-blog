@@ -15,20 +15,20 @@ router.route('/').get(userController.handleLogin);
 
 router.route('/login').post(userController.handleLogin);
 
-async function generateToken(req:Request, res: Response, next:any){
-    const email = req.body.email;
-    const token = jwt.sign({email}, process.env.SECRET_KEY as string, { expiresIn: "1h" })
-    res.cookie("jwttoken", token);
+// async function generateToken(req:Request, res: Response, next:any){
+//     const email = req.body.email;
+//     const token = jwt.sign({email}, process.env.SECRET_KEY as string, { expiresIn: "1h" })
+//     res.cookie("jwttoken", token);
 
-    return res.json({token: token}) 
+//     return res.json({token: token}) 
     
-    // http
-    // .createServer(function (req, res) {
-    //     res.writeHead(301, { Location: "/" });
-    //     res.end();
-    // })
-    // .listen(8888);
-}
+//     // http
+//     // .createServer(function (req, res) {
+//     //     res.writeHead(301, { Location: "/" });
+//     //     res.end();
+//     // })
+//     // .listen(8888);
+// }
 
 router.route('/logout').get(userController.handleLogin);
 

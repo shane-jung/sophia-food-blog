@@ -9,7 +9,6 @@ interface AuthenticatedRouteProps {
 export default function AuthenticatedRoute ({allowedRoles}: AuthenticatedRouteProps) {
   const { auth } = useAuth();
   const location = useLocation();
-  console.log(auth.roles)
   return ( 
     auth?.roles?.find((role:any) => allowedRoles?.includes(role)) 
       ? <Outlet /> 

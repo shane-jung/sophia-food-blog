@@ -20,7 +20,6 @@ export default function RecipeForm({recipe}:RecipeFormProps){
     const [isEditable, setIsEditable] = useState(false);
 
     let viewMode: _viewMode = recipe.titleID ?  _viewMode.EDITING :_viewMode.CREATING
-    console.log(isEditable || viewMode);
  
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

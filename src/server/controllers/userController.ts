@@ -13,39 +13,37 @@ const userController = {
     console.log(user);
     const db = await connectToDatabase();
     const DBUser = await db.collection('Profiles').findOne({'email':user.email});
-    console.log(DBUser);
     if(!DBUser) return res.sendStatus(401);
     console.log(DBUser.password, user.password);
     const match = await bcrypt.compare(user.password, DBUser.password)
-    console.log("MATCH: ", match);
     if(match) {
       const accessToken = jwt.sign(
         {
-          email: DBUser.email, 
-          name: DBUser.name
+          email: DBUser.email,
+          roles: DBUser.roles
         }, 
-        process.env.SECRET_KEY as string, 
+        process.env.ACCESS_TOKEN_SECRET as string, 
         {expiresIn: '1h'}
       );
       const refreshToken = jwt.sign(
         { 
           "email" : DBUser.email 
         }, 
-        process.env.SECRET_KEY as string,
+        process.env.REFRESH_TOKEN_SECRET as string,
         {
           expiresIn: '1d'
         }
       );
       res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000});
       DBUser["refresh-token"] = refreshToken;
-      res.json({accessToken: accessToken, roles: [1000]}); 
+      saveUser(DBUser);
+      res.json({accessToken: accessToken, roles: [1000], user: DBUser}); 
     }
     else {
       res.status(401);
     }
   },
   createUser: async (req: Request, res: Response) => {
-    //return res.status(200).json({message:"Need to implement"});
     const user = res.locals.user;
     console.log("USER IN CREATE USER: " , user);
     try{
@@ -61,6 +59,7 @@ const userController = {
     }
     return;
   },
+  
 };
 // function verifyUserPassword(password: string, userPassword: string){
 //   console.log(password, userPassword);
@@ -71,6 +70,16 @@ const userController = {
 //         });
 //     });
 // }
+async function saveUser(user: any)  {
+
+  try{
+    const db = await connectToDatabase();
+    const result = await db.collection('Profiles').updateOne({email: user.email}, {$set: user});
+  } catch(error:any){ 
+    console.error(`Error editing user in saveUser: ${error}`);
+    throw error;
+  }
+}
 
 export default userController;
 

@@ -12,7 +12,7 @@ export default function LoginButton(){
     return(
 
         auth.roles 
-            ?    <> <p>Welcome, Sophia!</p> <button onClick = {handleLogout}>Logout</button> </>
+            ?    <> <p>Welcome, Sophia!</p> <button className = "simple-button" onClick = {handleLogout}>Logout</button> </>
             :    <Link to="/users/login" className="simple-button login-button">Login</Link>
     )
 }

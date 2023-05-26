@@ -10,12 +10,10 @@ interface IngredientProps{
 
 export default function Ingredients(props: IngredientProps){
     const { auth } = useAuth()
-    console.log(auth?.auth);
     const isEditable = useContext(EditableContext);
     const [ingredientsList, setIngredientsList] = useState(props.ingredients || []);
     
 
-    //const ingredient = <RichTextRecipeComponent className = "recipe-ingredient"></RichTextRecipeComponent>
     function addIngredient(){
         setIngredientsList([...ingredientsList, ""]);
     }
@@ -25,12 +23,9 @@ export default function Ingredients(props: IngredientProps){
             <ul className = 'recipe-ingredients'>
                 {
                     ingredientsList.map((ingredient, i) => {
-                        // if(isAuthenticated) 
                             return <li key= {ingredient + `${i}`}>
-                                        <RichTextRecipeComponent className ="recipe-ingredient" value = {ingredient} name = "Ingredient" />
+                                        <RichTextRecipeComponent className ="recipe-ingredient" key={ `${i}` } value = {ingredient} name = "Ingredient" />
                                     </li>
-                                        // <input readOnly = {!isEditable} defaultValue = {ingredient} placeholder = {"New Ingredient"}></input></li>
-                        // else return <li key = {ingredient} className = "recipe-ingredient"> {ingredient} </li>
                     })
                 }
             </ul>

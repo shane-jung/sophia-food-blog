@@ -18,7 +18,7 @@ export default function LoginPage(){
     const navigate = useNavigate(); 
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
-
+    
     useEffect(() =>{
         emailRef.current?.focus();
     }, [])
@@ -82,6 +82,7 @@ export default function LoginPage(){
                     placeholder="Email Address" 
                     value = {email}
                     onChange = {(e) => setEmail(e.target.value)}
+                    autoComplete = "username"
                     required
                 />
                 <label>Password</label>
@@ -92,7 +93,7 @@ export default function LoginPage(){
                     type="password" 
                     minLength={8}
                     onChange = {(e) => setPassword(e.target.value)}
-
+                    autoComplete = "current-password"
                     required 
                 />
                 <button>Submit</button>

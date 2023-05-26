@@ -21,10 +21,6 @@ export default function RecipePage() {
         setRecipe({ ...recipeLoaderData });
     }, [recipeLoaderData])
 
-    useEffect(() => {
-        auth?.accessToken && console.log("yes");
-    })
-
 
     return (
         <>
