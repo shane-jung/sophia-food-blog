@@ -8,9 +8,14 @@ import bcrypt from 'bcryptjs';
 
 
 const userController = {
+  findUser: async (req: Request, res: Response) => {
+    const email = req.body.email;
+    const db = await connectToDatabase();
+    const user = await db.collection('Profiles').findOne({'email':email});
+    if(user) return res.sendStatus(409);
+  }, 
   handleLogin: async (req: Request, res: Response, next: any) => {
     const user = req.body;
-    console.log(user);
     const db = await connectToDatabase();
     const DBUser = await db.collection('Profiles').findOne({'email':user.email});
     if(!DBUser) return res.sendStatus(401);

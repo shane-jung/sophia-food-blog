@@ -6,12 +6,9 @@ import jwt from "jsonwebtoken";
 import multer from 'multer';
 import http from "http";
 
-
-var upload = multer({ dest: 'uploads/' });
-
 const router = express.Router();
 
-router.route('/').get(userController.handleLogin);
+router.route('/').post(userController.findUser);
 
 router.route('/login').post(userController.handleLogin);
 
@@ -35,7 +32,7 @@ router.route('/logout').get(userController.handleLogin);
 
 
 
-router.route('/create').post(upload.none(), hashPassword, userController.createUser);
+router.route('/create').post(hashPassword, userController.createUser);
 
 
 async function hashPassword(req: Request, res: Response, next: any){

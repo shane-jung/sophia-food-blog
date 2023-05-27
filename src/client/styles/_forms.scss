@@ -110,15 +110,17 @@ strong{
 
 
 .user-form{
+  padding: .25em 2em;
+  text-align:left;
   font-family:inherit;
   width: clamp(300px, 50%, 600px);
   margin:auto;
   outline:2px solid black;
   input{
-    width: 80%;
-    margin:.5em auto;
+    text-align:left;
+    margin:.5em 0;
     border-radius:.25em;
-    padding:.25em;
+    padding:.5em;
     outline:1px solid black;
     font-size:1.0625em;
   }
@@ -130,4 +132,22 @@ strong{
   font-family:inherit;
   font-size:inherit;
   resize:none;
+}
+
+
+
+.form-error-message{
+  background: rgba(255, 0, 0, 0.348);
+  color:rgb(255, 26, 26);
+  padding: .5em;
+  border-radius:.25em;
+}
+
+.offscreen{ 
+  position: absolute;
+  left:     -10000px;
+  top:      auto;
+  width:    1px;
+  height:   1px;
+  overflow: hidden;
 }

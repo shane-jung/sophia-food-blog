@@ -1,6 +1,7 @@
 import userController from "@/server/controllers/userController";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import axios from "../api/axios";
 import Logo from "../components/Logo"
 
 const FIRSTNAME_REGEX = /^[a-zA-Z]{2,24}$/;
@@ -46,6 +47,11 @@ export default function RegisterPage(){
         setValidFirstName(result);
     }, [firstName]);
 
+    useEffect(()=> {
+        const result = email.length> 8 ;
+        setValidEmail(result);
+    }, [email])
+
     useEffect(()=>{
         const result =  PASSWORD_REGEX.test(password);
         setValidPassword(result);
@@ -59,8 +65,20 @@ export default function RegisterPage(){
     }, [firstName, email, password, confirmPassword])
 
 
-    function handleSubmit(){
-
+    async function handleSubmit(e:any){
+        e.preventDefault();
+        if(!validFirstName || !validEmail || !validPassword || !validConfirmPassword){
+            return; 
+        }
+        const response = await axios.post('/users', {
+            email: email,
+        }) .catch((err) => {  
+            if(err.response.status === 409){
+                setErrMessage('Email already exists');
+                return;
+            }   
+        });
+        console.log(response);
     }
 
     return (
@@ -70,17 +88,18 @@ export default function RegisterPage(){
             <form method="POST"  className="user-form" onSubmit= {handleSubmit} >
                 <h1>Make an Account</h1>
                 <p 
+                    className= {errMessage ? "form-error-message" : "offscreen"}
                     ref = {errRef}
                 >
                     {errMessage}
                 </p>
-                <label>First Name</label>
+                <label>Display Name</label>
                 <input 
                     type="text"
                     id = "firstName"
                     ref = {firstNameRef}
                     name= "firstName" 
-                    placeholder="First Name" 
+                    placeholder="Display Name" 
                     value = {firstName}
                     onChange = {(e) => setFirstName(e.target.value)}
                     required
@@ -102,6 +121,7 @@ export default function RegisterPage(){
                 />
                 <p
                     id="email-error"
+                    className= { emailFocus && email && !validEmail ? "form-error-message" : "offscreen" }
                 >
                     {emailFocus && !validEmail && "Please enter a valid email address"}
                 </p>
@@ -110,6 +130,7 @@ export default function RegisterPage(){
                     name= "password" 
                     id="password"
                     placeholder="Password" 
+                    autoComplete = "new-password"
                     type="password" 
                     minLength={8}
                     onChange = {(e) => setPassword(e.target.value)}
@@ -120,6 +141,7 @@ export default function RegisterPage(){
                 />
                 <p
                     id="password-error"
+                    className= { passwordFocus && password && !validPassword ? "form-error-message" : "offscreen" }
                 >
                     {passwordFocus && !validPassword && "Passwords should be between 8 and 24 characters and contain at least one number, one lowercase and one uppercase letter."}
                 </p>
@@ -134,14 +156,17 @@ export default function RegisterPage(){
                     pattern= {PASSWORD_REGEX.source}
                     onFocus={() => setConfirmPasswordFocus(true)}
                     onBlur={() => setConfirmPasswordFocus(false)}
+                    autoComplete = "new-password"
                     required 
                 />
                 <p
                     id="confirm-password-error"
+                    className= { confirmPasswordFocus && confirmPassword && !validConfirmPassword ? "form-error-message" : "offscreen" }
+                    
                 >
-                    {confirmPasswordFocus && !validConfirmPassword && "Please make sure the passwords match."}
+                    Please make sure the passwords match.
                 </p>
-                <button className="simple-button">Submit</button>
+                <button className="simple-button">Create an Account</button>
             </form>
            
         </>
