@@ -6,12 +6,13 @@ export default function LoginButton(){
     const navigate = useNavigate();
 
     function handleLogout(){
-        setAuth({});
+        console.log("logging out")
+        setAuth({...auth, accessToken: null})
         navigate("/")
     }
+    console.log(auth)
     return(
-
-        auth.roles 
+        auth.accessToken != null 
             ?    <> <p>Welcome, Sophia!</p> <button className = "simple-button" onClick = {handleLogout}>Logout</button> </>
             :    <Link to="/users/login" className="simple-button login-button">Login</Link>
     )

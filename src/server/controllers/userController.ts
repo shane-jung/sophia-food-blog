@@ -28,7 +28,7 @@ const userController = {
           roles: DBUser.roles
         }, 
         process.env.ACCESS_TOKEN_SECRET as string, 
-        {expiresIn: '1h'}
+        {expiresIn: '15s'}
       );
       const refreshToken = jwt.sign(
         { 
@@ -36,7 +36,7 @@ const userController = {
         }, 
         process.env.REFRESH_TOKEN_SECRET as string,
         {
-          expiresIn: '1d'
+          expiresIn: '10m'
         }
       );
       res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000});

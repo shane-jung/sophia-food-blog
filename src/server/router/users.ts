@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import multer from 'multer';
 import http from "http";
 
-const router = express.Router();
+const router = express.Router(); 
 
 router.route('/').post(userController.findUser);
 

@@ -6,6 +6,7 @@ import Logo from "../components/Logo"
 
 const FIRSTNAME_REGEX = /^[a-zA-Z]{2,24}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/;
+const EMAIL_REGEX = /^[ ]*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})[ ]*$/i;
 
 export default function RegisterPage(){
 
@@ -48,7 +49,7 @@ export default function RegisterPage(){
     }, [firstName]);
 
     useEffect(()=> {
-        const result = email.length> 8 ;
+        const result = EMAIL_REGEX.test(email);
         setValidEmail(result);
     }, [email])
 
@@ -166,7 +167,12 @@ export default function RegisterPage(){
                 >
                     Please make sure the passwords match.
                 </p>
-                <button className="simple-button">Create an Account</button>
+                <button className={ "simple-button " + 
+                    ((validFirstName && validEmail &&  validPassword && validConfirmPassword)
+                    ? ""
+                    : "disabled-button")}
+                    >Create an Account
+                </button>
             </form>
            
         </>

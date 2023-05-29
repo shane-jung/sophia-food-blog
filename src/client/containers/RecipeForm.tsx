@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { EmptyRecipe, Recipe } from '../types';
 import { sampleAuthor, sampleRecipe} from '@/server/seed';
 
@@ -10,79 +10,80 @@ import ActionButton from '../components/ActionButton';
 import { EditableContext } from '../contexts/EditableContext';
 import DeleteRecipe from '../components/DeleteRecipe';
 import { _viewMode } from '../enums';
+import useViewMode from '../utils/useViewMode';
+import useAxiosPrivate from '../utils/useAxiosPrivate';
 
 interface RecipeFormProps{
     recipe:Recipe
 }
 
 export default function RecipeForm({recipe}:RecipeFormProps){ 
+    const { viewMode, setViewMode } = useViewMode();
+    const axiosPrivate = useAxiosPrivate();
 
-    const [isEditable, setIsEditable] = useState(false);
+    const [buttonText, setButtonText] = useState("");
+    useEffect( ()=> {
+        console.log(JSON.stringify(recipe));
+        if(!recipe.titleID || recipe.titleID === "") console.log("Recipe doesn't exist")
+        setViewMode(_viewMode.CREATING);
+        console.log(recipe.titleID); 
+        console.log(viewMode);
+        const buttonText = viewMode == _viewMode.CREATING ? "Save" : "Edit";
+        console.log(buttonText);
+        setButtonText(buttonText);
+    }, []);
 
-    let viewMode: _viewMode = recipe.titleID ?  _viewMode.EDITING :_viewMode.CREATING
- 
-
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const navigate = useNavigate();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if(buttonType!="submit") return;
         const data = new FormData(event.currentTarget);
         if(!verifyInputs(data)) return;
         data.set('dateEdited', new Date().toISOString());
-        let reqLink, method, redirect :string;
+        let reqLink, redirect:string;
         if(viewMode == _viewMode.EDITING){  //In the case that the recipe already exists, we just want to update the recipe. 
-            method = 'POST';
-            reqLink = `/api/recipes/${recipe.titleID}`;
-        }
-        else{         //In the case the recipe doesn't exist, we want to create the recipe.
-            method = 'POST'
-            reqLink = '/api/recipes/create';
+            reqLink = `/recipes/${recipe.titleID}`;
+            redirect = `/recipes/${recipe.titleID}`
+        } else {         //In the case the recipe doesn't exist, we want to create the recipe.
+            reqLink = '/recipes/create';
             data.set('dateCreated', new Date().toISOString());
             data.set('author', sampleAuthor.toString() );
-            // data.set('comments', new Array());
             redirect = `/recipes/${data.get('titleID')}`
         }
-        fetch(reqLink, {
-            method: method,
-            body: data, 
-        }).then(()=>{
-            if(redirect) window.location.href = redirect;
-        })
+        const result = await axiosPrivate.post(reqLink, data, {withCredentials: true});
+        console.log(result);
+        navigate(redirect, {replace: true})
     }
 
-    const [buttonText, setButtonText] = useState("Edit");
-    const [buttonType, setButtonType]= useState("button" as "button" | "submit");
-    if(viewMode == _viewMode.CREATING && buttonText != "Submit"){
-        setButtonText("Submit")
-        setButtonType("submit");
-    }
+    
+
     function handleActionButtonClick(event:any){
+        event.preventDefault();
+        console.log("here");
+        console.log("viewMode: " + viewMode)
         switch (viewMode) {
-            case _viewMode.VIEWING: 
-                break
-            case _viewMode.CREATING:
-                
+            case _viewMode.VIEWING:
+                setButtonText("Save");
+                setViewMode(_viewMode.EDITING);
+                break;
             case _viewMode.EDITING:
-                if(isEditable){
-                    console.log("Update Existing Recipe")
-                    setButtonText("Edit");
-                    setButtonType("submit");
-                } else {
-                    setButtonText("Save");
-                    setButtonType("button");
-                }
-                setIsEditable(!isEditable);
+                setButtonText("Edit");      
+                setViewMode(_viewMode.VIEWING); 
+                handleSubmit(event);
+                break;  
+            case _viewMode.CREATING:
+                setButtonText("Save");
+                setViewMode(_viewMode.EDITING);
+                break;
         }
     }
 
     return (
         <>
             <form className="recipe-form"  onSubmit={handleSubmit} method='POST'  encType="multipart/form-data">
-                <ActionButton onClick = {handleActionButtonClick} buttonText = {buttonText} buttonType = {buttonType} /> 
-                <EditableContext.Provider value = {isEditable || (viewMode ==_viewMode.CREATING)}>
-                    <RecipeContainer recipe={recipe} viewMode = {viewMode}/>
-                </EditableContext.Provider>
+                <ActionButton onClick = {handleActionButtonClick} buttonText = {buttonText} /> 
+                <RecipeContainer recipe={recipe}/>
             </form>
-            <DeleteRecipe titleID = {recipe.titleID} />
+            { viewMode != _viewMode.CREATING &&  <DeleteRecipe titleID = {recipe.titleID} /> }
         </>
     );
 }
@@ -90,7 +91,10 @@ export default function RecipeForm({recipe}:RecipeFormProps){
 
 function verifyInputs(data:FormData){
     for(const [field, value] of data){
-        if(value =="") console.log(`Error: ${field} field cannot be empty.`)
+        if(!value) {
+            console.log(`Error: ${field} field cannot be empty.`)
+            return false;
+        }
     }
     return true;
 }

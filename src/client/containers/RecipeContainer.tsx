@@ -15,7 +15,6 @@ import { _viewMode } from '../enums';
 import TitleID from '../components/Recipe/TitleID';
 
 interface RecipeContainerProps{
-    viewMode : _viewMode,
     recipe: Recipe,
 }
 
@@ -24,7 +23,7 @@ import RatingBar from '../components/Recipe/RatingBar';
 import DateComponent from '../components/Recipe/DateComponent';
 import Ingredients from '../components/Recipe/Ingredients';
 
-export default function RecipeContainer({viewMode, recipe}: RecipeContainerProps) {
+export default function RecipeContainer({recipe}: RecipeContainerProps) {
     return (
         <div className = "recipe-container">
             <SimpleTextRecipeComponent name="title" className = "recipe-title" value = {recipe.title} />

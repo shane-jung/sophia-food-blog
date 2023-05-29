@@ -7,11 +7,10 @@ import RecipeContainer from "./RecipeContainer";
 import RecipeForm from "./RecipeForm";
 
 import { useLoaderData } from "react-router";
-import { EmptyRecipe, Recipe } from "../types";
-import { CommentType } from "../types";
 import { Link } from "react-router-dom";
 import Comments from "../components/other/Comments";
 import useAuth from "../utils/useAuth";
+import { ViewModeProvider } from "../contexts/ViewModeProvider";
 
 export default function RecipePage() {
     const {auth} = useAuth();
@@ -21,13 +20,12 @@ export default function RecipePage() {
         setRecipe({ ...recipeLoaderData });
     }, [recipeLoaderData])
 
-
     return (
-        <>
-            {auth?.accessToken ? <RecipeForm recipe={recipe} /> : <RecipeContainer recipe={recipe} viewMode={_viewMode.VIEWING} /> }
+        <ViewModeProvider>
+            {auth?.accessToken ? <RecipeForm recipe={recipe} /> : <RecipeContainer recipe={recipe} /> }
             {recipe.titleID && <Comments />}
             <Link to='/recipes'>Back to Recipes</Link>
-        </>
+        </ViewModeProvider>
     )
 }
 

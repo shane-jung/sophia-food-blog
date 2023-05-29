@@ -4,6 +4,8 @@ import useAuth from "@/client/utils/useAuth"
 
 
 import ReactQuill from "react-quill"
+import useViewMode from "@/client/utils/useViewMode";
+import { _viewMode } from "@/client/enums";
 
 interface RichTextRecipeComponentProps{
     className: string;
@@ -11,7 +13,7 @@ interface RichTextRecipeComponentProps{
     name: string;
 }
 export default function     RichTextRecipeComponent(props:RichTextRecipeComponentProps){
-    const isEditable = useContext(EditableContext);
+    const { viewMode } = useViewMode();
     const {auth} = useAuth();
     const placeholder = "Recipe " + props.name;
     const [state, setState] = useState({ content: props.value })
@@ -43,7 +45,7 @@ export default function     RichTextRecipeComponent(props:RichTextRecipeComponen
             {
                 auth?.accessToken  ?
                     <>
-                        <ReactQuill readOnly = {!isEditable} defaultValue = {props.value} placeholder={placeholder} className= {props.className + " input-field"} theme="snow" modules = {modules} formats = {formats} onChange = {onChange}/>
+                        <ReactQuill readOnly = {viewMode == _viewMode.VIEWING} defaultValue = {props.value} placeholder={placeholder} className= {props.className + " input-field"} theme="snow" modules = {modules} formats = {formats} onChange = {onChange}/>
                         <input aria-hidden= "true" readOnly = {true} className = {props.className + " hidden-input"} name = {props.name} value={state.content}  placeholder = {placeholder}></input>
                     </>
                 :

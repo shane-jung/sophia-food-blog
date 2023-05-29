@@ -11,7 +11,7 @@
 
    // outline:1px solid $primary;
   }
-  
+   
   #{$forms} {
     @extend %forms;
     
@@ -91,18 +91,18 @@
   display:none;
 }
 
-.input-field:focus-within{
-  //outline:1px solid black;
+// .input-field:focus-within{
+//   //outline:1px solid black;
 
-}
+// }
 
 input{
   display:block;
   width:100%;
 }
 
-.quill, .ql-container, .ql-editor{
-}
+// .quill, .ql-container, .ql-editor{
+// }
 
 strong{
   font-weight:bold;
@@ -137,7 +137,6 @@ strong{
 
 
 .form-error-message{
-  background: rgba(255, 0, 0, 0.348);
   color:rgb(255, 26, 26);
   padding: .5em;
   border-radius:.25em;

@@ -27,9 +27,9 @@
     display: flex; 
     flex-direction:row;
 }
-.recipe-component{ 
+// .recipe-component{ 
 
-}
+// }
 .recipe-title{
     font-weight:bold;
     text-align:center;
@@ -129,21 +129,6 @@ form input:focus:not(:read-only){
 
 
 
-.simple-button{
-    appearance:none;
-    outline:none;
-    border:none;
-    cursor:pointer;
-    background:none;
-    color:$font-color;
-    font-family:inherit;
-    font-size:1.125em;
-    margin:0;
-    padding:.5em;
-    &:hover{
-        color:$accent;
-    }
-}
 
 
 .comment-submit-button{

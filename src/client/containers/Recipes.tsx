@@ -3,52 +3,73 @@ import { Recipe } from '@/client/types'
 import { NavLink } from 'react-router-dom';
 import useAxiosPrivate from '@/client/utils/useAxiosPrivate';
 
-export default function Recipes(){
+let cached = false;
+let cachedRecipes: Recipe [] = [];
 
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
+export default function Recipes(){
+    const [recipes, setRecipes] = useState<any>();
+    const [isLoading, setIsLoading] = useState(true);
+    
+
 
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
-        // fetch('/api/recipes')
-        // .then(response => response.json())
-        // .then(data => setRecipes(data))
-        // .catch(error => console.log(error));
         let isMounted = true;
         const controller = new AbortController();
-        const getRecipes = async () => {
+        setIsLoading(true);
+        const getRecipes = async (): Promise<Recipe []> => {
             try{
                 const response = await axiosPrivate.get('/recipes', {
                     signal: controller.signal
                 })
-                console.log(response.data);
-                setRecipes(response.data);
+                return response.data;
             } catch (error) {  
-
+                return [];
             }
         }
-
-        getRecipes();
+        if(!cached){
+            getRecipes().then((response) => {
+                setRecipes([...response]);
+                console.log(recipes);
+                setIsLoading(false);
+                cached = true;
+                cachedRecipes = [...response];
+            });
+        }
+        else {
+            setRecipes([...cachedRecipes]);
+            setIsLoading(false);
+        }
         return () => {
             isMounted = false;
             controller.abort();
         }
     }, []);
 
+
     return (
         <div>
-            <h1>All Recipes</h1>
-            <ul className = "recipes-grid"> 
-                { recipes.map(recipe=> (
-                    <li
-                    key={recipe._id}
-                    className="recipe-thumbnail"
-                    >
-                        <NavLink to={`/recipes/${recipe.titleID}`}>{recipe.title}</NavLink>
-                    </li>
-                ))}
-            </ul>
-        </div>
+                <h1>All Recipes</h1>
+                {
+                !isLoading 
+                    
+                ? 
+                <ul className = "recipes-grid"> 
+                    { recipes?.map((recipe:any)=> (
+                        <li
+                        key={recipe._id}
+                        className="recipe-thumbnail"
+                        >
+                            <NavLink to={`/recipes/${recipe.titleID}`}>{recipe.title}</NavLink>
+                        </li>
+                    ))}
+                </ul>
+                : <div>Loading...</div>
+                }
+            </div>
+
+        
        
     );
 }

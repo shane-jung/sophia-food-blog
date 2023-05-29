@@ -10,7 +10,6 @@ const handleRefreshToken = (req: Request, res:Response) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET!,
         (err: any, user: any) => {
-            console.log(user);
             if (err) return res.status(403).json({message: 'Forbidden'});
             const accessToken = jwt.sign(
                 { email: user.email },

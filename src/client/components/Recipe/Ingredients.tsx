@@ -1,16 +1,17 @@
 import useAuth from "@/client/utils/useAuth"
-
-import { EditableContext } from "@/client/contexts/EditableContext";
 import { useState } from "react";
 import { useContext } from "react"
 import RichTextRecipeComponent from "./RichTextRecipeComponent";
+import ViewModeContext from "@/client/contexts/ViewModeProvider";
+import useViewMode from "@/client/utils/useViewMode";
+import { _viewMode } from "@/client/enums";
 interface IngredientProps{
     ingredients: string[];
 }
 
 export default function Ingredients(props: IngredientProps){
     const { auth } = useAuth()
-    const isEditable = useContext(EditableContext);
+    const {viewMode} = useViewMode();
     const [ingredientsList, setIngredientsList] = useState(props.ingredients || []);
     
 
@@ -29,7 +30,7 @@ export default function Ingredients(props: IngredientProps){
                     })
                 }
             </ul>
-            {auth?.accessToken && isEditable && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
+            {auth?.accessToken && (viewMode != _viewMode.VIEWING) && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
         </div>
     );
 }
