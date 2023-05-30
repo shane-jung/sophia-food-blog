@@ -4,15 +4,20 @@ interface CommentProps{
     comment:CommentType;
 }
 export default function Comment({comment}:CommentProps){
+    const date = new Date(comment.date);
+    const dateString = date.toLocaleDateString("en-US", {month: 'long', day: 'numeric', year: 'numeric'});
     return(
         <div className = "comment">
+            <p className = "comment-user">Sophia</p>
             <p className = "comment-content">{comment.content}</p>
-            <p className = "comment-date">{comment.date.toLocaleString()}</p>
+            <p className = "comment-date">{dateString}</p>
             <CommentToolbar></CommentToolbar>
         </div>
 
     )
 } 
+
+
 
 function CommentToolbar(){
     return(

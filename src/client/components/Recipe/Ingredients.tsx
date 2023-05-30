@@ -1,19 +1,19 @@
-import { AuthenticationContext } from "@/client/contexts/AuthenticationContext";
-import { EditableContext } from "@/client/contexts/EditableContext";
+import useAuth from "@/client/utils/useAuth"
 import { useState } from "react";
 import { useContext } from "react"
 import RichTextRecipeComponent from "./RichTextRecipeComponent";
+import ViewModeContext from "@/client/contexts/ViewModeProvider";
+import useViewMode from "@/client/utils/useViewMode";
+import { _viewMode } from "@/client/enums";
 interface IngredientProps{
     ingredients: string[];
 }
 
-export default function Ingredients(props: IngredientProps){
-    const isAuthenticated = useContext(AuthenticationContext)
-    const isEditable = useContext(EditableContext);
-    const [ingredientsList, setIngredientsList] = useState(props.ingredients || []);
+export default function Ingredients({ingredients}: IngredientProps){
+    const {viewMode} = useViewMode();
+    const [ingredientsList, setIngredientsList] = useState(ingredients || []);
     
 
-    //const ingredient = <RichTextRecipeComponent className = "recipe-ingredient"></RichTextRecipeComponent>
     function addIngredient(){
         setIngredientsList([...ingredientsList, ""]);
     }
@@ -23,16 +23,13 @@ export default function Ingredients(props: IngredientProps){
             <ul className = 'recipe-ingredients'>
                 {
                     ingredientsList.map((ingredient, i) => {
-                        // if(isAuthenticated) 
                             return <li key= {ingredient + `${i}`}>
-                                        <RichTextRecipeComponent className ="recipe-ingredient" value = {ingredient} name = "Ingredient" />
+                                        <RichTextRecipeComponent className ="recipe-ingredient" key={ `${i}` } value = {ingredient} name = "Ingredient" />
                                     </li>
-                                        // <input readOnly = {!isEditable} defaultValue = {ingredient} placeholder = {"New Ingredient"}></input></li>
-                        // else return <li key = {ingredient} className = "recipe-ingredient"> {ingredient} </li>
                     })
                 }
             </ul>
-            {isAuthenticated && isEditable && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
+            {(viewMode != _viewMode.VIEWING) && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
         </div>
     );
 }

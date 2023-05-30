@@ -21,7 +21,7 @@ export default function Comments(){
         }
         ).then(async (response)=>{
             const commentId = (await response.json()).insertedId;
-            let newComment :CommentType= {content: content, date: date, _id: commentId};
+            let newComment : CommentType= {content: content, date: date, _id: commentId};
             setComments([...comments, newComment])
             const data = new FormData();
             data.append("commentId", commentId);

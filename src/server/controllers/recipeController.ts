@@ -13,8 +13,7 @@ const recipeController ={
 
         const db = await connectToDatabase();
         const recipes = await db.collection('Recipes').find().toArray();
-        // if(recipes == null) res.json(sampleRecipe);
-        return res.json(recipes);
+        return res.status(200).json(recipes);
     } catch (error) {
         console.error(`Error fetching recipes in getAllRecipes: ${error}`);
         // return res.json(sampleRecipe);

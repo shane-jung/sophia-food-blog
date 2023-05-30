@@ -7,25 +7,33 @@ import HomePage from './HomePage'
 import RootLayout from '@/client/components/layouts/RootLayout';
 import { recipeLoader, emptyRecipeLoader} from '../router/recipes';
 import RegisterPage from './RegisterPage'
+import AuthenticatedRoute from '../components/AuthenticatedRoute'
+import AuthProvider from '../contexts/AuthProvider'
+import PersistLogin from '../utils/PersistLogin';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/'>
-      <Route  element = {<RootLayout />}>
-        <Route index element = {<HomePage/>} />
-        <Route path = "recipes">
-          <Route index element= {<Recipes/>}/>
-          <Route path = "create" loader = {emptyRecipeLoader} element = {<RecipePage  key = 'create' />}/>
-          <Route path = ":titleID" loader = {recipeLoader} element = {<RecipePage key = 'edit'/>}/>
+    <Route element = {<PersistLogin/>}>
+      <Route path='/'>
+        <Route element = {<RootLayout />}>
+          <Route index element = {<HomePage/>} />
+          <Route path = "recipes">
+            <Route index element= {<Recipes/>}/>
+            <Route element = {<AuthenticatedRoute allowedRoles = {[1000]}/>}>
+              <Route path = "create" loader = {emptyRecipeLoader} element = {<RecipePage  key = 'create' />}/>
+            </Route>
+            <Route path = ":titleID" loader = {recipeLoader} element = {<RecipePage key = 'edit'/>}/>
+          </Route>
         </Route>
-      </Route>
-        
-      <Route path = "users">
-        <Route path = 'login' element = {<LoginPage/>}/>
-        <Route path = 'register' element = {<RegisterPage/>}/>
+          
+        <Route path = "users">
+          <Route path = 'login' element = {<LoginPage/>}/>
+          <Route path = 'register' element = {<RegisterPage/>}/>
+        </Route>
       </Route>
     </Route>
   )
+
 );
 
 
@@ -42,4 +50,5 @@ export const App: React.FC = () => {
     </HelmetProvider>
   )
 }
+
 
