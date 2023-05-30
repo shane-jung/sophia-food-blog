@@ -1,17 +1,16 @@
 
 import { useContext } from "react";
-import { AuthenticationContext } from "@/client/contexts/AuthenticationContext";
+import useAuth from "@/client/utils/useAuth"
+
+
 
 interface TitleIDProps{
     value:string;
 }
 
 export default function TitleID(props:TitleIDProps){
-    const isAuthenticated = useContext(AuthenticationContext);
+    const { auth } = useAuth();
     return(
-      isAuthenticated ? 
-        <input className="recipe-title-id" type="text" name="titleID" defaultValue = {props.value} placeholder="TITLE ID (REQUIRED)" readOnly = {false}/>
-        :
-        <></>
+      auth?.accessToken && <input className="recipe-title-id" type="text" name="titleID" defaultValue = {props.value} placeholder="TITLE ID (REQUIRED)" readOnly = {false}/>
     )
 }

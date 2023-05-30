@@ -50,3 +50,27 @@ html, body{
   }
 }
 
+
+.simple-button{
+  appearance:none;
+  outline:none;
+  border:none;
+  cursor:pointer;
+  background:none;
+  color:$font-color;
+  font-family:inherit;
+  font-size:1.125em;
+  margin:0;
+  padding:.5em;
+  &:hover{
+      color:$accent;
+  }
+}
+
+.disabled-button {
+  cursor:default;
+  color: lighten($font-color, 50%);
+  &:hover{
+    color: lighten($font-color, 50%);
+  }
+}

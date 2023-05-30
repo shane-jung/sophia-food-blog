@@ -1,3 +1,6 @@
+import { _viewMode } from "@/client/enums";
+import useViewMode from "@/client/utils/useViewMode";
+
 interface DateComponentProps {
   dateCreated : string, 
   dateEdited : string
