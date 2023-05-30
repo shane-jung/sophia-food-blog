@@ -31,7 +31,6 @@ export default function Recipes(){
         if(!cached){
             getRecipes().then((response) => {
                 setRecipes([...response]);
-                console.log(recipes);
                 setIsLoading(false);
                 cached = true;
                 cachedRecipes = [...response];

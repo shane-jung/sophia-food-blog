@@ -6,11 +6,9 @@ export default function LoginButton(){
     const navigate = useNavigate();
 
     function handleLogout(){
-        console.log("logging out")
         setAuth({...auth, accessToken: null})
         navigate("/")
     }
-    console.log(auth)
     return(
         auth.accessToken != null 
             ?    <> <p>Welcome, Sophia!</p> <button className = "simple-button" onClick = {handleLogout}>Logout</button> </>

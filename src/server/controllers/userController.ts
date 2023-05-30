@@ -28,21 +28,22 @@ const userController = {
           roles: DBUser.roles
         }, 
         process.env.ACCESS_TOKEN_SECRET as string, 
-        {expiresIn: '15s'}
+        {expiresIn: '1h'}
       );
       const refreshToken = jwt.sign(
         { 
-          "email" : DBUser.email 
+          email : DBUser.email ,
+          roles : DBUser.roles
         }, 
         process.env.REFRESH_TOKEN_SECRET as string,
         {
-          expiresIn: '10m'
+          expiresIn: '1d'
         }
       );
       res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000});
       DBUser["refresh-token"] = refreshToken;
       saveUser(DBUser);
-      res.json({accessToken: accessToken, roles: [1000], user: DBUser}); 
+      res.json({accessToken: accessToken, roles: DBUser.roles, user: DBUser}); 
     }
     else {
       res.status(401);
@@ -53,7 +54,7 @@ const userController = {
     console.log("USER IN CREATE USER: " , user);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Profiles').insertOne({ _id : new ObjectId(), 
+        const result = await db.collection('Profiles').insertOne({ _id : new ObjectId(), roles : [1000], 
             ...user
         });
         console.log(result);

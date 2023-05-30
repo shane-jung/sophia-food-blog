@@ -43,7 +43,7 @@ export default function     RichTextRecipeComponent(props:RichTextRecipeComponen
     return (
         <>  
             {
-                auth?.accessToken  ?
+                viewMode != _viewMode.VIEWING ?
                     <>
                         <ReactQuill readOnly = {viewMode == _viewMode.VIEWING} defaultValue = {props.value} placeholder={placeholder} className= {props.className + " input-field"} theme="snow" modules = {modules} formats = {formats} onChange = {onChange}/>
                         <input aria-hidden= "true" readOnly = {true} className = {props.className + " hidden-input"} name = {props.name} value={state.content}  placeholder = {placeholder}></input>

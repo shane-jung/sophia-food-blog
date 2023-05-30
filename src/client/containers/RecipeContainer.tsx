@@ -22,19 +22,21 @@ import { CommentType } from '@/client/types';
 import RatingBar from '../components/Recipe/RatingBar';
 import DateComponent from '../components/Recipe/DateComponent';
 import Ingredients from '../components/Recipe/Ingredients';
+import useViewMode from '../utils/useViewMode';
 
 export default function RecipeContainer({recipe}: RecipeContainerProps) {
+    const { viewMode } = useViewMode();
     return (
         <div className = "recipe-container">
             <SimpleTextRecipeComponent name="title" className = "recipe-title" value = {recipe.title} />
-            <RatingBar/>
+            {viewMode == _viewMode.VIEWING && <RatingBar/> }
             <AuthorSnippet author = {recipe.author}/>
             <TitleID value = {recipe.titleID}/>
             <RecipeToolbar /> 
             <RichTextRecipeComponent name="background" className = "recipe-background" value = {recipe.background}/>
             <div className="recipe-card"> 
                 <SimpleTextRecipeComponent name="card-title" className = "recipe-title header" value = {recipe.title} />
-                <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  />
+                {viewMode == _viewMode.VIEWING && <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  /> }
                 <RichTextRecipeComponent name="description" className = "recipe-description" value = {recipe.description}/>
                 <Ingredients ingredients = {recipe.ingredients} />
                 <RichTextRecipeComponent name="directions" className = "recipe-directions" value = {recipe.directions}/>

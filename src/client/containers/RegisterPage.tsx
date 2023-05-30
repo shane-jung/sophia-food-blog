@@ -122,9 +122,9 @@ export default function RegisterPage(){
                 />
                 <p
                     id="email-error"
-                    className= { emailFocus && email && !validEmail ? "form-error-message" : "offscreen" }
+                    className= { 'form-error-message ' + (email && !validEmail ? "active" : "") }
                 >
-                    {emailFocus && !validEmail && "Please enter a valid email address"}
+                    Please enter a valid email address
                 </p>
                 <label>Password</label>
                 <input 
@@ -142,9 +142,9 @@ export default function RegisterPage(){
                 />
                 <p
                     id="password-error"
-                    className= { passwordFocus && password && !validPassword ? "form-error-message" : "offscreen" }
+                    className= { 'form-error-message ' + (password && !validPassword ? "active" : "") }
                 >
-                    {passwordFocus && !validPassword && "Passwords should be between 8 and 24 characters and contain at least one number, one lowercase and one uppercase letter."}
+                    Passwords should be between 8 and 24 characters and contain at least one number, one lowercase and one uppercase letter.
                 </p>
                 <label>Confirm Password</label>
                 <input 
@@ -162,7 +162,7 @@ export default function RegisterPage(){
                 />
                 <p
                     id="confirm-password-error"
-                    className= { confirmPasswordFocus && confirmPassword && !validConfirmPassword ? "form-error-message" : "offscreen" }
+                    className= { "form-error-message " + (confirmPassword && !validConfirmPassword ? "active" : "")}
                     
                 >
                     Please make sure the passwords match.

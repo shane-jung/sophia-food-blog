@@ -15,9 +15,8 @@ export default function DateComponent( props : DateComponentProps ) {
                         } 
     const formattedDateEdited = new Date(props.dateEdited).toLocaleDateString('en-gb', dateOptions);
     const formattedDateCreated = new Date(props.dateCreated).toLocaleDateString('en-gb', dateOptions);
-    const { viewMode } = useViewMode();
     return(
-        viewMode != _viewMode.CREATING && <div>
+        <div>
             <span className = "recipe-dates">Created {formattedDateCreated} - Edited {formattedDateEdited} </span>   
         </div>
        

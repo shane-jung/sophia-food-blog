@@ -21,17 +21,16 @@ export default function RecipeForm({recipe}:RecipeFormProps){
     const { viewMode, setViewMode } = useViewMode();
     const axiosPrivate = useAxiosPrivate();
 
+    useEffect( ()=> {   
+        if(!recipe.titleID) setViewMode(_viewMode.CREATING);
+        else setViewMode(_viewMode.EDITING);
+    }, []);
+
     const [buttonText, setButtonText] = useState("");
     useEffect( ()=> {
-        console.log(JSON.stringify(recipe));
-        if(!recipe.titleID || recipe.titleID === "") console.log("Recipe doesn't exist")
-        setViewMode(_viewMode.CREATING);
-        console.log(recipe.titleID); 
-        console.log(viewMode);
-        const buttonText = viewMode == _viewMode.CREATING ? "Save" : "Edit";
-        console.log(buttonText);
+        const buttonText = (viewMode == _viewMode.CREATING) ? "Save" : "Edit";
         setButtonText(buttonText);
-    }, []);
+    }, [viewMode]);
 
     const navigate = useNavigate();
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,8 +57,6 @@ export default function RecipeForm({recipe}:RecipeFormProps){
 
     function handleActionButtonClick(event:any){
         event.preventDefault();
-        console.log("here");
-        console.log("viewMode: " + viewMode)
         switch (viewMode) {
             case _viewMode.VIEWING:
                 setButtonText("Save");

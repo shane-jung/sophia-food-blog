@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, redirect, useLocation, useNavigate } from "react-router-dom"
 import Logo from "../components/Logo"
 
 import axios from '@/client/api/axios';
 import useAuth from "../utils/useAuth";
 
 export default function LoginPage(){
-    const { setAuth }= useAuth();
+    const { auth, setAuth }= useAuth();
 
     const emailRef = useRef<HTMLInputElement>(null);
     const errRef = useRef<HTMLParagraphElement>(null);  
@@ -20,6 +20,8 @@ export default function LoginPage(){
     const from = location.state?.from?.pathname || "/";
     
     useEffect(() =>{
+        console.log(auth);
+        if(auth.accessToken) navigate("/", {replace: true});
         emailRef.current?.focus();
     }, [])
 

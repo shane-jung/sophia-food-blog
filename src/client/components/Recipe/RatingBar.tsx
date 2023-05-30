@@ -48,9 +48,7 @@ export default function RatingBar(){
     })
     return(
         
-        (viewMode == _viewMode.CREATING)
-        ? <></>
-        : <div className="rating-bar"> {stars} </div> 
+       <div className="rating-bar"> {stars} </div> 
 
         
 

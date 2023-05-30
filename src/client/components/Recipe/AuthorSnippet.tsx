@@ -9,7 +9,7 @@ export default function AuthorSnppet({author}: AuthorSnippetProps){
     
     return(
 
-        author != undefined ? <p>Recipe Created By <a>{author.firstName}</a> </p>
+        author != undefined ? <p>Signed in as <a>{author.firstName}</a> </p>
         : 
     
         <>

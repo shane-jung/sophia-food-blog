@@ -118,7 +118,7 @@ strong{
   outline:2px solid black;
   input{
     text-align:left;
-    margin:.5em 0;
+    margin-top:.25em;
     border-radius:.25em;
     padding:.5em;
     outline:1px solid black;
@@ -137,9 +137,17 @@ strong{
 
 
 .form-error-message{
+  padding:0;
+  margin:0;
+  font-size:.825em;
   color:rgb(255, 26, 26);
-  padding: .5em;
+  margin: .125em 0;
+  padding: .25em 0;
   border-radius:.25em;
+  opacity: 0; 
+  &.active {
+    opacity: 1;
+  }
 }
 
 .offscreen{ 

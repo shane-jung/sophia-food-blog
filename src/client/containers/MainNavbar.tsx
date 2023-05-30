@@ -28,11 +28,11 @@ export default function MainNavbar() {
                 <li>
                     <NavLink to="/">Snack</NavLink>
                 </li>
-                {/* { auth?.roles?.find((role:any) => role == 1000) &&
+                { auth?.roles?.includes(8012) &&
                     <li>
                         <NavLink to="/recipes/create">Create New Recipe</NavLink>
                     </li>
-                } */}
+                }
             </ul>
         </nav>
     );

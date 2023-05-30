@@ -116,6 +116,14 @@ form input:focus:not(:read-only){
     margin:.25em 0;
 
 }
+
+.comment-user{
+    font-size:.825em;
+    font-weight:bold;
+    font-style: italic;
+    margin:0;
+}
+
 .comment-content{
     margin:0;
 }

@@ -7,7 +7,7 @@ export default function HomePage(){
     const { auth, setAuth } = useAuth();
 
     return (
-        auth?.accessToken  && <div>
+        auth?.roles?.includes(8012) && <div>
             <NavLink to="/recipes/create">
                 Create New Recipe
             </NavLink>

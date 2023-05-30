@@ -16,7 +16,7 @@ export default function SimpleTextRecipeComponent(props:SimpleTextRecipeComponen
     return (
         <>  
             {
-                auth?.accessToken  ?
+                viewMode != _viewMode.VIEWING  ?
                     <input name= {props.name} className ={props.className + " input-field"} defaultValue = {props.value} placeholder={placeholder} readOnly = {viewMode == _viewMode.VIEWING} required></input>
                 :
                     <div className = {props.className}>{props.value}</div>
