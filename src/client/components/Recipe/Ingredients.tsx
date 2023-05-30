@@ -9,10 +9,9 @@ interface IngredientProps{
     ingredients: string[];
 }
 
-export default function Ingredients(props: IngredientProps){
-    const { auth } = useAuth()
+export default function Ingredients({ingredients}: IngredientProps){
     const {viewMode} = useViewMode();
-    const [ingredientsList, setIngredientsList] = useState(props.ingredients || []);
+    const [ingredientsList, setIngredientsList] = useState(ingredients || []);
     
 
     function addIngredient(){
@@ -30,7 +29,7 @@ export default function Ingredients(props: IngredientProps){
                     })
                 }
             </ul>
-            {auth?.accessToken && (viewMode != _viewMode.VIEWING) && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
+            {(viewMode != _viewMode.VIEWING) && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
         </div>
     );
 }
