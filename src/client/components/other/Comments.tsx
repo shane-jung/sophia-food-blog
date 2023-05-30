@@ -4,7 +4,7 @@ import { useLoaderData } from 'react-router';
 
 import { Recipe } from '@/client/types';
 import { useState } from 'react';
-
+    
 export default function Comments(){
     const [recipeLoaderData, commentLoaderData] = useLoaderData() as [Recipe, CommentType[]];
     const [comments, setComments] = useState(commentLoaderData);
@@ -21,7 +21,7 @@ export default function Comments(){
         }
         ).then(async (response)=>{
             const commentId = (await response.json()).insertedId;
-            let newComment : CommentType= {content: content, date: date, _id: commentId};
+            let newComment : CommentType= {content: content, date: date, _id: commentId, likes: 0, username: "Anonymous"};
             setComments([...comments, newComment])
             const data = new FormData();
             data.append("commentId", commentId);
@@ -38,14 +38,15 @@ export default function Comments(){
     
     return (
         <div className="comments">
-            <h2>Comments</h2>
-            <div className="comment-list">
-               {commentsList}   
-            </div>
+            <h2 className = "comments-title">Comments</h2>
             <form className="comment-form" onSubmit={handleSubmit} method="POST">
                 <input type='text' name="content" className = "comment-textarea" placeholder='Add a comment...'/>
                 <button type="submit" className="simple-button comment-submit-button">Submit</button>
             </form>
+            <div className="comment-list">
+               {commentsList}   
+            </div>
+            
            
         </div>
     )

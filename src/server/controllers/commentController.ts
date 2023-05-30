@@ -59,6 +59,17 @@ const commentController ={
         throw error;
     }
   },
+  updateLikes: async (req: Request, res: Response) => {
+    try{
+      const db = await connectToDatabase();
+      const result = await db.collection('Comments').updateOne({id: req.params.commentID}, {$set: {likes: req.body.likes}});
+      console.log(result);
+      return res.status(200).json({message: "Recipe likes updated"});
+    } catch (error) { 
+      console.error(`Error fetching recipe in updateLikes: ${error}`);
+      throw error;
+    }
+  },
 };
 
 export default commentController;

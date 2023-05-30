@@ -105,20 +105,28 @@ form input:focus:not(:read-only){
 }
 
 .comments{
-    width:60%;
+    width: 80%;
     margin: .5em auto;
     text-align:left;
+    border-top: 5px solid black;
+}
+
+.comments-title{
+    font-size:1.25em;
+    font-weight:bold;
+    margin:.25em 0;
 }
 
 .comment{
-    border-top:2px solid rgb(74, 74, 74);
-    padding:.5em 0;
-    margin:.25em 0;
+    border-bottom: 1px solid rgb(74, 74, 74);
+    margin-top:1em;
+    // padding:.5em 0;
+    // margin:.25em 0;
 
 }
 
 .comment-user{
-    font-size:.825em;
+    font-size:1em;
     font-weight:bold;
     font-style: italic;
     margin:0;
@@ -126,12 +134,19 @@ form input:focus:not(:read-only){
 
 .comment-content{
     margin:0;
+    margin-bottom:.25em;
 }
 .comment-date{
-    text-align:right;
-    margin:0;
+    font-size:.75em;
+    text-align: left;
+    margin: 0 0 .75em 0;
 }
 
+.comment-toolbar{
+    display:flex;
+    justify-content:space-between;
+    flex-direction: row;
+}
 
 
 

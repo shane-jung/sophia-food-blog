@@ -49,6 +49,8 @@ export interface Author extends Profile {
 export type CommentType= {
     _id: string;
     profile?: Profile;
+    username: string;
+    likes: number;
     content: string;
     date: string;
     replies?: CommentType[];
