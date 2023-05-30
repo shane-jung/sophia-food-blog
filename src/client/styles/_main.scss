@@ -59,9 +59,9 @@ html, body{
   background:none;
   color:$font-color;
   font-family:inherit;
-  font-size:1.125em;
+  font-size:1.0em;
   margin:0;
-  padding:.5em;
+  padding:.25em 0em;
   &:hover{
       color:$accent;
   }

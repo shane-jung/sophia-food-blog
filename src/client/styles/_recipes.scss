@@ -105,15 +105,14 @@ form input:focus:not(:read-only){
 }
 
 .comments{
-    width:60%;
+    width:80%;
     margin: .5em auto;
     text-align:left;
 }
 
 .comment{
-    border-top:2px solid rgb(74, 74, 74);
-    padding:.5em 0;
-    margin:.25em 0;
+    border-bottom:1px solid rgb(74, 74, 74);
+    padding:.25em 0;
 
 }
 
@@ -126,12 +125,19 @@ form input:focus:not(:read-only){
 
 .comment-content{
     margin:0;
+    margin-bottom:.5em;
 }
 .comment-date{
-    text-align:right;
+    text-align:left;
+    font-size:.75em;
     margin:0;
 }
 
+.comment-toolbar{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
 
 
 
