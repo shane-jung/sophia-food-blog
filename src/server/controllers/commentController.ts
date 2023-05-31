@@ -52,7 +52,6 @@ const commentController ={
     try{
         const db = await connectToDatabase();
         const result = await db.collection('Comments').deleteOne({id: req.params.commentID});
-        console.log(result);
         return res.status(200).json({message: "Recipe deleted successfully"});
     } catch (error) {
         console.error(`Error fetching recipe in deleteRecipe: ${error}`);

@@ -20,8 +20,7 @@ export default function LoginPage(){
     const from = location.state?.from?.pathname || "/";
     
     useEffect(() =>{
-        console.log(auth);
-        if(auth.accessToken) navigate("/", {replace: true});
+        if(auth.accessToken) navigate(from, {replace: true});
         emailRef.current?.focus();
     }, [])
 
@@ -41,11 +40,9 @@ export default function LoginPage(){
             );
             setEmail("")
             setPassword("")
-            console.log(JSON.stringify(response?.data));  
             const accessToken = response?.data?.accessToken;    
-            const roles = response?.data?.roles  || [1000];    
-            const user = response?.data?.user || "Hello";
-            setAuth({accessToken, roles})
+            const roles = response?.data?.roles;
+            setAuth({accessToken, roles, username: email})
             setPassword("");
             setEmail("");    
             setTimeout( ()=> { navigate(from, {replace: true}) }, 200)

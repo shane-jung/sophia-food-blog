@@ -39,7 +39,7 @@ export default function Comments(){
     return (
         <div className="comments">
             <h2 className = "comments-title">Comments</h2>
-            <form className="comment-form" onSubmit={handleSubmit} method="POST">
+            <form className="comment-form" method="POST">
                 <input type='text' name="content" className = "comment-textarea" placeholder='Add a comment...'/>
                 <button type="submit" className="simple-button comment-submit-button">Submit</button>
             </form>

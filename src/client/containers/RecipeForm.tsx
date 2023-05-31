@@ -6,12 +6,12 @@ import { EmptyRecipe, Recipe } from '../types';
 import { sampleAuthor, sampleRecipe} from '@/server/seed';
 
 import RecipeContainer  from './RecipeContainer';
-import ActionButton from '../components/ActionButton';
 import { EditableContext } from '../contexts/EditableContext';
 import DeleteRecipe from '../components/DeleteRecipe';
 import { _viewMode } from '../enums';
 import useViewMode from '../utils/useViewMode';
 import useAxiosPrivate from '../utils/useAxiosPrivate';
+import useAuth from '../utils/useAuth';
 
 interface RecipeFormProps{
     recipe:Recipe
@@ -19,18 +19,13 @@ interface RecipeFormProps{
 
 export default function RecipeForm({recipe}:RecipeFormProps){ 
     const { viewMode, setViewMode } = useViewMode();
+    const {auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
     useEffect( ()=> {   
         if(!recipe.titleID) setViewMode(_viewMode.CREATING);
-        else setViewMode(_viewMode.EDITING);
+        else setViewMode(_viewMode.VIEWING);
     }, []);
-
-    const [buttonText, setButtonText] = useState("");
-    useEffect( ()=> {
-        const buttonText = (viewMode == _viewMode.CREATING) ? "Save" : "Edit";
-        setButtonText(buttonText);
-    }, [viewMode]);
 
     const navigate = useNavigate();
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,33 +46,15 @@ export default function RecipeForm({recipe}:RecipeFormProps){
         const result = await axiosPrivate.post(reqLink, data, {withCredentials: true});
         console.log(result);
         navigate(redirect, {replace: true})
+        setViewMode(_viewMode.VIEWING);
     }
 
     
 
-    function handleActionButtonClick(event:any){
-        event.preventDefault();
-        switch (viewMode) {
-            case _viewMode.VIEWING:
-                setButtonText("Save");
-                setViewMode(_viewMode.EDITING);
-                break;
-            case _viewMode.EDITING:
-                setButtonText("Edit");      
-                setViewMode(_viewMode.VIEWING); 
-                handleSubmit(event);
-                break;  
-            case _viewMode.CREATING:
-                setButtonText("Save");
-                setViewMode(_viewMode.EDITING);
-                break;
-        }
-    }
-
     return (
         <>
-            <form className="recipe-form"  onSubmit={handleSubmit} method='POST'  encType="multipart/form-data">
-                <ActionButton onClick = {handleActionButtonClick} buttonText = {buttonText} /> 
+            <form className="recipe-form" method='POST'  encType="multipart/form-data" onSubmit = {handleSubmit}>
+                {auth?.roles?.includes(8012) && (viewMode == _viewMode.VIEWING ? <EditButton/> : <SubmitButton/>)}
                 <RecipeContainer recipe={recipe}/>
             </form>
             { viewMode != _viewMode.CREATING &&  <DeleteRecipe titleID = {recipe.titleID} /> }
@@ -96,3 +73,36 @@ function verifyInputs(data:FormData){
     return true;
 }
 
+
+
+function SubmitButton(){
+
+    const {viewMode, setViewMode} = useViewMode();
+    const [buttonText, setButtonText] = useState("");
+    
+    useEffect(()=>{ 
+        if (viewMode == _viewMode.CREATING) setButtonText("Create Recipe");
+        else setButtonText("Save");
+    }, [viewMode]);
+
+
+    return(
+        <button className="edit-button simple-button" type= "submit">{buttonText}</button>
+
+    )
+}
+
+
+function EditButton() {
+    const {viewMode, setViewMode} = useViewMode();
+
+    const toggleViewMode = (e:any) =>{
+        e.preventDefault();
+        setViewMode(viewMode == _viewMode.VIEWING ? _viewMode.EDITING : _viewMode.VIEWING);
+    }
+
+    return(
+        <button className="edit-button simple-button" type= "button" onClick = {toggleViewMode}> Edit </button>
+        
+    )
+}

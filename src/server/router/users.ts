@@ -1,10 +1,7 @@
 import express, {Request, Response} from 'express';
 import userController from '../controllers/userController';
 import bcrypt from 'bcryptjs';
-
-import jwt from "jsonwebtoken";
-import multer from 'multer';
-import http from "http";
+import checkAuth from '../middleware/checkAuth';
 
 const router = express.Router(); 
 
@@ -12,32 +9,13 @@ router.route('/').post(userController.findUser);
 
 router.route('/login').post(userController.handleLogin);
 
-// async function generateToken(req:Request, res: Response, next:any){
-//     const email = req.body.email;
-//     const token = jwt.sign({email}, process.env.SECRET_KEY as string, { expiresIn: "1h" })
-//     res.cookie("jwttoken", token);
-
-//     return res.json({token: token}) 
-    
-//     // http
-//     // .createServer(function (req, res) {
-//     //     res.writeHead(301, { Location: "/" });
-//     //     res.end();
-//     // })
-//     // .listen(8888);
-// }
-
-router.route('/logout').get(userController.handleLogin);
-
-
-
+router.route('/logout').post(userController.handleLogout);
 
 router.route('/create').post(hashPassword, userController.createUser);
 
 
 async function hashPassword(req: Request, res: Response, next: any){
-    let password = req.body['password'] as string;
-    console.log(req.body);
+    let password = req.body['password']!;
 
     hashedPassword(password).then((hash) => {
         console.log("HASHED PASSWORD: " , hash);

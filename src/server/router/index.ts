@@ -8,7 +8,7 @@ const router = express.Router();
 import checkAuth from '../middleware/checkAuth';
 
 
-router.route('/auth').get(checkAuth, (req, res) => { res.json({message: "success"})});
+router.route('/auth').get(checkAuth);
 router.route('/refresh').get(refreshTokenController.handleRefreshToken)
 
 router.use('/recipes', recipeRouter);

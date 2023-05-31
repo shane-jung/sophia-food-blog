@@ -10,7 +10,6 @@ async function recipeLoader ({request, params} :any){
         return resp.json();
     }));
 
-    console.log(comments);
     return [recipe, comments];
 }
 
