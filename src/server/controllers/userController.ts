@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs';
 
 
+import { EmptyProfile } from '../../client/types';
 
 
 const userController = {
@@ -80,13 +81,14 @@ async function saveUser(user: any)  {
 
   try{
     const db = await connectToDatabase();
-    const result = await db.collection('Profiles').updateOne({email: user.email}, {$set: user});
+    const result = await db.collection('Profiles').updateOne({email: user.email}, {$set: user}, {upsert:true});
   } catch(error:any){ 
     console.error(`Error editing user in saveUser: ${error}`);
     throw error;
-  }
+  } 
 }
 
+saveUser({...EmptyProfile, email: "sampleuser@gmail.com"})
 export default userController;
 
 

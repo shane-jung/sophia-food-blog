@@ -126,11 +126,13 @@ strong{
   }
 }
 .comment-textarea{
-  margin:.5em auto;
+  padding:.5em;
   height:100px;
   outline:1px solid black;
   font-family:inherit;
   font-size:inherit;
+  text-align:left;
+  font-weight:normal;
   resize:none;
 }
 

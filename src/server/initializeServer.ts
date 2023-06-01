@@ -35,7 +35,7 @@ export default function initializeServer(router: Router) {
   app.use(cookieParser())
 //   app.use(cors(origin))  
 //   app.use(helmet())
-//   app.use(compression())
+//   app.use(compression())  
 
   // app.use((request, response, next) => {
   //   response.header('Content-Security-Policy', "img-src 'self' *.githubusercontent.com")
