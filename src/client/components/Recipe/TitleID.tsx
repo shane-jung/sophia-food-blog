@@ -11,6 +11,6 @@ interface TitleIDProps{
 export default function TitleID(props:TitleIDProps){
     const { auth } = useAuth();
     return(
-      auth?.accessToken && <input className="recipe-title-id" type="text" name="titleID" defaultValue = {props.value} placeholder="TITLE ID (REQUIRED)" readOnly = {false}/>
+      auth.user?.roles?.includes(8012) && <input className="recipe-title-id" type="text" name="titleID" defaultValue = {props.value} placeholder="TITLE ID (REQUIRED)" readOnly = {false}/>
     )
 }

@@ -21,19 +21,17 @@ const userController = {
     if(!DBUser) return res.sendStatus(401);
     const match = await bcrypt.compare(user.password, DBUser.password)
     if(match) {
-      console.log("User successfully logged in, generating access token and refresh token.")
+      console.log("\nLogging in User. Generating Access and Refresh Token\n")
       const accessToken = jwt.sign(
         {
-          email: DBUser.email,
-          roles: DBUser.roles
+          user : DBUser
         }, 
         process.env.ACCESS_TOKEN_SECRET!, 
         {expiresIn: '1h'}
       );
       const refreshToken = jwt.sign(
         { 
-          email : DBUser.email ,
-          roles : DBUser.roles
+          user : DBUser
         }, 
         process.env.REFRESH_TOKEN_SECRET!,
         {
@@ -42,19 +40,19 @@ const userController = {
       );
       res.cookie('jwt', refreshToken, { httpOnly: true, secure:true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000});
       DBUser["refresh-token"] = refreshToken;
-      console.log(`Access Token: ${accessToken}`);
-      console.log(`Refresh Token: ${refreshToken}`)
-      console.log(`Storing refresh token in jwt cookie, saving to User profile.`);
-      console.log("Returning access token in JSON");
+      // console.log(`Access Token: ${accessToken}`);
+      // console.log(`Refresh Token: ${refreshToken}`)
+      // console.log(`Storing refresh token in jwt cookie, saving to User profile.`);
+      req.headers['Authorization'] = `Bearer ${accessToken}`
       saveUser(DBUser);
-      res.json({accessToken: accessToken, roles: DBUser.roles, email: DBUser.email}); 
+      res.json({isAuthenticated: true, user: DBUser}); 
     }
     else {
       res.status(401);
     }
   },
   handleLogout: async(req:Request, res:Response) =>{
-    console.log(req.body);
+    // console.log(req.body);
     const cookies = req.cookies;
     if(!cookies?.jwt) return res.sendStatus(204);
     const jwt = cookies.jwt;

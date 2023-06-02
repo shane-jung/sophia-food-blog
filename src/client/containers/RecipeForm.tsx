@@ -19,7 +19,7 @@ interface RecipeFormProps{
 
 export default function RecipeForm({recipe}:RecipeFormProps){ 
     const { viewMode, setViewMode } = useViewMode();
-    const {auth } = useAuth();
+    const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
     useEffect( ()=> {   
@@ -44,17 +44,14 @@ export default function RecipeForm({recipe}:RecipeFormProps){
             redirect = `/recipes/${data.get('titleID')}`
         }
         const result = await axiosPrivate.post(reqLink, data, {withCredentials: true});
-        console.log(result);
+        // console.log(result);
         navigate(redirect, {replace: true})
         setViewMode(_viewMode.VIEWING);
     }
-
-    
-
     return (
         <>
             <form className="recipe-form" method='POST'  encType="multipart/form-data" onSubmit = {handleSubmit}>
-                {auth?.roles?.includes(8012) && (viewMode == _viewMode.VIEWING ? <EditButton/> : <SubmitButton/>)}
+                {auth?.user?.roles?.includes(8012) && (viewMode == _viewMode.VIEWING ? <EditButton/> : <SubmitButton/>)}
                 <RecipeContainer recipe={recipe}/>
             </form>
             { viewMode != _viewMode.CREATING &&  <DeleteRecipe titleID = {recipe.titleID} /> }
