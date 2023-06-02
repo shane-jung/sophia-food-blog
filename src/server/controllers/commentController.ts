@@ -36,10 +36,14 @@ const commentController ={
   },
   postComment: async (req: Request, res: Response) => {
     const comment = req.body;
+    // console.log(comment);
     try{
         const db = await connectToDatabase();
         const result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment});
-
+        if(comment.profileId) {
+          const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.insertedId)}});
+          // console.log(addToProfile);
+        }
         return res.status(200).json(result);
     } catch (error) {
         console.error(`Error creating comment in postComment: ${error}`);

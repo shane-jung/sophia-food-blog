@@ -14,6 +14,7 @@ const userController = {
     const db = await connectToDatabase();
     const user = await db.collection('Profiles').findOne({'email':email});
     if(user) return res.sendStatus(409);
+    else return res.sendStatus(200)
   }, 
   handleLogin: async (req: Request, res: Response, next: any) => {
     const user = req.body;
@@ -74,18 +75,17 @@ const userController = {
   ,
   createUser: async (req: Request, res: Response) => {
     const user = res.locals.user;
+    console.log(req.body, res.locals.user);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Profiles').insertOne({ _id : new ObjectId(), roles : [1000], 
-            ...user
-        });
+        const DBuser = { ...EmptyProfile, roles : [1000], ...user }
+        const result = await db.collection('Profiles').insertOne({...DBuser,  _id : new ObjectId()});
         console.log(result);
-        return res.json({message: "User created successfully"});
+        return res.json({user: {...DBuser, _id: result.insertedId}});
     } catch (error) {
         console.error(`Error creating user in createUser: ${error}`);
         throw error;
     }
-    return;
   },
   
 };

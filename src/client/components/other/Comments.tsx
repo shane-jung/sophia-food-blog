@@ -30,9 +30,10 @@ export default function Comments(){
         // and we can just check userCommentLikes[index]: boolean). I don't know how many comments it would take to slow this down,
         // so this may not be an issue.
 
-        const userCommentLikes = [0, 1, 3] 
+        const userCommentLikes = auth?.user?.likedComments && auth.user.likedComments[0].comments;
+    //    console.log(userCommentLikes, auth.user);
         const c = (comments!=undefined) && comments.map((comment,index) => {
-            return <Comment key={index} comment={comment} index = {index} liked = {userCommentLikes.includes(index)} />;
+            return <Comment key={index} comment={comment} index = {index} liked = {userCommentLikes?.includes(index)} />;
         });
         setCommentsList(c);
         setCommentIdList(comments.map(comment => comment._id));
@@ -68,14 +69,17 @@ function CommentForm({reply}: {reply:boolean}){
    
     async function handleSubmit(event:any){
         event.preventDefault();
+        console.log("submitting comment");
         const addCommentResult = await axios.post('/comments', {
-            email : email,
-            name: name,
+            profileId : auth?.user?._id || undefined,
+            email : email || auth?.user.email,
+            username: name || auth?.user.username,
             content : content,
             date: new Date().toISOString(),
             likes: 0, 
         });
-        if(!addCommentResult.data.success) return;
+        console.log(addCommentResult)
+        if(addCommentResult.status != 200) return;
 
         const addCommentToRecipeResult = await axios.post(`/recipes/test-recipe/comment`, {
             commentId: addCommentResult.data.insertedId,
@@ -84,8 +88,8 @@ function CommentForm({reply}: {reply:boolean}){
 
     return(
         <form className="comment-form" onSubmit={handleSubmit} method="POST">
-                {auth?.accessToken 
-                 ?  <p>Signed in as {auth.username}</p>
+                {auth?.user 
+                 ?  <p>Signed in as <b>{auth.user.username} </b></p>
                  :  <div>
                         <label htmlFor='name'>Your Name</label>
                         <input 
@@ -138,6 +142,7 @@ interface CommentProps{
 }
 
 function Comment({comment, index, liked}:CommentProps){
+    const { auth } = useAuth();
     const [commentID, setCommentID] = useState(comment._id);
     const date = new Date(comment.date);
     const dateString = date.toLocaleDateString("en-US", {month: 'long', day: 'numeric', year: 'numeric'});
@@ -154,7 +159,7 @@ function Comment({comment, index, liked}:CommentProps){
             try{ 
                 const result = await axios.post(
                     `/comments/${commentID}/like`, 
-                    { inc: userLiked ? -1 : 1, commentID, recipeID: '644600514a6a31a0b4282785', profileID: '64782f70a4a50f0efa0de498', commentIndex: index}
+                    { inc: userLiked ? -1 : 1, commentID, recipeID: '644600514a6a31a0b4282785', profileID: auth?.user?._id || "64782f70a4a50f0efa0de498", commentIndex: index}
                 );
             } catch(err) {
                 console.log(err);
@@ -173,9 +178,23 @@ function Comment({comment, index, liked}:CommentProps){
         // setActivelyReplying(!activelyReplying);
         activelyReplying = !activelyReplying;
     }
+
+    function handleDelete(e:any){
+        e.preventDefault();
+        console.log("Deleting comment... (need to implement)")
+        // async function deleteComment(){
+        //     // try{
+        //     //     const result = await axios.delete(`/comments/${commentID}`);
+        //     //     console.log(result);
+        //     // } catch(err){
+        //     //     console.log(err);
+        //     // }
+        // }
+        // deleteComment();
+    }
     return(
         <div className = "comment">
-            <p className = "comment-user">{comment.username || "Shanejung12"}</p>
+            <p className = "comment-user">{comment.username}</p>
             <p className = "comment-date">{dateString}</p>
 
             <p className = "comment-content">{comment.content}</p>
@@ -185,7 +204,16 @@ function Comment({comment, index, liked}:CommentProps){
               
                     <span className = "comment-like-counter"> {comment.likes + (userLiked ? 1 : 0)}</span>   
                 </div>
-                <button className="comment-submit-button simple-button" onClick={handleReply}>{replyText}</button>
+                <div>
+                    <button className="comment-submit-button simple-button" onClick={handleReply}>{replyText} </button>
+                    { 
+                            auth?.user?.roles.includes(8012) && 
+                            <> 
+                                <span> or </span>
+                                <button className="comment-delete-button simple-button" onClick={handleDelete}>Delete</button> 
+                            </>
+                    }
+                </div>
             </div>
             {
                 activelyReplying && <CommentForm reply = {true} />

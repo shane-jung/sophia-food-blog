@@ -6,9 +6,9 @@ import MainNavbar from "./MainNavbar";
 export default function HomePage(){
     const { auth, setAuth } = useAuth();
 
-    // useEffect(() => {
-    //     console.log("Auth changed", auth)
-    // }, [auth]);
+    useEffect(() => {
+        console.log("Auth changed", auth)
+    }, [auth]);
 
     return (
         auth?.user?.roles?.includes(8012) && <div>
