@@ -22,7 +22,7 @@ export default function RecipePage() {
 
     return (
         <ViewModeProvider>
-            {auth?.accessToken ? <RecipeForm recipe={recipe} /> : <RecipeContainer recipe={recipe} /> }
+            {auth?.user?.roles?.includes(8012) ? <RecipeForm recipe={recipe} /> : <RecipeContainer recipe={recipe} /> }
             {recipe.titleID && <Comments />}
             <Link to='/recipes'>Back to Recipes</Link>
         </ViewModeProvider>

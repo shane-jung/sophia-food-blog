@@ -8,22 +8,19 @@ export default function LoginButton(){
 
     async function handleLogout(){
         setAuth({})
-
         try{ 
             const response = await axios.post(`/users/logout`, {
                 email: auth.email,
             }) 
-            console.log("LOGGING OUT", auth);
 
         } catch (error) {
             console.log(error);
         }
-        
         navigate("/")
     }  
     return(
-        auth.accessToken != null 
-            ?    <> <p>Welcome, {auth.username}!</p> <button className = "simple-button" onClick = {handleLogout}>Logout</button> </>
+        auth.isAuthenticated 
+            ?    <> <p>Welcome, {auth.user?.username}!</p> <button className = "simple-button" onClick = {handleLogout}>Logout</button> </>
             :    <Link to="/users/login" className="simple-button login-button">Login</Link>
     )
 }

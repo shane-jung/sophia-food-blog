@@ -38,14 +38,13 @@ export default function LoginPage(){
                     withCredentials: true,
                 }
             );
-            setEmail("")
-            setPassword("")
-            const accessToken = response?.data?.accessToken;    
-            const roles = response?.data?.roles;
-            setAuth({accessToken, roles, username: email})
+            // console.log(response);
+
+            setAuth({user: response.data.user, isAuthenticated: true})
             setPassword("");
             setEmail("");    
-            setTimeout( ()=> { navigate(from, {replace: true}) }, 200)
+            navigate(from, {replace: true});
+            
         } catch(err : any) {
             if(!err?.response){
                 setErrMessage("No Server Response")

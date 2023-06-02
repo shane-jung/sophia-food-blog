@@ -1,5 +1,3 @@
-import {isAuthenticated} from '@/client/utils/isAuthenticated';
-import { Component, useState } from 'react';
 import { Navigate, Outlet, Route, useLocation } from 'react-router-dom';
 import useAuth from '../utils/useAuth';
 
