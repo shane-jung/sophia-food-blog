@@ -79,7 +79,7 @@ const recipeController ={
     console.log(titleID, commentID);
     const db = await connectToDatabase();
 
-    const result = await db.collection('Recipes').updateOne({titleID:titleID} , {$push: { comments: commentID}} );
+    const result = await db.collection('Recipes').updateOne({titleID:titleID} , {$push: { comments: new ObjectId(commentID)}} );
     return res.status(200).json(result);
     
   },

@@ -1,4 +1,4 @@
-import { sampleAuthor } from "@/server/seed";
+
 
 export type Recipe = {
     _id: string;
@@ -7,7 +7,7 @@ export type Recipe = {
     dateCreated: string;
     dateEdited: string;
     description: string;
-    author: Author;
+    author: any;
     background : string;
     ingredients : string[];
     // ingredients : Ingredient[];
@@ -31,14 +31,25 @@ export type Ingredient = {
 
 
 export type Profile = {
-    _id: string;
+    _id?: string;
     firstName: string;
     lastName: string;   
     email: string;
     password: string;  
-    savedRecipes: Recipe[];
-   
+    savedRecipes: any;
+    comments: any
+    likedComments: any;
+}
 
+export const EmptyProfile:Profile = {
+    firstName: "",
+    lastName: "",   
+    email: "",
+    password: "",  
+    savedRecipes : [],   // an array of Recipe IDs 
+    comments : [],       // an array of (Recipe ID, comment ID)'s 
+    likedComments : [ ],   // an array of Objects of the form  {recipeID, commentID []}
+    
 }
 
 export interface Author extends Profile {
@@ -48,6 +59,8 @@ export interface Author extends Profile {
 
 export type CommentType= {
     _id: string;
+    likes:number;
+    username:string;
     profile?: Profile;
     username: string;
     likes: number;
@@ -73,7 +86,7 @@ export const EmptyRecipe:Recipe = {
     dateEdited: "",
     description: "",
     background : "",
-    author: sampleAuthor,
+    author: "",
     ingredients : [],
     directions: "",
     comments: []

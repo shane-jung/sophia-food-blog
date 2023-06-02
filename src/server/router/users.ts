@@ -19,7 +19,7 @@ async function hashPassword(req: Request, res: Response, next: any){
 
     hashedPassword(password).then((hash) => {
         console.log("HASHED PASSWORD: " , hash);
-        let data = {...req.body, "admin-status": 'false', "date-created": new Date().toISOString()};
+        let data = {...req.body, "date-created": new Date().toISOString()};
         data["password"] = hash;
         res.locals.user = data;
         next();

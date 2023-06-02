@@ -36,7 +36,6 @@ const commentController ={
   },
   postComment: async (req: Request, res: Response) => {
     const comment = req.body;
-  
     try{
         const db = await connectToDatabase();
         const result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment});
@@ -58,17 +57,33 @@ const commentController ={
         throw error;
     }
   },
-  updateLikes: async (req: Request, res: Response) => {
+  handleLike: async (req: Request, res:Response) => {
+    const commentId = req.body.commentID;
+    const commentIndex = req.body.commentIndex
+    const recipeId = req.body.recipeID;
+    const profileId = req.body.profileID;
+    const increment = req.body.inc; 
     try{
       const db = await connectToDatabase();
-      const result = await db.collection('Comments').updateOne({id: req.params.commentID}, {$set: {likes: req.body.likes}});
-      console.log(result);
-      return res.status(200).json({message: "Recipe likes updated"});
-    } catch (error) { 
-      console.error(`Error fetching recipe in updateLikes: ${error}`);
-      throw error;
+      const commentUpdateResult = await db.collection('Comments').updateOne({_id: new ObjectId(commentId) }, { $inc: {likes: increment}})
+      // console.log(result);
+      // const anotha = await db.collection('Profiles').updateOne({'email': req.body.email}, {$set : {'comment-likes': {}}})
+      // const result2 = await db.collection('Profiles').updateOne( {'email': req.body.email}, { $set : { 'comment-likes.$.liked': req.body.inc > 0 ? 'true' : 'false'} }, {upsert:true})
+      const profileFilter = {_id: new ObjectId(profileId), 'likedComments.recipeID' : new ObjectId(recipeId)}
+
+      const profileUpdate = increment < 0 ? {$pull : {'likedComments.$.comments': commentIndex}} : {$push : {'likedComments.$.comments': commentIndex}}
+      const profileUpdateResult = await db.collection('Profiles').updateOne(profileFilter, profileUpdate)
+      if(profileUpdateResult.modifiedCount === 0){
+        const newProfileUpdate = {$push : {'likedComments': {recipeID: new ObjectId(recipeId), comments: [commentIndex]}}}
+        const newProfileUpdateResult = await db.collection('Profiles').updateOne({_id: new ObjectId(profileId)}, newProfileUpdate)
+      }
+      
+      return res.sendStatus(200);
+    } catch (err) {
+      console.log(err);
+    throw err;
     }
-  },
+  }
 };
 
 export default commentController;
