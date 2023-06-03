@@ -73,15 +73,52 @@ const recipeController ={
         throw error;
     }
   },
-  addCommentToRecipe: async (req: Request, res: Response) => {
-    const titleID = req.params.titleID;
-    const commentID = req.body.commentId;
-    console.log(titleID, commentID);
-    const db = await connectToDatabase();
-
-    const result = await db.collection('Recipes').updateOne({titleID:titleID} , {$push: { comments: new ObjectId(commentID)}} );
-    return res.status(200).json(result);
-    
+  postComment: async (req: Request, res: Response) => {
+    const comment = req.body.comment;
+    const reply = req.body.reply;
+    const recipeId = req.body.recipeId;
+    const commentId = req.body.commentId;
+    // console.log(comment);
+    try{
+        const db = await connectToDatabase();
+        if(!reply){
+          const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {$push: {comments: {_id: new ObjectId(), ...comment, replies: [], profileId : new ObjectId(comment.profileId) }}});
+          console.log(result);
+        } else {
+          console.log(req.body);
+          const result = await db.collection('Recipes').updateOne(
+            {
+              _id: new ObjectId(recipeId), 
+              'comments._id': new ObjectId(commentId)
+            }, 
+            { 
+              $push: { 
+                'comments.$[comment].replies': { 
+                  _id: new ObjectId(), 
+                  ...comment, 
+                  profileId : new ObjectId(comment.profileId) 
+                } 
+              } 
+            }, 
+            { 
+              arrayFilters: [
+                { 
+                  'comment._id': new ObjectId(commentId) 
+                }
+              ] 
+            } 
+          );
+          console.log(result);
+        }
+        // if(comment.profileId) {
+        //   const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.upsertedId)}});
+        //   // console.log(addToProfile);
+        // }
+        return res.sendStatus(200);
+    } catch (error) {
+        console.error(`Error creating comment in postComment: ${error}`);
+        throw error;
+    }
   },
 };
 
