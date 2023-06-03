@@ -9,8 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useAuth from '@/client/utils/useAuth';
 import RatingBar from '../Recipe/RatingBar';
 import axios from '@/client/api/axios';
-
-var activelyReplying = false;
+import { set } from 'mongoose';
 
 
 export default function Comments(){
@@ -19,7 +18,9 @@ export default function Comments(){
     const [comments, setComments] = useState(commentLoaderData);
     const [commentsList, setCommentsList] = useState<any>();
     const [commentIdList, setCommentIdList] = useState<string[]>()
+    const [commentFormIndex, setCommentFormIndex] = useState(-1);
 
+    const userCommentLikes = auth?.user?.likedComments?.length>0 && auth.user.likedComments[0].comments;
     
     useEffect( ()=> {
 
@@ -29,28 +30,36 @@ export default function Comments(){
         // need to use .includes() method. For example if the user likes the 3rd comment, the array would be [false, false, true, false, false]
         // and we can just check userCommentLikes[index]: boolean). I don't know how many comments it would take to slow this down,
         // so this may not be an issue.
-
-        const userCommentLikes = auth?.user?.likedComments && auth.user.likedComments[0].comments;
+        console.log(userCommentLikes);
     //    console.log(userCommentLikes, auth.user);
-        const c = (comments!=undefined) && comments.map((comment,index) => {
-            return <Comment key={index} comment={comment} index = {index} liked = {userCommentLikes?.includes(index)} />;
-        });
-        setCommentsList(c);
         setCommentIdList(comments.map(comment => comment._id));
     }, [])
-    
 
+
+    const commentList = comments.map((comment,index) => {
+        return      <Comment key = {index} 
+                           comment={comment} 
+                           index = {index} 
+                           liked = {(userCommentLikes.length > 0) && userCommentLikes.includes(index)}
+                           setCommentFormIndex = {setCommentFormIndex} 
+                           commentFormIndex = {commentFormIndex}
+                    />;
+    })
+
+    if(commentFormIndex != -1) commentList.splice(commentFormIndex+1, 0, <CommentForm key = {'form '+ commentFormIndex} reply={true} setComments = {setComments} />)
+
+   
     return (
         <div className="comments">
-            <h2>Comments</h2>
-            {!activelyReplying && <CommentForm reply ={false} />}
+            <h2>Recipe Comments ({commentList.length})</h2>
+            {(commentFormIndex == -1) ? <CommentForm reply={false} setComments = {setComments} /> : <button className = "simple-button" onClick={()=>setCommentFormIndex(-1)}>Add a comment</button>}
             <div className = "comments-toolbar">
                 {/* <span>Sort By</span>
                 <button></button>
                 <button> </button> */}
             </div>
             <div className="comment-list">
-               {commentsList}   
+               { commentList}
             </div>
             
         </div>
@@ -58,7 +67,7 @@ export default function Comments(){
 }
 ;
 
-function CommentForm({reply}: {reply:boolean}){
+function CommentForm({reply, setComments}: {reply:boolean, setComments: any}){
     const { auth } = useAuth();
 
     const [email, setEmail] = useState("");
@@ -70,6 +79,12 @@ function CommentForm({reply}: {reply:boolean}){
     async function handleSubmit(event:any){
         event.preventDefault();
         console.log("submitting comment");
+
+    setComments((prev:any) => {
+        return [{username: name || auth?.user.username, content: content, date: new Date().toISOString(), likes: 0}, ...prev]
+    })
+        
+
         const addCommentResult = await axios.post('/comments', {
             profileId : auth?.user?._id || undefined,
             email : email || auth?.user.email,
@@ -87,9 +102,9 @@ function CommentForm({reply}: {reply:boolean}){
     }
 
     return(
-        <form className="comment-form" onSubmit={handleSubmit} method="POST">
+        <form className={ "comment-form " + (reply ? "reply" : "")} onSubmit={handleSubmit} method="POST">
                 {auth?.user 
-                 ?  <p>Signed in as <b>{auth.user.username} </b></p>
+                 ? <></>
                  :  <div>
                         <label htmlFor='name'>Your Name</label>
                         <input 
@@ -112,22 +127,21 @@ function CommentForm({reply}: {reply:boolean}){
                     </div>
                 }
 
+                <textarea 
+                    name="content" 
+                    className = "comment-textarea" 
+                    placeholder= {reply ? 'Reply to this comment...' : 'Add a comment...' }
+                    cols = {50} 
+                    rows = {4} 
+                    onChange = { (e) => setContent(e.target.value) }
+                    value = {content}
+                />
+
                 { !reply && <>
                                 <p>Did you make this recipe? Give it a rating!</p>
                                 <RatingBar />
                             </>
                 }
-
- 
-                <textarea 
-                    name="content" 
-                    className = "comment-textarea" 
-                    placeholder='Add a comment...' 
-                    cols = {50} 
-                    rows = {5} 
-                    onChange = { (e) => setContent(e.target.value) }
-                    value = {content}
-                />
                 
                 <button type="submit" className="simple-button comment-submit-button">Submit</button>
             </form>
@@ -139,21 +153,24 @@ interface CommentProps{
     comment:CommentType;
     index: number;
     liked: boolean;
+    commentFormIndex:number;
+    setCommentFormIndex: (index:number) => void;
 }
 
-function Comment({comment, index, liked}:CommentProps){
+function Comment({comment, index, liked, commentFormIndex, setCommentFormIndex}:CommentProps){
     const { auth } = useAuth();
     const [commentID, setCommentID] = useState(comment._id);
     const date = new Date(comment.date);
     const dateString = date.toLocaleDateString("en-US", {month: 'long', day: 'numeric', year: 'numeric'});
 
-    const [icon, setIcon] = useState(liked ? faHeartSolid : faHeart);
+    const [icon, setIcon] = useState(liked ? faHeartSolid : faHeartSolid);
     const [inc, setInc] = useState(liked ? -1 : 1)
     const [userLiked, setUserLiked] = useState(liked);
     const [replyText, setReplyText] = useState("Reply");
+    const [replying, setReplying] = useState(false);
 
     function handleLike(){
-        const i = userLiked ? faHeart : faHeartSolid;  
+        const i = userLiked ? faHeartSolid : faHeartSolid;  
         setIcon(i)
         async function updateDB(){
             try{ 
@@ -169,16 +186,24 @@ function Comment({comment, index, liked}:CommentProps){
         setUserLiked(!userLiked);
         
     }
-
     
     function handleReply(e:any){
         e.preventDefault();
-        setReplyText(activelyReplying ? "Reply" : "Cancel")
-
-        // setActivelyReplying(!activelyReplying);
-        activelyReplying = !activelyReplying;
+        setCommentFormIndex(!replying ? index : -2);
     }
 
+
+    useEffect(()=>{
+        if(commentFormIndex == index) {
+            setReplyText("Cancel");
+            setReplying(true);
+        } else {
+            setReplyText("Reply");
+            setReplying(false);
+        }
+    }, [commentFormIndex]);
+
+    
     function handleDelete(e:any){
         e.preventDefault();
         console.log("Deleting comment... (need to implement)")
@@ -194,30 +219,30 @@ function Comment({comment, index, liked}:CommentProps){
     }
     return(
         <div className = "comment">
-            <p className = "comment-user">{comment.username}</p>
-            <p className = "comment-date">{dateString}</p>
+            <span>
+                <span className = "comment-user">{comment.username}</span> &#x2022; <span className = "comment-date">{dateString}</span>
+            </span>
+            
 
             <p className = "comment-content">{comment.content}</p>
             <div className="comment-toolbar">  
-                <div className="comment-like-container">
-                    <button className= "comment-like-button simple-button" onClick = {handleLike}>Like <FontAwesomeIcon icon={icon} /></button>
-              
-                    <span className = "comment-like-counter"> {comment.likes + (userLiked ? 1 : 0)}</span>   
-                </div>
-                <div>
-                    <button className="comment-submit-button simple-button" onClick={handleReply}>{replyText} </button>
-                    { 
-                            auth?.user?.roles.includes(8012) && 
-                            <> 
-                                <span> or </span>
-                                <button className="comment-delete-button simple-button" onClick={handleDelete}>Delete</button> 
-                            </>
-                    }
-                </div>
+                <FontAwesomeIcon 
+                    onClick = {handleLike}
+                    icon={icon} 
+                    className = {userLiked ? "comment-like-icon liked" : "comment-like-icon"}
+                />
+            
+                <span className = "comment-like-counter">  {(comment.likes + (userLiked ? 1 : 0) ) + " likes"}</span> 
+                <span> &#x2022; </span>
+                <button type = 'button' className="comment-reply-button simple-button" onClick={handleReply} value={'hello'}>{replyText} </button>
+                { 
+                        auth?.user?.roles?.includes(8012) && 
+                        <> 
+                            <span> &#x2022; </span>
+                            <button className="comment-delete-button simple-button" onClick={handleDelete}>Delete</button> 
+                        </>
+                } 
             </div>
-            {
-                activelyReplying && <CommentForm reply = {true} />
-            }
         </div>
 
     )

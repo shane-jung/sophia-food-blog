@@ -57,7 +57,6 @@ html, body{
   border:none;
   cursor:pointer;
   background:none;
-  color:$font-color;
   font-family:inherit;
   font-size:1.0em;
   margin:0;
@@ -65,6 +64,7 @@ html, body{
   &:hover{
       color:$accent;
   }
+  font-weight:unset;
 }
 
 .disabled-button {
