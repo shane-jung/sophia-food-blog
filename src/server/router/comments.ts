@@ -6,10 +6,10 @@ const router = express.Router();
 router.route('/')
     .post(commentController.postComment);
 
-router.get('/:commentID', commentController.getCommentById)
-      .delete('/:commentID', commentController.deleteComment);
+router.get('/:commentId', commentController.getCommentById)
+      .delete('/:commentId', commentController.deleteComment);
 
-router.post('/:commentID/like', commentController.handleLike)
+router.post('/:commentId/like', commentController.handleLike)
 
 
 export default router; 

@@ -60,7 +60,7 @@ export default function Recipes(){
                         key={recipe._id}
                         className="recipe-thumbnail"
                         >
-                            <NavLink to={`/recipes/${recipe.titleID}`}>{recipe.title}</NavLink>
+                            <NavLink to={`/recipes/${recipe.titleId}`}>{recipe.title}</NavLink>
                         </li>
                     ))}
                 </ul>

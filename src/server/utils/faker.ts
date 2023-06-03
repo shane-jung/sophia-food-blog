@@ -10,10 +10,10 @@ async function insertFakeRecipes(numRecipes: number): Promise<void> {
     const title = "test recipe " + (i+1);
     const ingredients = generateFakeIngredients(Math.round(Math.random() * 10) + 1);
     const directions = [ " These ", " are ", " fake ", " directions "];
-    const titleID = "test-recipe-" + (i+1);
+    const titleId = "test-recipe-" + (i+1);
     const fakeRecipe = {
       title,
-      titleID, 
+      titleId, 
       ingredients,
       directions,
     };

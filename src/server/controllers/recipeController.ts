@@ -21,10 +21,10 @@ const recipeController ={
     }
   },
   getRecipeById: async (req: Request, res: Response)=> {
-    const ID = req.params.titleID;
+    const Id = req.params.titleId;
     try{
         const db = await connectToDatabase();
-        const recipe = await db.collection<Recipe>('Recipes').findOne({"titleID" : ID});
+        const recipe = await db.collection<Recipe>('Recipes').findOne({"titleId" : Id});
         if(!recipe){
             return res.status(500).json({ message: 'Internal server error' });
         }
@@ -55,7 +55,7 @@ const recipeController ={
     // console.log(req.body);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').updateOne({'titleID': recipe.titleID}, {"$set": recipe});
+        const result = await db.collection('Recipes').updateOne({'titleId': recipe.titleId}, {"$set": recipe});
         console.log(result);
         return res.status(200).json({message: "Recipe updated successfully"});
     } catch (error) {
@@ -66,7 +66,7 @@ const recipeController ={
   deleteRecipe: async (req : Request, res: Response) => {
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').deleteOne({titleID: req.params.titleID});
+        const result = await db.collection('Recipes').deleteOne({titleId: req.params.titleId});
         return res.status(200).json({message: "Recipe deleted successfully"});
     } catch (error) {
         console.error(`Error fetching recipe in deleteRecipe: ${error}`);

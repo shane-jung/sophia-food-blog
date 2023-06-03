@@ -23,7 +23,7 @@ export default function RecipeForm({recipe}:RecipeFormProps){
     const axiosPrivate = useAxiosPrivate();
 
     useEffect( ()=> {   
-        if(!recipe.titleID) setViewMode(_viewMode.CREATING);
+        if(!recipe.titleId) setViewMode(_viewMode.CREATING);
         else setViewMode(_viewMode.VIEWING);
     }, []);
 
@@ -35,13 +35,13 @@ export default function RecipeForm({recipe}:RecipeFormProps){
         data.set('dateEdited', new Date().toISOString());
         let reqLink, redirect:string;
         if(viewMode == _viewMode.EDITING){  //In the case that the recipe already exists, we just want to update the recipe. 
-            reqLink = `/recipes/${recipe.titleID}`;
-            redirect = `/recipes/${recipe.titleID}`
+            reqLink = `/recipes/${recipe.titleId}`;
+            redirect = `/recipes/${recipe.titleId}`
         } else {         //In the case the recipe doesn't exist, we want to create the recipe.
             reqLink = '/recipes/create';
             data.set('dateCreated', new Date().toISOString());
             data.set('author', sampleAuthor.toString() );
-            redirect = `/recipes/${data.get('titleID')}`
+            redirect = `/recipes/${data.get('titleId')}`
         }
         const result = await axiosPrivate.post(reqLink, data, {withCredentials: true});
         // console.log(result);
@@ -54,7 +54,7 @@ export default function RecipeForm({recipe}:RecipeFormProps){
                 {auth?.user?.roles?.includes(8012) && (viewMode == _viewMode.VIEWING ? <EditButton/> : <SubmitButton/>)}
                 <RecipeContainer recipe={recipe}/>
             </form>
-            { viewMode != _viewMode.CREATING &&  <DeleteRecipe titleID = {recipe.titleID} /> }
+            { viewMode != _viewMode.CREATING &&  <DeleteRecipe titleId = {recipe.titleId} /> }
         </>
     );
 }
