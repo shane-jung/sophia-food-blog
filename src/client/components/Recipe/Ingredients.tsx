@@ -24,7 +24,7 @@ export default function Ingredients({ingredients}: IngredientProps){
                 {
                     ingredientsList.map((ingredient, i) => {
                             return <li key= {ingredient + `${i}`}>
-                                        <RichTextRecipeComponent className ="recipe-ingredient" key={ `${i}` } value = {ingredient} name = "Ingredient" />
+                                        <RichTextRecipeComponent className ="recipe-ingredient" key={ `${i}` } value = {ingredient} name = "ingredients" />
                                     </li>
                     })
                 }

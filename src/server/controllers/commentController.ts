@@ -35,11 +35,15 @@ const commentController ={
     }
   },
   postComment: async (req: Request, res: Response) => {
-    const comment = req.body;
+    const comment = req.body.comment;
+    const reply = req.body.reply;
     // console.log(comment);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment});
+        let result
+        if(reply) result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment});
+        else result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment, replies: []});
+
         if(comment.profileId) {
           const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.insertedId)}});
           // console.log(addToProfile);

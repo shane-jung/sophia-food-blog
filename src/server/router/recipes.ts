@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/create', checkAuth, verifyRoles(8012), recipeController.createRecipe);
 
-router.post('/:titleID/comment', recipeController.addCommentToRecipe)
+router.post('/comment', recipeController.postComment)
 
 router.route('/:titleID')
     .get(recipeController.getRecipeById)

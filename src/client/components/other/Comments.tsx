@@ -2,7 +2,7 @@ import { CommentType } from '@/client/types';
 import { useLoaderData } from 'react-router';
 
 import { Recipe } from '@/client/types';
-import { useEffect, useRef, useState } from 'react';
+import { Key, useEffect, useRef, useState } from 'react';
 import {faHeart as faHeartSolid} from '@fortawesome/free-solid-svg-icons'
 import {faHeart} from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,8 +14,8 @@ import { set } from 'mongoose';
 
 export default function Comments(){
     const {auth} = useAuth();
-    const [recipeLoaderData, commentLoaderData] = useLoaderData() as [Recipe, CommentType[]];
-    const [comments, setComments] = useState(commentLoaderData);
+    const [recipeLoaderData] = useLoaderData() as Recipe[];
+    const [comments, setComments] = useState<any>(recipeLoaderData.comments);
     const [commentsList, setCommentsList] = useState<any>();
     const [commentIdList, setCommentIdList] = useState<string[]>()
     const [commentFormIndex, setCommentFormIndex] = useState(-1);
@@ -32,27 +32,25 @@ export default function Comments(){
         // so this may not be an issue.
         console.log(userCommentLikes);
     //    console.log(userCommentLikes, auth.user);
-        setCommentIdList(comments.map(comment => comment._id));
+        setCommentIdList(comments.map((comment: CommentType)=> comment._id));
     }, [])
 
 
-    const commentList = comments.map((comment,index) => {
+    const commentList = comments.map((comment: CommentType, index: number) => {
         return      <Comment key = {index} 
                            comment={comment} 
                            index = {index} 
                            liked = {(userCommentLikes.length > 0) && userCommentLikes.includes(index)}
-                           setCommentFormIndex = {setCommentFormIndex} 
-                           commentFormIndex = {commentFormIndex}
                     />;
     })
 
-    if(commentFormIndex != -1) commentList.splice(commentFormIndex+1, 0, <CommentForm key = {'form '+ commentFormIndex} reply={true} setComments = {setComments} />)
-
+    if(commentFormIndex != -1) commentList.splice(commentFormIndex, 0, <CommentForm key = {'form '+ commentFormIndex} reply={true} setComments = {setComments} />)
+    commentList.reverse();
    
     return (
         <div className="comments">
             <h2>Recipe Comments ({commentList.length})</h2>
-            {(commentFormIndex == -1) ? <CommentForm reply={false} setComments = {setComments} /> : <button className = "simple-button" onClick={()=>setCommentFormIndex(-1)}>Add a comment</button>}
+            {(commentFormIndex>-10) ? <CommentForm reply={false} setComments = {setComments} /> : <button className = "simple-button" onClick={()=>setCommentFormIndex(-1)}>Add a comment</button>}
             <div className = "comments-toolbar">
                 {/* <span>Sort By</span>
                 <button></button>
@@ -81,24 +79,25 @@ function CommentForm({reply, setComments}: {reply:boolean, setComments: any}){
         console.log("submitting comment");
 
     setComments((prev:any) => {
-        return [{username: name || auth?.user.username, content: content, date: new Date().toISOString(), likes: 0}, ...prev]
+        return [...prev, {username: name || auth?.user.username, content: content, date: new Date().toISOString(), likes: 0}]
     })
         
 
-        const addCommentResult = await axios.post('/comments', {
-            profileId : auth?.user?._id || undefined,
-            email : email || auth?.user.email,
-            username: name || auth?.user.username,
-            content : content,
-            date: new Date().toISOString(),
-            likes: 0, 
+        const addCommentResult = await axios.post('/recipes/comment', {
+            comment: {
+                profileId : auth?.user?._id || undefined,
+                email : email || auth?.user.email,
+                username: name || auth?.user.username,
+                content : content,
+                date: new Date().toISOString(),
+                likes: 0, 
+            },
+            reply: reply,
+            recipeId: "644600514a6a31a0b4282785",
+            commentId: "647aa92bdf14b8b9246cb229"
         });
         console.log(addCommentResult)
         if(addCommentResult.status != 200) return;
-
-        const addCommentToRecipeResult = await axios.post(`/recipes/test-recipe/comment`, {
-            commentId: addCommentResult.data.insertedId,
-        })
     }
 
     return(
@@ -132,7 +131,7 @@ function CommentForm({reply, setComments}: {reply:boolean, setComments: any}){
                     className = "comment-textarea" 
                     placeholder= {reply ? 'Reply to this comment...' : 'Add a comment...' }
                     cols = {50} 
-                    rows = {4} 
+                    rows = {3} 
                     onChange = { (e) => setContent(e.target.value) }
                     value = {content}
                 />
@@ -153,11 +152,9 @@ interface CommentProps{
     comment:CommentType;
     index: number;
     liked: boolean;
-    commentFormIndex:number;
-    setCommentFormIndex: (index:number) => void;
 }
 
-function Comment({comment, index, liked, commentFormIndex, setCommentFormIndex}:CommentProps){
+function Comment({comment, index, liked} : CommentProps){
     const { auth } = useAuth();
     const [commentID, setCommentID] = useState(comment._id);
     const date = new Date(comment.date);
@@ -168,6 +165,7 @@ function Comment({comment, index, liked, commentFormIndex, setCommentFormIndex}:
     const [userLiked, setUserLiked] = useState(liked);
     const [replyText, setReplyText] = useState("Reply");
     const [replying, setReplying] = useState(false);
+    const [repliesVisible, setRepliesVisible] = useState(false);
 
     function handleLike(){
         const i = userLiked ? faHeartSolid : faHeartSolid;  
@@ -189,19 +187,14 @@ function Comment({comment, index, liked, commentFormIndex, setCommentFormIndex}:
     
     function handleReply(e:any){
         e.preventDefault();
-        setCommentFormIndex(!replying ? index : -2);
+        setReplying(!replying);
     }
 
 
     useEffect(()=>{
-        if(commentFormIndex == index) {
-            setReplyText("Cancel");
-            setReplying(true);
-        } else {
-            setReplyText("Reply");
-            setReplying(false);
-        }
-    }, [commentFormIndex]);
+        replying ? setReplyText("Cancel") : setReplyText("Reply");
+
+    }, [replying]);
 
     
     function handleDelete(e:any){
@@ -217,6 +210,9 @@ function Comment({comment, index, liked, commentFormIndex, setCommentFormIndex}:
         // }
         // deleteComment();
     }
+    const replies = comment.replies?.map((reply, index) => {
+        return <Comment key = {index} comment={reply} index={index} liked={false} />
+    });
     return(
         <div className = "comment">
             <span>
@@ -242,6 +238,13 @@ function Comment({comment, index, liked, commentFormIndex, setCommentFormIndex}:
                             <button className="comment-delete-button simple-button" onClick={handleDelete}>Delete</button> 
                         </>
                 } 
+                { replies != undefined && replies?.length > 0 ? <button onClick = { ()=> setRepliesVisible(!repliesVisible)} className="simple-button"> &#x2022; {repliesVisible ? "Hide Replies" : "Show Replies" }</button> : <></>}
+            </div>
+            { replying && <CommentForm reply={true} setComments = {()=>{console.log("add comment")}} /> }
+            <div className = "replies">
+                
+                { repliesVisible && replies }
+
             </div>
         </div>
 

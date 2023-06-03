@@ -4,13 +4,8 @@ async function recipeLoader ({request, params} :any){
     const recipe:Recipe = await fetch(
         `/api/recipes/${params.titleID}`)
         .then(response => response.json());
-    
-    const comments = recipe.comments.map == undefined? [] :  await Promise.all(recipe.comments.map(async commentID=>{
-        const resp = await fetch(`/api/comments/${commentID}`);
-        return resp.json();
-    }));
 
-    return [recipe, comments];
+    return [recipe];
 }
 
 
