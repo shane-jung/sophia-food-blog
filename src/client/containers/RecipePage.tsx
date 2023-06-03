@@ -11,10 +11,20 @@ import { Link } from "react-router-dom";
 import Comments from "../components/other/Comments";
 import useAuth from "../utils/useAuth";
 import { ViewModeProvider } from "../contexts/ViewModeProvider";
+import { setActiveRecipeId } from "../slices/recipe";
+import {useSelector, useDispatch} from 'react-redux';
 
 export default function RecipePage() {
     const {auth} = useAuth();
-    const [recipeLoaderData, commentsLoaderData] = useLoaderData() as any;
+    const [recipeLoaderData] = useLoaderData() as any;
+
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setActiveRecipeId(recipeLoaderData._id))
+    },[]);
+
+
     const [recipe, setRecipe] = useState(recipeLoaderData);
     useEffect(() => {
         setRecipe({ ...recipeLoaderData });
@@ -23,7 +33,7 @@ export default function RecipePage() {
     return (
         <ViewModeProvider>
             {auth?.user?.roles?.includes(8012) ? <RecipeForm recipe={recipe} /> : <RecipeContainer recipe={recipe} /> }
-            {recipe.titleID && <Comments />}
+            {recipe.titleId && <Comments />}
             <Link to='/recipes'>Back to Recipes</Link>
         </ViewModeProvider>
     )

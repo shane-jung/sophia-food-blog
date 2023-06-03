@@ -12,8 +12,6 @@ interface IngredientProps{
 export default function Ingredients({ingredients}: IngredientProps){
     const {viewMode} = useViewMode();
     const [ingredientsList, setIngredientsList] = useState(ingredients || []);
-    
-
     function addIngredient(){
         setIngredientsList([...ingredientsList, ""]);
     }
