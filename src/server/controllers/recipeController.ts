@@ -76,7 +76,7 @@ const recipeController ={
   postComment: async (req: Request, res: Response) => {
     const comment = req.body.comment;
     const reply = req.body.reply;
-    const recipeId = req.body.recipeId;
+    const recipeId = req.body.comment.recipeId;
     const commentId = req.body.commentId;
     // console.log(comment);
     try{

@@ -37,12 +37,21 @@ const commentController ={
   postComment: async (req: Request, res: Response) => {
     const comment = req.body.comment;
     const reply = req.body.reply;
-    // console.log(comment);
+    const commentId = req.body.commentId;
+    console.log(req.body);
+    console.log("REPLYING TO COMMENT ? ", reply);
     try{
         const db = await connectToDatabase();
         let result
-        if(reply) result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment});
-        else result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment, replies: []});
+        if(reply) {
+          result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment, profileId: new ObjectId(comment.profileId), recipeId: new ObjectId(comment.recipeId)});
+          await db.collection('Comments').updateOne({_id: new ObjectId(commentId)}, {$push: {replies: new ObjectId(result.insertedId)}});
+
+        } else  { 
+          result = await db.collection('Comments').insertOne({_id: new ObjectId(), ...comment, profileId: new ObjectId(comment.profileId), recipeId: new ObjectId(comment.recipeId), replies: []});
+          const addToRecipe = await db.collection('Recipes').updateOne({_id: new ObjectId(comment.recipeId)}, {$push: {comments: new ObjectId(result.insertedId)}});
+          console.log(addToRecipe);
+        }
 
         if(comment.profileId) {
           const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.insertedId)}});
@@ -56,9 +65,12 @@ const commentController ={
   },
 
   deleteComment: async (req : Request, res: Response) => {
+    const commentId = req.params.commentId;
+    console.log(commentId);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Comments').deleteOne({id: req.params.commentId});
+        const result = await db.collection('Comments').updateOne({_id: new ObjectId(commentId)}, {$set:{'hidden': true}}, {upsert: true});
+        console.log(result);
         return res.status(200).json({message: "Recipe deleted successfully"});
     } catch (error) {
         console.error(`Error fetching recipe in deleteRecipe: ${error}`);

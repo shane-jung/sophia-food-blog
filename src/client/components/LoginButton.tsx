@@ -20,7 +20,6 @@ export default function LoginButton(){
         }
         navigate(from, {replace:true})
     }  
-    console.log(window.location.pathname)
     return(
         auth.isAuthenticated 
             ?    <> <p>Welcome, {auth.user?.username}!</p> <button className = "simple-button" onClick = {handleLogout}>Logout</button> </>

@@ -1,4 +1,4 @@
-import useAuth from "@/client/utils/useAuth";
+ import useAuth from "@/client/utils/useAuth";
 import { useEffect, useState } from "react";
 import {faHeart} from '@fortawesome/free-solid-svg-icons'
 import { useSelector } from "react-redux";
@@ -20,6 +20,7 @@ export default function Comment({comment, index, liked, reply} : CommentProps){
     const recipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
 
     const { auth } = useAuth();
+    const  comments  = useSelector((state: RootState) => state.recipe.comments);
     const [commentId, setCommentId] = useState(comment._id);
     const date = new Date(comment.date);
     const dateString = date.toLocaleDateString("en-US", {month: 'long', day: 'numeric', year: 'numeric'});
@@ -32,12 +33,13 @@ export default function Comment({comment, index, liked, reply} : CommentProps){
     const [repliesJSX, setRepliesJSX] = useState<any>([]);
 
     useEffect(()=>{
-        setReplies(comment.replies);
-    }, [])
+        if(!reply) setReplies(comments[index].replies);
+        console.log(comments);
+    }, [comments[index]])
 
     useEffect(()=>{
+        console.log(replies);
         setRepliesJSX( ()=> {
-            console.log(replies)
             return replies?.map((reply:any, index:number) => {
                 return <Comment reply = {true} key = {index} comment={reply} index={index} liked={false} />
             });
@@ -81,15 +83,15 @@ export default function Comment({comment, index, liked, reply} : CommentProps){
     function handleDelete(e:any){
         e.preventDefault();
         console.log("Deleting comment... (need to implement)")
-        // async function deleteComment(){
-        //     // try{
-        //     //     const result = await axios.delete(`/comments/${commentId}`);
-        //     //     console.log(result);
-        //     // } catch(err){
-        //     //     console.log(err);
-        //     // }
-        // }
-        // deleteComment();
+        async function deleteComment(){
+            try{
+                const result = await axios.delete(`/comments/${commentId}`);
+                console.log(result);
+            } catch(err){
+                console.log(err);
+            }
+        }
+        deleteComment();
     }
     
 
@@ -113,7 +115,7 @@ export default function Comment({comment, index, liked, reply} : CommentProps){
                     !reply &&
                     <>
                         <span> &#x2022; </span>
-                        <button type = 'button' className="comment-reply-button simple-button" onClick={handleReply} value={'hello'}>{replyText}</button>
+                        <button type = 'button' className="comment-reply-button simple-button" onClick={handleReply} >{replyText}</button>
                     </> 
                 }
 
@@ -123,7 +125,7 @@ export default function Comment({comment, index, liked, reply} : CommentProps){
                             onClick = { ()=> setRepliesVisible(!repliesVisible)} 
                             className="simple-button"
                         > 
-                            &#x2022; {repliesVisible ? "Hide Replies" : "Show Replies" }
+                            &#x2022; {!reply && repliesVisible ? "Hide Replies" : "Show Replies" }
                         </button>
                     :   <></>
                 }
@@ -140,13 +142,12 @@ export default function Comment({comment, index, liked, reply} : CommentProps){
             </div>
             
             { 
-                replying && 
-                <CommentForm replyToCommentId={comment._id} setComments = {setReplies} setReplying = {setReplying} setRepliesVisible={setRepliesVisible} /> 
+                replying && <CommentForm replyToCommentId={comment._id} index = {index} setReplying = {setReplying} setRepliesVisible={setRepliesVisible} /> 
             }
 
-            <div className = "replies"> 
+            { <div className = "replies"> 
                 { repliesVisible && repliesJSX } 
-            </div>
+            </div>}
 
         </div>
 

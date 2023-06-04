@@ -14,21 +14,39 @@ import { ViewModeProvider } from "../contexts/ViewModeProvider";
 import { setActiveRecipeId } from "../slices/recipe";
 import {useSelector, useDispatch} from 'react-redux';
 
+import {setComments} from '../slices/recipe'
+import axios from '@/client/api/axios';
+
 export default function RecipePage() {
     const {auth} = useAuth();
     const [recipeLoaderData] = useLoaderData() as any;
+    const [recipe, setRecipe]  = useState(recipeLoaderData);
+    const [commentIds, setCommentIds] = useState<any>(recipe.comments);
+
 
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setActiveRecipeId(recipeLoaderData._id))
+        dispatch(setActiveRecipeId(recipe._id))
+        function retrieveComments(){
+            return Promise.all(commentIds?.map(async (id: string)=>{
+                try{
+                    const result = await axios.get(`/comments/${id}`);
+                    const comment = result.data;
+                    const replies = await Promise.all(comment.replies.map(async (id:string)=>{
+                        const result = await axios.get(`/comments/${id}`);
+                        return result.data;
+                    }));
+
+                    return {comment, replies};
+                } catch (err) {
+
+                }
+            }));
+        }
+        retrieveComments().then(r=>dispatch(setComments(r)));
     },[]);
 
-
-    const [recipe, setRecipe] = useState(recipeLoaderData);
-    useEffect(() => {
-        setRecipe({ ...recipeLoaderData });
-    }, [recipeLoaderData])
 
     return (
         <ViewModeProvider>

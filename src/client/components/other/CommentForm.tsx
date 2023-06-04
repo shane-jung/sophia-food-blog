@@ -2,13 +2,18 @@ import { RootState } from "@/client/slices/store";
 import useAuth from "@/client/utils/useAuth";
 import axios from "../../api/axios";
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RatingBar from "../Recipe/RatingBar";
 
+import {addComment, addReply} from "@/client/slices/recipe";
 
-export default function CommentForm({replyToCommentId, setComments, setReplying, setRepliesVisible}: {replyToCommentId?: string, setComments: any, setReplying?: any, setRepliesVisible?: any}){
+
+export default function CommentForm({index, replyToCommentId, setReplying, setRepliesVisible}: {index: number, replyToCommentId?: string, setReplying?: any, setRepliesVisible?: any}){
     const { auth } = useAuth();
+    const comments = useSelector((state: RootState) => state.recipe.comments);
+    const dispatch = useDispatch();;
 
+    
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [content, setContent] = useState("");
@@ -22,19 +27,19 @@ export default function CommentForm({replyToCommentId, setComments, setReplying,
         event.preventDefault();
         console.log("submitting comment");
 
-        setComments((prev:any) => {
-            return [...prev, {username: name || auth?.user.username, content: content, date: new Date().toISOString(), likes: 0}]
-        });
         
         setContent(""); 
+
+        
         if(replyToCommentId) { 
             setReplying(false);
             setRepliesVisible(true)
         }
-            
-        const addCommentResult = await axios.post('/recipes/comment', {
+        console.log("REPLY IS ", replyToCommentId ? true : false)
+        const addCommentResult = await axios.post('/comments', {
             comment: {
-                profileId : auth?.user?._id || undefined,
+                profileId : auth?.user?._id || "",
+                recipeId,
                 email : email || auth?.user.email,
                 username: name || auth?.user.username,
                 content : content,
@@ -43,8 +48,22 @@ export default function CommentForm({replyToCommentId, setComments, setReplying,
             },
             reply: (replyToCommentId ? true : false),
             commentId: replyToCommentId,
-            recipeId,
         });
+        const data = {
+                        comment:{
+                            _id: addCommentResult.data.insertedId, 
+                            username: name || auth?.user.username, 
+                            content: content, 
+                            date: new Date().toISOString(), 
+                            likes: 0
+                        }
+                    }
+
+        if(index==-1) { 
+            dispatch(addComment({...data, replies: []}));
+        } else {
+            dispatch(addReply({...data, index:index}));     
+        }
         if(addCommentResult.status != 200) return;
     }
 
