@@ -84,16 +84,18 @@
 }
 
 form input{
-    border: none;
+    border:1px solid $accent-gray;
+    padding: .5em .375em;
+    margin:.5em 0;
     outline:none;
     background-color:inherit;
     text-align:inherit;
-    border-radius:.125em;
-    outline:2px solid transparent;
+    border-radius:.25em;
+    outline:1px solid transparent;
 }
 
 form input:focus:not(:read-only){
-    outline: 2px solid $accent-gray;
+    outline: 1px solid $accent-gray;
     
 }
 
@@ -237,26 +239,14 @@ form input:focus:not(:read-only){
 
 
 .rating-bar{
+    font-size:1.25em;
     display:block;
 }
 .rating-star{
-    display:inline-block;
-    height:1em;
-    width:1em;
+    color:rgb(252, 220, 59);
+    
     cursor:pointer;
-    border-radius:100%;
-    border:1px solid black;
-    margin: .0625em;
     &:hover{
-        background:rgb(253, 224, 3);
+       
     }
-}
-.rating-star.checked{
-        background:rgb(253, 224, 3);
-}
-.rating-star-input{
-    display:inline;
-    width:0;
-    height:0;
-    appearance:none;
 }

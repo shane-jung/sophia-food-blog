@@ -27,6 +27,7 @@ export default function RatingBar(){
                 onMouseEnter = {()=>setTempActiveRating(index)}
                 onMouseLeave = {()=>setTempActiveRating(-1)}
                 onClick={()=>setActiveRating(index)}
+                className="rating-star"
             />
         )
     }
