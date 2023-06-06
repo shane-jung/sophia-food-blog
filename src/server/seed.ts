@@ -11,7 +11,7 @@ export const sampleRecipe : Recipe = {
     directions: 'This is a sample recipe',
     dateCreated: '2021-01-01',
     dateEdited: '2021-01-01',
-    titleID: 'sample-recipe',
+    titleId: 'sample-recipe',
     comments: [ "69"],
     author: {
         profilePictureURL: "",

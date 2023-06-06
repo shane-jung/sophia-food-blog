@@ -2,15 +2,11 @@
 import { CommentType, EmptyRecipe, Recipe } from "../types";
 async function recipeLoader ({request, params} :any){
     const recipe:Recipe = await fetch(
-        `/api/recipes/${params.titleID}`)
+        `/api/recipes/titleId/${params.titleId}`)
         .then(response => response.json());
-    
-    const comments = recipe.comments.map == undefined? [] :  await Promise.all(recipe.comments.map(async commentID=>{
-        const resp = await fetch(`/api/comments/${commentID}`);
-        return resp.json();
-    }));
 
-    return [recipe, comments];
+    console.log(recipe);
+    return [recipe];
 }
 
 

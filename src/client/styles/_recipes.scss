@@ -84,16 +84,18 @@
 }
 
 form input{
-    border: none;
+    border:1px solid $accent-gray;
+    padding: .5em .375em;
+    margin:.5em 0;
     outline:none;
     background-color:inherit;
     text-align:inherit;
-    border-radius:.125em;
-    outline:2px solid transparent;
+    border-radius:.25em;
+    outline:1px solid transparent;
 }
 
 form input:focus:not(:read-only){
-    outline: 2px solid $accent-gray;
+    outline: 1px solid $accent-gray;
     
 }
 
@@ -118,21 +120,26 @@ form input:focus:not(:read-only){
 }
 
 .comment{
-    border-bottom:1px solid rgb(74, 74, 74);
-    padding:.25em 0;
-
+    // border-bottom:1px solid rgb(74, 74, 74);
+    padding:.5em;
+    margin:.5em;
+    box-shadow: 0px 0px 2px 2px rgba(208, 208, 208, 0.204);
+    
 }
 
 .comment-user{
     font-size:1em;
     font-weight:bold;
     font-style: italic;
+    color:rgb(135, 159, 255);
     margin:0;
 }
 
 .comment-content{
     margin:0;
-    margin-bottom:.5em;
+    margin:.25em 0;
+    font-size:.875em;
+    font-weight:normal;
 }
 .comment-date{
     text-align:left;
@@ -141,10 +148,50 @@ form input:focus:not(:read-only){
 }
 
 .comment-toolbar{
-    display:flex;
-    flex-direction:row;
-    justify-content:space-between;
+    font-size: .875em;
+    font-weight:normal;
+    color: #8c8c8cb8;
 }
+
+.comment-textarea{
+    padding:.5em;
+    margin:.5em 0;
+    border-radius:.25em;
+    width:100%;
+    outline:1px solid rgba(84, 84, 84, 0.54);
+    box-shadow: 0 0 2px 1px rgba(84, 84, 84, 0.54);
+    font-family:inherit;
+    font-size:inherit;
+    text-align:left;
+    font-weight:normal;
+    resize:none;
+}
+
+.comment-form{
+    font-size:.875em;
+    padding:.25em;
+    margin:.5em;
+    &.reply{
+        margin-left: 1em;
+        padding-left:1em;
+        border-left: 2px solid rgba(128, 128, 128, 0.345);
+    }
+}
+
+.comment-like-icon{
+    cursor: pointer;
+    color:#7b7b7b;
+    &:hover { color:darken(#7b7b7b, 10%); }
+
+    // transition: all .15s ease-out;
+    &.liked{
+        color:rgb(255, 20, 78);
+        &:hover{
+        color:darken(rgb(255, 20, 78), 10%);
+        }
+    }
+}
+  
 
     
 .edit-button{
@@ -192,26 +239,14 @@ form input:focus:not(:read-only){
 
 
 .rating-bar{
+    font-size:1.25em;
     display:block;
 }
 .rating-star{
-    display:inline-block;
-    height:1em;
-    width:1em;
+    color:rgb(252, 220, 59);
+    
     cursor:pointer;
-    border-radius:100%;
-    border:1px solid black;
-    margin: .0625em;
     &:hover{
-        background:rgb(253, 224, 3);
+       
     }
-}
-.rating-star.checked{
-        background:rgb(253, 224, 3);
-}
-.rating-star-input{
-    display:inline;
-    width:0;
-    height:0;
-    appearance:none;
 }

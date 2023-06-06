@@ -13,8 +13,8 @@ export default function DateComponent( props : DateComponentProps ) {
                             month: 'long',
                             day: 'numeric'
                         } 
-    const formattedDateEdited = new Date(props.dateEdited).toLocaleDateString('en-gb', dateOptions);
-    const formattedDateCreated = new Date(props.dateCreated).toLocaleDateString('en-gb', dateOptions);
+    const formattedDateEdited = new Date(props.dateEdited).toLocaleDateString('en-US', dateOptions);
+    const formattedDateCreated = new Date(props.dateCreated).toLocaleDateString('en-US', dateOptions);
     return(
         <div>
             <span className = "recipe-dates">Created {formattedDateCreated} - Edited {formattedDateEdited} </span>   

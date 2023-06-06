@@ -4,13 +4,13 @@ import useAuth from "@/client/utils/useAuth"
 
 
 
-interface TitleIDProps{
+interface TitleIdProps{
     value:string;
 }
 
-export default function TitleID(props:TitleIDProps){
+export default function TitleId(props:TitleIdProps){
     const { auth } = useAuth();
     return(
-      auth.user?.roles?.includes(8012) && <input className="recipe-title-id" type="text" name="titleID" defaultValue = {props.value} placeholder="TITLE ID (REQUIRED)" readOnly = {false}/>
+      auth.user?.roles?.includes(8012) && <input className="recipe-title-id" type="text" name="titleId" defaultValue = {props.value} placeholder="TITLE Id (REQUIRED)" readOnly = {false}/>
     )
 }

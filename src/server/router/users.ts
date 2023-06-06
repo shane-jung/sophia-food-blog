@@ -5,13 +5,18 @@ import checkAuth from '../middleware/checkAuth';
 
 const router = express.Router(); 
 
-router.route('/').post(userController.findUser);
 
 router.route('/login').post(userController.handleLogin);
 
 router.route('/logout').post(userController.handleLogout);
 
 router.route('/create').post(hashPassword, userController.createUser);
+
+router.route('/:id').get(userController.getUser);
+
+router.route('/').post(userController.findUser);
+
+
 
 
 async function hashPassword(req: Request, res: Response, next: any){

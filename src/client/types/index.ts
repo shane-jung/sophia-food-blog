@@ -3,13 +3,13 @@
 export type Recipe = {
     _id: string;
     title: string;
-    titleID: string;
+    titleId: string;
     dateCreated: string;
     dateEdited: string;
     description: string;
     author: any;
     background : string;
-    ingredients : string[];
+    ingredients : string;
     // ingredients : Ingredient[];
     directions: string;
     imageURLs?: string[];
@@ -46,9 +46,9 @@ export const EmptyProfile:Profile = {
     lastName: "",   
     email: "",
     password: "",  
-    savedRecipes : [],   // an array of Recipe IDs 
-    comments : [],       // an array of (Recipe ID, comment ID)'s 
-    likedComments : [ ],   // an array of Objects of the form  {recipeID, commentID []}
+    savedRecipes : [],   // an array of Recipe Ids 
+    comments : [],       // an array of (Recipe Id, comment Id)'s 
+    likedComments : [ ],   // an array of Objects of the form  {recipeId, commentId []}
     
 }
 
@@ -62,8 +62,6 @@ export type CommentType= {
     likes:number;
     username:string;
     profile?: Profile;
-    username: string;
-    likes: number;
     content: string;
     date: string;
     replies?: CommentType[];
@@ -81,13 +79,13 @@ export type Rating = {
 export const EmptyRecipe:Recipe = {
     _id: "",
     title: "",
-    titleID: "",
+    titleId: "",
     dateCreated: "",
     dateEdited: "",
     description: "",
     background : "",
     author: "",
-    ingredients : [],
+    ingredients : "",
     directions: "",
     comments: []
 }

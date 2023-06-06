@@ -3,19 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import axios from "../api/axios";
 import Logo from "../components/Logo"
+import useAuth from "../utils/useAuth";
 
-const FIRSTNAME_REGEX = /^[a-zA-Z]{2,24}$/;
+const USERNAME_REGEX = /^[a-zA-Z0-9]{2,24}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/;
 const EMAIL_REGEX = /^[ ]*([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})[ ]*$/i;
 
 export default function RegisterPage(){
 
-    const firstNameRef = useRef<HTMLInputElement>(null);
+    const { auth, setAuth } = useAuth();
+    const usernameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
     const errRef = useRef<HTMLParagraphElement>(null);  
 
-    const [firstName, setFirstName] = useState('');
-    const [validFirstName, setValidFirstName] = useState(false);
+    const [username, setUsername] = useState('');
+    const [validUsername, setValidUsername] = useState(false);
     const [firstNameFocus, setFirstNameFocus] = useState(false);
 
 
@@ -40,13 +42,13 @@ export default function RegisterPage(){
     const from = location.state?.from?.pathname || "/";
 
     useEffect(() =>{
-        firstNameRef.current?.focus();  
+        usernameRef.current?.focus();  
     }, [])
 
     useEffect(()=>{
-        const result =  FIRSTNAME_REGEX.test(firstName);
-        setValidFirstName(result);
-    }, [firstName]);
+        const result = USERNAME_REGEX.test(username);
+        setValidUsername(result);
+    }, [username]);
 
     useEffect(()=> {
         const result = EMAIL_REGEX.test(email);
@@ -63,23 +65,42 @@ export default function RegisterPage(){
 
     useEffect(()=> {
         setErrMessage('');
-    }, [firstName, email, password, confirmPassword])
+    }, [username, email, password, confirmPassword])
 
 
     async function handleSubmit(e:any){
         e.preventDefault();
-        if(!validFirstName || !validEmail || !validPassword || !validConfirmPassword){
+        if(!validUsername || !validEmail || !validPassword || !validConfirmPassword){
+            console.log(validUsername, validEmail, validPassword, validConfirmPassword)
             return; 
         }
-        const response = await axios.post('/users', {
-            email: email,
-        }) .catch((err) => {  
+        console.log('here');
+        try { 
+            const response = await axios.post('/users', {
+                email : email,
+            })
+            if(response.status == 200){
+                const createResult = await axios.post('/users/create', {
+                    email,
+                    username,
+                    password
+                });
+                console.log(createResult);
+
+                const loginResult = await axios.post('/users/login', {
+                    email,
+                    password
+                });
+                setAuth({user: createResult.data.user, isAuthenticated: true})
+                navigate(from, {replace: true})
+            }
+        } catch(err: any) {  
             if(err.response.status === 409){
                 setErrMessage('Email already exists');
                 return;
-            }   
-        });
-        console.log(response);
+            } 
+                
+        }
     }
 
     return (
@@ -97,12 +118,12 @@ export default function RegisterPage(){
                 <label>Display Name</label>
                 <input 
                     type="text"
-                    id = "firstName"
-                    ref = {firstNameRef}
-                    name= "firstName" 
-                    placeholder="Display Name" 
-                    value = {firstName}
-                    onChange = {(e) => setFirstName(e.target.value)}
+                    id = "username"
+                    ref = {usernameRef}
+                    name= "username" 
+                    placeholder="Username" 
+                    value = {username}
+                    onChange = {(e) => setUsername(e.target.value)}
                     required
                 />
                 <label>Email Address</label>
@@ -168,7 +189,7 @@ export default function RegisterPage(){
                     Please make sure the passwords match.
                 </p>
                 <button className={ "simple-button " + 
-                    ((validFirstName && validEmail &&  validPassword && validConfirmPassword)
+                    ((validUsername && validEmail &&  validPassword && validConfirmPassword)
                     ? ""
                     : "disabled-button")}
                     >Create an Account

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'; 
 import { Recipe } from '@/client/types'
 import { NavLink } from 'react-router-dom';
-import useAxiosPrivate from '@/client/utils/useAxiosPrivate';
+import axios from '@/client/api/axios';
 
 let cached = false;
 let cachedRecipes: Recipe [] = [];
@@ -12,7 +12,7 @@ export default function Recipes(){
     
 
 
-    const axiosPrivate = useAxiosPrivate();
+
 
     useEffect(() => {
         let isMounted = true;
@@ -20,7 +20,7 @@ export default function Recipes(){
         setIsLoading(true);
         const getRecipes = async (): Promise<Recipe []> => {
             try{
-                const response = await axiosPrivate.get('/recipes', {
+                const response = await axios.get('/recipes', {
                     signal: controller.signal
                 })
                 return response.data;
@@ -29,6 +29,7 @@ export default function Recipes(){
             }
         }
         if(!cached){
+            // setIsLoading(false);
             getRecipes().then((response) => {
                 setRecipes([...response]);
                 setIsLoading(false);
@@ -60,7 +61,7 @@ export default function Recipes(){
                         key={recipe._id}
                         className="recipe-thumbnail"
                         >
-                            <NavLink to={`/recipes/${recipe.titleID}`}>{recipe.title}</NavLink>
+                            <NavLink to={`/recipes/${recipe.titleId}`}>{recipe.title}</NavLink>
                         </li>
                     ))}
                 </ul>

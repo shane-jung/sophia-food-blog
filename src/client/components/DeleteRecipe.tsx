@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router';
 import useViewMode from '../utils/useViewMode';
 import { _viewMode } from '../enums';
 
-export default function DeleteRecipe(props: {titleID: string}){
+export default function DeleteRecipe(props: {titleId: string}){
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
 
     async function handleDelete(){
-        const result = await axiosPrivate.delete(`/recipes/${props.titleID}`);
+        const result = await axiosPrivate.delete(`/recipes/${props.titleId}`);
         if(result.status === 200) navigate('/recipes', {replace: true});
     }
 

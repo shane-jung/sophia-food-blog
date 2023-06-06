@@ -8,9 +8,13 @@ const router = express.Router();
 
 router.post('/create', checkAuth, verifyRoles(8012), recipeController.createRecipe);
 
-router.post('/:titleID/comment', recipeController.addCommentToRecipe)
+router.post('/comment', recipeController.postComment)
 
-router.route('/:titleID')
+router.route('/titleId/:titleId').get(recipeController.getRecipeByTitleId);
+
+router.route('/:recipeId/comments').get(recipeController.getComments);
+
+router.route('/:recipeId')
     .get(recipeController.getRecipeById)
     .post(checkAuth, verifyRoles(8012), recipeController.updateRecipe)
     .delete(checkAuth, verifyRoles(8012), recipeController.deleteRecipe);
