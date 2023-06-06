@@ -35,7 +35,6 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
             setReplying(false);
             setRepliesVisible(true)
         }
-        console.log("REPLY IS ", replyToCommentId ? true : false)
         const addCommentResult = await axios.post('/comments', {
             comment: {
                 profileId : auth?.user?._id || "",

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CommentForm from "./CommentForm";
 import { useDispatch } from "react-redux";
 import { setLikedComment } from "@/client/slices/user";
+import { removeComment } from "@/client/slices/recipe";
 
 interface CommentProps{
     comment:CommentType;
@@ -46,19 +47,17 @@ export default function Comment({comment, index, reply} : CommentProps){
     });
 
     useEffect(()=>{
-        // console.log("liked comments", likedComments, "\ncommetId", commentId)
          setUserLiked(likedComments.includes(commentId));
     },[likedComments, comment._id]);
     
 
     useEffect(()=>{
         if(!reply) setReplies(comments[index]?.replies);
-    }, [comments[index]])
+    }, [comments[index]?.replies])
 
 
     useEffect(()=>{
         setIncrement(userLiked ? -1 : 1);
-        console.log(userLiked);
     }, [userLiked])
 
 
@@ -111,6 +110,7 @@ export default function Comment({comment, index, reply} : CommentProps){
             }
         }
         deleteComment();
+        dispatch(removeComment({commentId}));
     }
     
 
@@ -119,7 +119,7 @@ export default function Comment({comment, index, reply} : CommentProps){
             <span>
                 <span className = "comment-user">{comment.username}</span> &#x2022; <span className = "comment-date">{dateString}</span>
             </span>
-            <h1>{comment._id}</h1>
+            {/* <h1>{comment._id}</h1> */}
             <p className = "comment-content">{comment.content}</p>
             <div className="comment-toolbar">  
                 <FontAwesomeIcon 

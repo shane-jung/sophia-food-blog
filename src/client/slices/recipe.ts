@@ -1,4 +1,6 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
+import { database } from 'faker';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { Recipe } from '../types'
 
 interface RecipeState {
@@ -31,6 +33,12 @@ export const recipeSlice = createSlice({
         comments: [...state.comments, action.payload]
       }
     },
+    removeComment(state = initialState, action:PayloadAction<any>){
+      return {
+        ...state,
+        comments: [...state.comments.filter((data:any) => data.comment._id !== action.payload.commentId)]
+      }
+    },
     setComments (state = initialState, action:PayloadAction<any>){
       return {
         ...state,
@@ -38,7 +46,7 @@ export const recipeSlice = createSlice({
       }
     },
     addReply (state = initialState, action:PayloadAction<any>){
-      const { index, comment } = action.payload;
+      const { comment, index } = action.payload;
 
       const newState = {
         ...state,
@@ -53,13 +61,13 @@ export const recipeSlice = createSlice({
       newState.comments[index] = updatedComment;
       return { 
         ...state, 
-        newState
+        ...newState
       }
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setActiveRecipeId, addComment, setComments, addReply } = recipeSlice.actions
+export const { setActiveRecipeId, addComment, setComments, addReply, removeComment } = recipeSlice.actions
 
 export default recipeSlice.reducer

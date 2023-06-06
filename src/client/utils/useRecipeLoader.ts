@@ -7,7 +7,7 @@ export default function useRecipeLoader(){
         // console.log("RECIPE ID", recipeId);
         const response = await axios.get(`/recipes/${recipeId}/comments`);
         // console.log(response.data);
-        return await response.data;
+        return await response.data.filter((comment:any) => comment.hidden !== true);
     }
     
     const retrieveLikedComments = async (recipeId: string, userId: string) =>{
