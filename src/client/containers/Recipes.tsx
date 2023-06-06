@@ -29,6 +29,7 @@ export default function Recipes(){
             }
         }
         if(!cached){
+            // setIsLoading(false);
             getRecipes().then((response) => {
                 setRecipes([...response]);
                 setIsLoading(false);

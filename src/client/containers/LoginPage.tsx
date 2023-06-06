@@ -4,6 +4,9 @@ import Logo from "../components/Logo"
 
 import axios from '@/client/api/axios';
 import useAuth from "../utils/useAuth";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { handleLogin } from "../slices/user";
 
 export default function LoginPage(){
     const { auth, setAuth }= useAuth();
@@ -18,6 +21,11 @@ export default function LoginPage(){
     const navigate = useNavigate(); 
     const location = useLocation();
     const from = location.state?.from || "/";
+
+    const dispatch = useDispatch();
+    const likedComments = useSelector((state: any) => state.user.likedComments);
+
+
     useEffect(() =>{
         if(auth.accessToken) navigate(from, {replace: true});
         emailRef.current?.focus();
@@ -37,9 +45,10 @@ export default function LoginPage(){
                     withCredentials: true,
                 }
             );
-            // console.log(response);
-
+            console.log("logging in ");
+            dispatch(handleLogin(response.data))
             setAuth({user: response.data.user, isAuthenticated: true})
+
             setPassword("");
             setEmail("");    
             navigate( from, {replace: true});

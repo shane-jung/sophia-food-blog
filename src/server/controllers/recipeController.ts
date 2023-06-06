@@ -2,10 +2,6 @@ import { Request, Response } from 'express';
 import { MongoClient, ObjectId} from 'mongodb'
 import connectToDatabase from '../database/mongodb';
 
-import {Recipe} from '../../client/types';
-import { sampleRecipe } from '../seed';
-
-
 
 const recipeController ={
   getAllRecipes: async (req: Request, res: Response) => {
@@ -21,20 +17,35 @@ const recipeController ={
     }
   },
   getRecipeById: async (req: Request, res: Response)=> {
-    const Id = req.params.titleId;
+    const recipeId = req.params.recipeId;
     try{
         const db = await connectToDatabase();
-        const recipe = await db.collection<Recipe>('Recipes').findOne({"titleId" : Id});
+        const recipe = await db.collection('Recipes').findOne({ _id : new ObjectId(recipeId)});
         if(!recipe){
             return res.status(500).json({ message: 'Internal server error' });
         }
-        const typedRecipe = recipe as any as Recipe;
-        if(typedRecipe._id!=null) typedRecipe._id= typedRecipe._id.toString();
+
         return res.status(200).json(recipe);
     }  catch(error) {
         return res.status(500).json({ message: 'Internal server error' });
     }
   },
+
+  getRecipeByTitleId: async (req: Request, res: Response)=> {
+    try{
+        const db = await connectToDatabase();
+        const recipe = await db.collection('Recipes').findOne({ titleId : req.params.titleId});
+        if(!recipe){
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        return res.status(200).json(recipe);
+    }  catch(error) {
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  ,
   createRecipe: async (req: Request, res: Response) => {
     const recipe = req.body;
     try{
@@ -52,10 +63,9 @@ const recipeController ={
   updateRecipe: async (req: Request, res: Response) => {
 
     const recipe = req.body;
-    // console.log(req.body);
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').updateOne({'titleId': recipe.titleId}, {"$set": recipe});
+        const result = await db.collection('Recipes').updateOne({_id: recipe._id}, {"$set": recipe});
         console.log(result);
         return res.status(200).json({message: "Recipe updated successfully"});
     } catch (error) {
@@ -66,7 +76,7 @@ const recipeController ={
   deleteRecipe: async (req : Request, res: Response) => {
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').deleteOne({titleId: req.params.titleId});
+        const result = await db.collection('Recipes').deleteOne({_id: new ObjectId(req.params.recipeId) });
         return res.status(200).json({message: "Recipe deleted successfully"});
     } catch (error) {
         console.error(`Error fetching recipe in deleteRecipe: ${error}`);
@@ -83,9 +93,9 @@ const recipeController ={
         const db = await connectToDatabase();
         if(!reply){
           const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {$push: {comments: {_id: new ObjectId(), ...comment, replies: [], profileId : new ObjectId(comment.profileId) }}});
-          console.log(result);
+          // console.log(result);
         } else {
-          console.log(req.body);
+          // console.log(req.body);
           const result = await db.collection('Recipes').updateOne(
             {
               _id: new ObjectId(recipeId), 
@@ -108,18 +118,34 @@ const recipeController ={
               ] 
             } 
           );
-          console.log(result);
+          // console.log(result);
         }
-        // if(comment.profileId) {
-        //   const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.upsertedId)}});
-        //   // console.log(addToProfile);
-        // }
         return res.sendStatus(200);
     } catch (error) {
         console.error(`Error creating comment in postComment: ${error}`);
         throw error;
     }
-  },
+  }, 
+  getComments: async (req: Request, res: Response) => {
+    try {
+        const db = await connectToDatabase();
+        const result = await db.collection('Recipes').findOne({_id: new ObjectId(req.params.recipeId)});
+        const commentIds = result?.comments;
+        const comments = await Promise.all(commentIds.map(async (commentId: ObjectId) => {
+          const comment = await db.collection('Comments').findOne({_id: commentId});
+          
+          const replies = await Promise.all(comment?.replies.map(async (replyId:ObjectId)=>{
+            const reply = await db.collection('Comments').findOne({_id: replyId});
+            return reply;
+          }));
+          return {comment, replies};
+        }));
+        return res.json(comments);
+    } catch(error) {    
+      console.error(`Error fetching comments in getComments: ${error}`);
+      throw error;
+    }
+  }
 };
 
 export default recipeController;

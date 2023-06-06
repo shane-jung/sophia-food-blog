@@ -17,6 +17,7 @@ const userController = {
     else return res.sendStatus(200)
   }, 
   handleLogin: async (req: Request, res: Response, next: any) => {
+    console.log(req.cookies);
     const user = req.body;
     const db = await connectToDatabase();
     const DBUser = await db.collection('Profiles').findOne({'email':user.email});
@@ -26,14 +27,24 @@ const userController = {
       console.log("\nLogging in User. Generating Access and Refresh Token\n")
       const accessToken = jwt.sign(
         {
-          user : DBUser
+          user : {
+            roles: DBUser.roles,
+            _id: DBUser._id,
+            username: DBUser.username,
+
+          }
         }, 
         process.env.ACCESS_TOKEN_SECRET!, 
         {expiresIn: '1h'}
       );
       const refreshToken = jwt.sign(
         { 
-          user : DBUser
+          user : {
+            roles: DBUser.roles,
+            _id: DBUser._id,
+            username: DBUser.username,
+
+          }
         }, 
         process.env.REFRESH_TOKEN_SECRET!,
         {
@@ -42,28 +53,29 @@ const userController = {
       );
       res.cookie('jwt', refreshToken, { httpOnly: true, secure:true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000});
       DBUser["refresh-token"] = refreshToken;
-      // console.log(`Access Token: ${accessToken}`);
-      // console.log(`Refresh Token: ${refreshToken}`)
-      // console.log(`Storing refresh token in jwt cookie, saving to User profile.`);
+      console.log(refreshToken);
       req.headers['Authorization'] = `Bearer ${accessToken}`
       saveUser(DBUser);
       res.json({isAuthenticated: true, user: DBUser}); 
+      console.log(DBUser);
     }
     else {
       res.status(401);
     }
   },
   handleLogout: async(req:Request, res:Response) =>{
-    // console.log(req.body);
+    console.log(req.body);
     const cookies = req.cookies;
+    console.log(req.cookies)
     if(!cookies?.jwt) return res.sendStatus(204);
     const jwt = cookies.jwt;
     res.clearCookie('jwt', {httpOnly:true})
-    //req.clearC
+    console.log(req.cookies)
 
     try {
       const db = await connectToDatabase();
       const result = await db.collection('Profiles').updateOne({'refresh-token': jwt}, { $set : {'refresh-token': ""}} );
+      console.log(result);
       res.sendStatus(200);
     } catch (error) {
       console.log(error);
@@ -87,6 +99,27 @@ const userController = {
         throw error;
     }
   },
+  getUser: async (req: Request, res: Response) => {
+    console.log("in get users ") 
+    const id = req.params.id;
+    try{
+      const db = await connectToDatabase();
+      const user = await db.collection('Profiles').findOne({_id: new ObjectId(id)});
+      console.log(user);
+      if(user) return res.json({
+          user: {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            likedComments: user.likedComments,
+          }
+        });
+      else return res.sendStatus(404);
+    } catch (error) {
+      console.error(`Error getting user in getUser: ${error}`);
+      throw error;
+    }
+  }
   
 };
 async function saveUser(user: any)  {

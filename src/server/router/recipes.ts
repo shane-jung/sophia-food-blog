@@ -10,7 +10,11 @@ router.post('/create', checkAuth, verifyRoles(8012), recipeController.createReci
 
 router.post('/comment', recipeController.postComment)
 
-router.route('/:titleId')
+router.route('/titleId/:titleId').get(recipeController.getRecipeByTitleId);
+
+router.route('/:recipeId/comments').get(recipeController.getComments);
+
+router.route('/:recipeId')
     .get(recipeController.getRecipeById)
     .post(checkAuth, verifyRoles(8012), recipeController.updateRecipe)
     .delete(checkAuth, verifyRoles(8012), recipeController.deleteRecipe);

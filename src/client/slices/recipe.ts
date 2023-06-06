@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
 import { Recipe } from '../types'
 
 interface RecipeState {
@@ -17,21 +17,45 @@ export const recipeSlice = createSlice({
   name: 'recipe',
   initialState: initialState,
   reducers: {
-    setActiveRecipeId: (state, action:PayloadAction<string>) => {
-      state.activeRecipeId = action.payload
+    setActiveRecipeId(state = initialState, action:PayloadAction<string>) {
+      // state.activeRecipeId = action.payload
+      return {
+        ...state,
+        activeRecipeId: action.payload
+      }
     },
-    addComment: (state, action:PayloadAction<any>) => {
-      state.comments.push(action.payload)
+    addComment(state = initialState, action:PayloadAction<any>){
+      // state.comments=  [...state.comments, action.payload]
+      return {
+        ...state,
+        comments: [...state.comments, action.payload]
+      }
     },
-    setComments: (state, action:PayloadAction<any>) => {
-      state.comments = action.payload
+    setComments (state = initialState, action:PayloadAction<any>){
+      return {
+        ...state,
+        comments: [...action.payload]
+      }
     },
-    addReply: (state, action:PayloadAction<any>) => {
-      console.log(state.comments);
-      console.log(action.payload)
-      state.comments[action.payload.index].replies.push(action.payload.comment);
-    }
+    addReply (state = initialState, action:PayloadAction<any>){
+      const { index, comment } = action.payload;
 
+      const newState = {
+        ...state,
+        comments: [...state.comments],
+      };
+
+      const updatedComment = {
+        ...newState.comments[index],
+        replies: [...newState.comments[index].replies, comment],
+      };
+
+      newState.comments[index] = updatedComment;
+      return { 
+        ...state, 
+        newState
+      }
+    },
   },
 })
 

@@ -38,8 +38,8 @@ const commentController ={
     const comment = req.body.comment;
     const reply = req.body.reply;
     const commentId = req.body.commentId;
-    console.log(req.body);
-    console.log("REPLYING TO COMMENT ? ", reply);
+    // console.log(req.body);
+    // console.log("REPLYING TO COMMENT ? ", reply);
     try{
         const db = await connectToDatabase();
         let result
@@ -55,7 +55,7 @@ const commentController ={
 
         if(comment.profileId) {
           const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.insertedId)}});
-          // console.log(addToProfile);
+          console.log(addToProfile);  
         }
         return res.status(200).json(result);
     } catch (error) {
@@ -79,26 +79,31 @@ const commentController ={
   },
   handleLike: async (req: Request, res:Response) => {
     const commentId = req.body.commentId;
-    const commentIndex = req.body.commentIndex
     const recipeId = req.body.recipeId;
     const profileId = req.body.profileId;
     const increment = req.body.inc; 
+    console.log(req.body);
     try{
       const db = await connectToDatabase();
-      const commentUpdateResult = await db.collection('Comments').updateOne({_id: new ObjectId(commentId) }, { $inc: {likes: increment}})
-      // console.log(result);
-      // const anotha = await db.collection('Profiles').updateOne({'email': req.body.email}, {$set : {'comment-likes': {}}})
-      // const result2 = await db.collection('Profiles').updateOne( {'email': req.body.email}, { $set : { 'comment-likes.$.liked': req.body.inc > 0 ? 'true' : 'false'} }, {upsert:true})
-      const profileFilter = {_id: new ObjectId(profileId), 'likedComments.recipeId' : new ObjectId(recipeId)}
-
-      const profileUpdate = increment < 0 ? {$pull : {'likedComments.$.comments': commentIndex}} : {$push : {'likedComments.$.comments': commentIndex}}
-      const profileUpdateResult = await db.collection('Profiles').updateOne(profileFilter, profileUpdate)
+      const commentUpdateResult = await db.collection('Comments').findOneAndUpdate({_id: new ObjectId(commentId) }, { $inc: {likes: increment}}, {returnDocument: 'after'})
+      console.log("COMMENT UPDATE", commentUpdateResult);
+      const profileFilter = {_id: new ObjectId(profileId)}
+      const profileUpdate = increment < 0 ? {$pull : {'likedComments.$[recipe].comments': new ObjectId(commentId)}} : {$push : {'likedComments.$[recipe].comments': new ObjectId(commentId)}}
+      const profileUpdateResult = await db.collection('Profiles').updateOne(profileFilter, profileUpdate,
+        {
+          arrayFilters: [
+            { 'recipe.recipeId': new ObjectId(recipeId) }
+          ]
+        }
+        )
+      console.log("PROFILE UPDATE: ", profileUpdateResult);
       if(profileUpdateResult.modifiedCount === 0){
-        const newProfileUpdate = {$push : {'likedComments': {recipeId : new ObjectId(recipeId), comments: [commentIndex]}}}
+        const newProfileUpdate = {$push : {'likedComments': {recipeId : new ObjectId(recipeId), comments: [new ObjectId(commentId)]}}}
         const newProfileUpdateResult = await db.collection('Profiles').updateOne({_id: new ObjectId(profileId)}, newProfileUpdate)
+        console.log(newProfileUpdateResult)
       }
       
-      return res.sendStatus(200);
+      return res.status(200).json(commentUpdateResult);
     } catch (err) {
       console.log(err);
     throw err;

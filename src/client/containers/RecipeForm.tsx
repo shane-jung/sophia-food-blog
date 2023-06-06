@@ -35,8 +35,8 @@ export default function RecipeForm({recipe}:RecipeFormProps){
         data.set('dateEdited', new Date().toISOString());
         let reqLink, redirect:string;
         if(viewMode == _viewMode.EDITING){  //In the case that the recipe already exists, we just want to update the recipe. 
-            reqLink = `/recipes/${recipe.titleId}`;
-            redirect = `/recipes/${recipe.titleId}`
+            reqLink = `/recipes/${recipe._id}`;
+            redirect = `/recipes/${recipe._id}`
         } else {         //In the case the recipe doesn't exist, we want to create the recipe.
             reqLink = '/recipes/create';
             data.set('dateCreated', new Date().toISOString());

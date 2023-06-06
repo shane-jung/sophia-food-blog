@@ -2,9 +2,10 @@
 import { CommentType, EmptyRecipe, Recipe } from "../types";
 async function recipeLoader ({request, params} :any){
     const recipe:Recipe = await fetch(
-        `/api/recipes/${params.titleId}`)
+        `/api/recipes/titleId/${params.titleId}`)
         .then(response => response.json());
 
+    console.log(recipe);
     return [recipe];
 }
 

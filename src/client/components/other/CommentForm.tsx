@@ -60,8 +60,10 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
                     }
 
         if(index==-1) { 
+            console.log("addingComment")
             dispatch(addComment({...data, replies: []}));
         } else {
+            console.log("addingReply");
             dispatch(addReply({...data, index:index}));     
         }
         if(addCommentResult.status != 200) return;
