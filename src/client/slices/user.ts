@@ -33,16 +33,45 @@ export const userSlice = createSlice({
       }
     },
     setLikedComment (state = initialState, action:PayloadAction<any>)  {
+      const recipeId = action.payload.recipeId;
+      const index = state.likedComments.findIndex((comment:any) => comment.recipeId === recipeId);
       switch(action.payload.type){  
         case "add":
-          const likedComments1 = [...state.likedComments, action.payload.commentId];
-          // console.log("ADDING 1", likedComments1);
-          state.likedComments = [...new Set(likedComments1)]
-          break;
+          if(index === -1)
+            return {
+              ...state, 
+              likedComments: [
+                ...state.likedComments, { 
+                  recipeId: action.payload.recipeId, 
+                  comments: [
+                    action.payload.commentId
+                  ]
+                }
+              ]
+            }
+          else {
+            const commentsList = [...state.likedComments[index].comments, action.payload.commentId];
+            const commentsObject = { recipeId: action.payload.recipeId, comments: commentsList };
+            const likedComments = [...state.likedComments];
+            likedComments[index] = commentsObject;
+            return {
+              ...state,
+              likedComments
+            }
+          }
+        break;
         case "remove":
-          const likedComments2 = [...state.likedComments.filter((commentId:any) => commentId !== action.payload.commentId)]
-          // console.log("REMOVING FILTERED", likedCommentsFiltered);
-          state.likedComments =  likedComments2;
+          if(index!= -1){
+            const commentsList = state.likedComments[index].comments;
+            const commentsListFiltered = commentsList.filter((commentId:string) => commentId !== action.payload.commentId);
+            const commentsObject = { recipeId: action.payload.recipeId, comments: commentsListFiltered };
+            const likedComments = [...state.likedComments];
+            likedComments[index] = commentsObject;
+            return {
+              ...state,
+              likedComments
+            }
+          }
         default:
           
       } 
@@ -54,7 +83,8 @@ export const userSlice = createSlice({
         ...state, 
         _id,
         email,
-        username
+        username,
+        likedComments
       }
     },
     handleLogout (state = initialState){

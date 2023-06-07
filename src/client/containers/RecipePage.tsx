@@ -28,19 +28,20 @@ export default function RecipePage() {
     const userId = useSelector((state:any) => state.user._id);
     const recipeId = useSelector((state:any) => state.recipe.activeRecipeId);
     const dispatch = useDispatch();
-
     const recipeLoader = useRecipeLoader();
     // const activeRecipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
 
     useEffect(()=> {
          dispatch(setActiveRecipeId(recipe._id))
-         recipeLoader(recipe._id, userId).then(({comments, likedComments} ) :any =>{
+         recipeLoader(recipe._id, userId).then(({comments, likedComments}) :any =>{
             dispatch(setComments((comments)));
             // console.log("LIKED COMMENTS: ", likedComments);
-            dispatch(setLikedComments([... new Set(likedComments)]));
+            // dispatch(setLikedComments([... new Set(likedComments2)]));
         });
     },[]);
-
+    // useEffect(()=>{
+    //     console.log(likedComments)
+    // }, [likedComments])
 
     return (
         <ViewModeProvider>

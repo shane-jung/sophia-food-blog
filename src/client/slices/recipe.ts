@@ -34,6 +34,20 @@ export const recipeSlice = createSlice({
       }
     },
     removeComment(state = initialState, action:PayloadAction<any>){
+      if(action.payload.type === "reply"){
+        const { commentId, index } = action.payload;
+        console.log(index);
+        const commentRemovedReply = {...state.comments[index], replies: state.comments[index].replies.filter((reply:any) => reply._id !== commentId)};
+        console.log(commentRemovedReply)
+        const comments = [...state.comments];
+        console.log(comments);
+        comments[index] = commentRemovedReply;
+        console.log(comments);
+        return {
+          ...state,
+          comments: [...comments]
+        }
+      }
       return {
         ...state,
         comments: [...state.comments.filter((data:any) => data.comment._id !== action.payload.commentId)]

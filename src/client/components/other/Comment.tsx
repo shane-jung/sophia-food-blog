@@ -23,12 +23,13 @@ export default function Comment({comment, index, reply} : CommentProps){
     const dispatch = useDispatch();
 
     const recipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
-    const likedComments = useSelector((state: RootState) => state.user.likedComments);
+    const likedComments = useSelector((state:any) => state.user.likedComments.filter((comment:any) => comment.recipeId === recipeId)[0]?.comments.includes(comment._id));
+
     const comments = useSelector((state: RootState) => state.recipe.comments);
     const [commentId, setCommentId] = useState(comment._id);
 
     const [liked, setLiked] = useState()
-    const [userLiked, setUserLiked] = useState(likedComments.includes(comment._id));
+    const [userLiked, setUserLiked] = useState(likedComments);
 
     const [increment, setIncrement] = useState(liked ? -1 : 1)
    
@@ -47,7 +48,8 @@ export default function Comment({comment, index, reply} : CommentProps){
     });
 
     useEffect(()=>{
-         setUserLiked(likedComments.includes(commentId));
+        console.log(likedComments);
+         setUserLiked(likedComments);
     },[likedComments, comment._id]);
     
 
@@ -83,7 +85,7 @@ export default function Comment({comment, index, reply} : CommentProps){
         }
         updateDB();
         console.log("Updating comment...", userLiked ? "Removing like" : "Adding like")
-        dispatch(setLikedComment({commentId, type: userLiked ? 'remove' : 'add'}))
+        dispatch(setLikedComment({recipeId, commentId, type: userLiked ? 'remove' : 'add'}))
         // setUserLiked(!userLiked);   
     }
     
@@ -110,7 +112,8 @@ export default function Comment({comment, index, reply} : CommentProps){
             }
         }
         deleteComment();
-        dispatch(removeComment({commentId}));
+        if(reply) dispatch(removeComment({type:"reply", commentId, index}));
+        else dispatch(removeComment({commentId}));
     }
     
 
@@ -168,7 +171,7 @@ export default function Comment({comment, index, reply} : CommentProps){
                 { 
                     repliesVisible && 
 
-                    replies?.map((reply:any, index:number) => {
+                    replies?.map((reply:any) => {
                         return !reply.hidden && <Comment reply = {true} key = {index} comment={reply} index={index}/>
                     })
                 

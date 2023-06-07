@@ -4,7 +4,6 @@ import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 import { useDispatch } from "react-redux";
 import user, {handleLogin, handleLogout } from "../slices/user";
-import useAxiosPrivate from "./useAxiosPrivate";
 import axios from "../api/axios";
 
 
@@ -33,11 +32,12 @@ const PersistLogin = () => {
     useEffect(() => {
         async function getUser(){
             const getUser = await axios.get(`/users/${auth.user._id}`)
-            // console.log("setting user data");
+            console.log("setting user data");
+            // console.log(getUser.data.user.likedComments)
             dispatch(handleLogin(getUser.data));
         }
         if(auth.user) getUser();
-    }, [auth])
+    })
 
 
     return (

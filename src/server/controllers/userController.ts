@@ -105,7 +105,7 @@ const userController = {
     try{
       const db = await connectToDatabase();
       const user = await db.collection('Profiles').findOne({_id: new ObjectId(id)});
-      console.log(user);
+      // console.log(user);
       if(user) return res.json({
           user: {
             _id: user._id,
