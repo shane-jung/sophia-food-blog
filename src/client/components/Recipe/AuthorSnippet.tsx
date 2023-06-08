@@ -5,11 +5,11 @@ interface AuthorSnippetProps{
     author?: Author;
 }
 
-export default function AuthorSnppet({author}: AuthorSnippetProps){
+export default function AuthorSnippet({author}: AuthorSnippetProps){
     
     return(
 
-        author != undefined ? <p>Signed in as <a>{author.firstName}</a> </p>
+        author != undefined ? <p>By <a>{author.firstName}</a> </p>
         : 
     
         <>

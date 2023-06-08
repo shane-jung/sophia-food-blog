@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { _viewMode } from '../enums';
 
 interface UserState {
     _id : string;
     likedComments: any;
     email: string;
     username: string;
+    viewMode: string;
 }
 
 const initialState : UserState = {
@@ -12,6 +14,7 @@ const initialState : UserState = {
     likedComments: [],
     email: "",
     username: "",
+    viewMode: "VIEWING"
 }
 
 
@@ -84,7 +87,8 @@ export const userSlice = createSlice({
         _id,
         email,
         username,
-        likedComments
+        likedComments,
+        viewMode: state.viewMode || "VIEWING"
       }
     },
     handleLogout (state = initialState){
@@ -94,12 +98,33 @@ export const userSlice = createSlice({
         likedComments: [],
         email: "",
         username: "",
+        viewMode: "VIEWING"
       }
     },
+    setViewMode(state = initialState, action:PayloadAction<string>){
+      switch (action.payload){
+        case "EDIT_RECIPE":
+          console.log("SETTING TO EDITING")
+          return {
+            ...state,
+            viewMode: "EDITING"
+          }
+        case "VIEW_RECIPE": 
+          return {
+            ...state,
+            viewMode: "VIEWING"
+          }
+        case "CREATE_RECIPE":
+          return {
+            ...state,
+            viewMode: "CREATING"
+          }
+      }
+    }
   },
 })
 
 // Action creators are generated for each case reducer functionikedCommentsForRecipe
-export const { setId, setLikedComments, setLikedComment, handleLogout, handleLogin} = userSlice.actions
+export const { setId, setLikedComments, setLikedComment, handleLogout, handleLogin, setViewMode} = userSlice.actions
 
 export default userSlice.reducer

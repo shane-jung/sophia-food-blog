@@ -2,15 +2,14 @@ import useAuth from "@/client/utils/useAuth"
 import { useState } from "react";
 import { useContext } from "react"
 import RichTextRecipeComponent from "./RichTextRecipeComponent";
-import ViewModeContext from "@/client/contexts/ViewModeProvider";
-import useViewMode from "@/client/utils/useViewMode";
 import { _viewMode } from "@/client/enums";
+import { useSelector } from "react-redux";
 interface IngredientProps{
     ingredients: string[];
 }
 
 export default function Ingredients({ingredients}: IngredientProps){
-    const {viewMode} = useViewMode();
+    const viewMode = useSelector((state: any) => state.user.viewMode);
     const [ingredientsList, setIngredientsList] = useState(ingredients || []);
     function addIngredient(){
         setIngredientsList([...ingredientsList, ""]);

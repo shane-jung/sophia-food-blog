@@ -53,11 +53,11 @@ const userController = {
       );
       res.cookie('jwt', refreshToken, { httpOnly: true, secure:true, sameSite: 'none', maxAge: 24 * 60 * 60 * 1000});
       DBUser["refresh-token"] = refreshToken;
-      console.log(refreshToken);
+      // console.log(refreshToken);
       req.headers['Authorization'] = `Bearer ${accessToken}`
       saveUser(DBUser);
       res.json({isAuthenticated: true, user: DBUser}); 
-      console.log(DBUser);
+      // console.log(DBUser);
     }
     else {
       res.status(401);

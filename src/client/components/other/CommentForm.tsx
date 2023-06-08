@@ -18,7 +18,7 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
     const [name, setName] = useState("");
     const [content, setContent] = useState("");
 
-    const recipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
+    const recipeId = useSelector((state: RootState) => state.recipe._id);
 
 
     const nameRef = useRef<HTMLInputElement>(null);

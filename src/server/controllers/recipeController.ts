@@ -61,11 +61,11 @@ const recipeController ={
     return;
   },
   updateRecipe: async (req: Request, res: Response) => {
+    const recipeId = req.params.recipeId;
 
-    const recipe = req.body;
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').updateOne({_id: recipe._id}, {"$set": recipe});
+        const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {"$set": req.body});
         console.log(result);
         return res.status(200).json({message: "Recipe updated successfully"});
     } catch (error) {

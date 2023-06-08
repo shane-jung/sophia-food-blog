@@ -22,7 +22,7 @@ export default function Comment({comment, index, reply} : CommentProps){
     const { auth } = useAuth();
     const dispatch = useDispatch();
 
-    const recipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
+    const recipeId = useSelector((state: RootState) => state.recipe._id);
     const likedComments = useSelector((state:any) => state.user.likedComments.filter((comment:any) => comment.recipeId === recipeId)[0]?.comments.includes(comment._id));
 
     const comments = useSelector((state: RootState) => state.recipe.comments);
@@ -65,7 +65,7 @@ export default function Comment({comment, index, reply} : CommentProps){
 
     function handleLike(){
         async function updateDB(){
-            console.log("UPDATING DB RECIPE: ", recipeId)
+            // console.log("UPDATING DB RECIPE: ", recipeId)
             try{ 
                 // console.log(increment);
                 const result = await axios.post(

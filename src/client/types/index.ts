@@ -1,6 +1,7 @@
 
 
 export type Recipe = {
+    subtitle: string;
     _id: string;
     title: string;
     titleId: string;
@@ -87,5 +88,6 @@ export const EmptyRecipe:Recipe = {
     author: "",
     ingredients : "",
     directions: "",
+    subtitle: "",
     comments: []
 }

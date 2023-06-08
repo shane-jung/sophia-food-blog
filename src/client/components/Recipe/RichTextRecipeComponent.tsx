@@ -1,22 +1,25 @@
-import { useContext, useState} from "react"
+import { useContext, useEffect, useState} from "react"
 import { EditableContext } from "../../contexts/EditableContext"
 import useAuth from "@/client/utils/useAuth"
 
 
 import ReactQuill from "react-quill"
-import useViewMode from "@/client/utils/useViewMode";
 import { _viewMode } from "@/client/enums";
+import { useSelector } from "react-redux";
 
 interface RichTextRecipeComponentProps{
     className: string;
-    value: string;
+    initialValue: string;
     name: string;
 }
-export default function     RichTextRecipeComponent(props:RichTextRecipeComponentProps){
-    const { viewMode } = useViewMode();
-    const {auth} = useAuth();
-    const placeholder = "Recipe " + props.name;
-    const [state, setState] = useState({ content: props.value })
+export default function RichTextRecipeComponent({className, initialValue, name}:RichTextRecipeComponentProps){
+    const viewMode = useSelector((state: any) => state.user.viewMode);
+    const [value, setValue] = useState(initialValue);
+    const recipe = useSelector((state: any) => state.recipe);
+
+    useEffect(() => {  
+        setValue(initialValue);        
+    }, [recipe])
 
     const modules = {
         toolbar: [
@@ -36,21 +39,41 @@ export default function     RichTextRecipeComponent(props:RichTextRecipeComponen
     ]
 
     
-    function onChange(value:string){
-        setState({ content: value })
+    function onChange(newValue:string){
+        setValue(newValue);
     }
 
     return (
         <>  
             {
-                viewMode != _viewMode.VIEWING ?
+                viewMode != "VIEWING" ?
                     <>
-                        <ReactQuill readOnly = {viewMode == _viewMode.VIEWING} defaultValue = {props.value} placeholder={placeholder} className= {props.className + " input-field"} theme="snow" modules = {modules} formats = {formats} onChange = {onChange}/>
-                        <input aria-hidden= "true" readOnly = {true} className = {props.className + " hidden-input"} name = {props.name} value={state.content}  placeholder = {placeholder}></input>
+                        <ReactQuill 
+                            readOnly = {viewMode == "VIEWING"} 
+                            defaultValue = {initialValue} 
+                            placeholder={"Recipe " + name} 
+                            className= {className + " input-field"} 
+                            theme="snow" 
+                            modules = {modules} 
+                            formats = {formats} 
+                            onChange = {onChange}
+                        />
+
+                        <input 
+                            aria-hidden= "true" 
+                            readOnly = {true} 
+                            className = {className + " hidden-input"} 
+                            name = {name} 
+                            value={value || ""}  
+                            placeholder = {"Recipe " + name} 
+                        />
                     </>
                 :
                 
-                    <div className = {props.className} dangerouslySetInnerHTML= {{__html : props.value}}></div>
+                    <div 
+                        className = {className} 
+                        dangerouslySetInnerHTML= {{__html : value || ""}} 
+                    />
             }
         </>
     )

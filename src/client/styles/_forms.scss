@@ -21,18 +21,26 @@
     }
   }
   
+.ql-toolbar.ql-snow + .ql-container.ql-snow{
+  border: 1px solid rgb(62, 62, 62);
+  margin:   1px solid rgb(62, 62, 62);
 
+}
 
 .ql-container.ql-snow{
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  // font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 1.125em;
   position: relative;
-  outline:none;
-  border:none;
+  
+
 }
 
 .quill {
   position:relative;
+  * {
+    font-family: inherit;
+    font-size:.875em;
+  }
   
 }
 
@@ -75,7 +83,7 @@
   font-style: inherit;
   width:100%;
   height:100%;  
-  border:none;
+  // border:none;
   outline:.125em solid transparent;
   transition: .1s outline ease-out;
   border-radius: .25em;
@@ -108,6 +116,12 @@ strong{
   font-weight:bold;
 }
 
+.recipe-form{
+  input {
+    border:none;
+    border-bottom:2px solid gray;
+  }
+}
 
 .user-form{
   padding: .25em 2em;
@@ -121,7 +135,7 @@ strong{
     margin-top:.25em;
     border-radius:.25em;
     padding:.5em;
-    outline:1px solid black;
+    border-bottom:1px solid black;
     font-size:1.0625em;
   }
 }
@@ -147,4 +161,20 @@ strong{
   width:    1px;
   height:   1px;
   overflow: hidden;
+}
+
+.input-field-container{
+  width: 50%;
+  margin:auto
+}
+.input-field {
+  padding: 1.5rem 0 0 0;
+  position:relative;
+}
+
+.input-field-label{
+  position:absolute;
+  left:0;
+  top:0;
+  font-size: min(.75em, .875rem);
 }

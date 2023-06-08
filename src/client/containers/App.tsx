@@ -8,8 +8,8 @@ import RootLayout from '@/client/components/layouts/RootLayout';
 import { recipeLoader, emptyRecipeLoader} from '../router/recipes';
 import RegisterPage from './RegisterPage'
 import AuthenticatedRoute from '../components/AuthenticatedRoute'
-import AuthProvider from '../contexts/AuthProvider'
 import PersistLogin from '../utils/PersistLogin';
+import CreateRecipeForm from './CreateRecipeForm'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +20,7 @@ const router = createBrowserRouter(
           <Route path = "recipes">
             <Route index element= {<Recipes/>}/>
             <Route element = {<AuthenticatedRoute allowedRoles = {[8012]}/>}>
-              <Route path = "create" loader = {emptyRecipeLoader} element = {<RecipePage  key = 'create' />}/>
+              <Route path = "create" loader = {emptyRecipeLoader} element = {<CreateRecipeForm  key = 'create' />}/>
             </Route>
             <Route path = ":titleId" loader = {recipeLoader} element = {<RecipePage key = {1}/>} />
           </Route>

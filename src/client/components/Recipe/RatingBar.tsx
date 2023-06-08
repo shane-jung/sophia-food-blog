@@ -1,6 +1,5 @@
 
 import { _viewMode } from "@/client/enums";
-import useViewMode from "@/client/utils/useViewMode";
 import { useState } from "react";
 
 import { faStar } from "@fortawesome/free-regular-svg-icons";
