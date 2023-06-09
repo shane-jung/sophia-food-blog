@@ -1,5 +1,5 @@
 
-import Logo from "../components/Logo"
+import { Link } from "react-router-dom"
 export default function RegisterPage(){
 
     function handleSubmit(event:any){
@@ -20,15 +20,15 @@ export default function RegisterPage(){
     return (
 
         <>  
-            <Logo/>
             <form method="POST" onSubmit={handleSubmit} className="user-form" action = "/">
-                <h1>Make an Account</h1>
-                <label> Email Address</label>
+                <h1>Create an Account</h1>
+                <h2> Email Address:</h2>
                 <input name= "user-email" placeholder="Email Address"></input>
-                <label>Password</label>
+                <h2>Password:</h2>
                 <input name= "user-password" placeholder="Password"></input>
                 <button className="simple-button">Submit</button>
             </form>
+            <p>Already have an account? <Link to='/users/login'>Login</Link></p>
            
         </>
     )

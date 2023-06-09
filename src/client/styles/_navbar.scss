@@ -1,6 +1,11 @@
 nav {
-    background-color: $accent; 
-    margin:.5em 0;     
+    background-color: $primary;
+    margin: .25em 0;  
+    border: 3px double $primary-dark;
+    border-radius: 5px;
+
+    
+    
     ul {
 
         display: flex;
@@ -13,19 +18,21 @@ nav {
 
         li{
             //border:1px solid $accent-gray;
+            margin: .25em;
             border-radius:.25em;
             transition: background-color .2s ease-out;
             &:hover{
-                background-color: $accent-dark;
+                background-color: $primary-light;
+                outline: 2px double $primary-dark;
             }
             a{
                 display:inline-block;
-                padding:.25em;
+                padding:.0625em .25em;
                 height:100%;
                 color: $font-color;
                 text-decoration: none;
                 font-size: 1.1em;
-                font-weight: 500;
+                font-weight: 300;
                 transition:color .5s ease-out;
                 &:hover{
                     color: $font-color;

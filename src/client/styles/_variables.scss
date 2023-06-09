@@ -1,18 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600&display=swap');
 body, input{
-  font-family: 'Roboto Slab';
+  font-family: 'Inter';
   font-weight: 300;
 }
 
 
 // Colors
-$primary: #fe63b9;
-$primary-light: lighten($primary, 10%);
-$primary-dark: darken($primary, 10%);
-$accent: #4da2fc;
+$primary: #a1bfb0;
+$primary-light: lighten($primary, 15%);
+$primary-dark: darken($primary, 30%);
+$primary-lightest: lighten($primary, 25%);
+$accent: #fbf3fc;
 $accent-light: lighten($accent, 10%);
-$accent-dark: darken($accent, 10%);
-$font-color: #313131;
+$accent-dark: #a0717884;
+$font-color: #2D3319;
 $font-color-light: #a0a0a0;
 $app-sidebar-color: #2d2d2d;
 $note-sidebar-color: #e5e5e5;

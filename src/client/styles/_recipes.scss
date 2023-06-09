@@ -9,11 +9,17 @@
     }
 }
 
-
 .main-container{
-    width: clamp(600px, 80%, 900px);
+    position: relative;
+    width: clamp(600px, 90%, 1000px);
     margin: auto;
-    border:2px solid $accent-gray;
+    font-size: 1rem;
+    color: $primary-dark;
+}
+
+.site-header{
+    position: relative;
+    margin: auto;
 }
 
 .recipe-container{
@@ -35,6 +41,7 @@
     text-align:center;
     font-size:2.25em;
     margin:.125em auto;
+    color: $primary-dark;
 }
 
 .recipe-title-id{
@@ -71,7 +78,7 @@
 
 
 .recipe-card{
-    background:#f0f7ff;
+    background: $primary-light;
     outline:.125rem solid black;
     width: clamp(350px, 65%, 525px);
     padding: .75em;
@@ -98,10 +105,10 @@ form input:focus:not(:read-only){
 }
 
 
-
 .recipe-ingredient {
     text-align:left;
     font-size:inherit;
+    color: $primary-dark;
 }
 
 .comments{
@@ -137,11 +144,11 @@ form input:focus:not(:read-only){
     background:none;
     color:$font-color;
     font-family:inherit;
-    font-size:1.125em;
     margin:0;
-    padding:.5em;
+    padding:.10em .25em;
     &:hover{
-        color:$accent;
+        background-color:$primary-light;
+        color:$font-color
     }
 }
 
@@ -189,9 +196,22 @@ form input:focus:not(:read-only){
 }
 
 .login-button{
+    right: 0;
+    bottom: 0%;
+    border: 3px double $primary-dark;
+    border-radius: 5px;
+    position:absolute;
+    background: $primary;
     text-align:right;
 }
 
+.ingredient-button{ 
+    color: $font-color;
+    font-size: 1em;
+    border: 3px double $primary-dark;
+    border-radius: 5px;
+    background: $primary;
+}
 
 .rating-bar{
     display:block;

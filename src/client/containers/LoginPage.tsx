@@ -1,6 +1,5 @@
 
 import { Link } from "react-router-dom"
-import Logo from "../components/Logo"
 export default function LoginPage(){
 
     function handleSubmit(event:any){
@@ -23,16 +22,16 @@ export default function LoginPage(){
     return (
 
         <>
-            <Logo/>
+
             <form className="user-form" onSubmit={handleSubmit}>
                 <h1>Login</h1>
-                <label> Email Address</label>
+                <h2> Email Address:</h2>
                 <input name= "user-email" placeholder="Email Address"></input>
-                <label>Password</label>
+                <h2>Password:</h2>
                 <input name= "user-password" placeholder="Password"></input>
                 <button>Submit</button>
             </form>
-            <p>Don't have an account? <Link to='/users/register'>Make an Account</Link></p>
+            <p>Don't have an account? <Link to='/users/register'>Create an Account</Link></p>
            
         </>
     )

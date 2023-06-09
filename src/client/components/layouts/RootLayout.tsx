@@ -7,8 +7,10 @@ export default function RootLayout(){
     return(
        
         <div className="main-container">
-            <LoginButton />
-            <Logo/>
+            <header className="site-header">
+                <Logo/>
+                <LoginButton />
+            </header>
             <MainNavbar />
             <Outlet />
         </div>

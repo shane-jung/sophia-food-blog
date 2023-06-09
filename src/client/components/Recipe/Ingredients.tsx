@@ -32,7 +32,7 @@ export default function Ingredients(props: IngredientProps){
                     })
                 }
             </ul>
-            {isAuthenticated && isEditable && <button type= "button" className="simple-button" onClick = {addIngredient}>Add Ingredient</button>}
+            {isAuthenticated && isEditable && <button type= "button" className="simple-button ingredient-button" onClick = {addIngredient}>Add Ingredient</button>}
         </div>
     );
 }

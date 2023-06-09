@@ -4,6 +4,7 @@ import { AuthenticationContext } from "../../contexts/AuthenticationContext"
 
 import ReactQuill from "react-quill"
 
+
 interface RichTextRecipeComponentProps{
     className: string;
     value: string;
@@ -19,6 +20,7 @@ export default function     RichTextRecipeComponent(props:RichTextRecipeComponen
         toolbar: [
           ['bold', 'italic', 'underline','strike'],
           [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+          [{ 'align': [] }],
           ['link', 'image'],
           ['clean']
         ],
@@ -29,7 +31,7 @@ export default function     RichTextRecipeComponent(props:RichTextRecipeComponen
     const formats = [
         'bold', 'italic', 'underline', 'strike',
         'list', 'bullet', 'indent',
-        'link', 'image'
+        'link', 'image','align'
     ]
 
     
