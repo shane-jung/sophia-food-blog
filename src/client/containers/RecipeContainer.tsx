@@ -24,23 +24,27 @@ export default function RecipeContainer() {
     return (
         <div className = "recipe-container">
             <ImageUpload />
-            <SimpleTextRecipeComponent name="title" className = "recipe-title" value = {recipe.title} />
-            <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" value = {recipe.subtitle} />
+            <SimpleTextRecipeComponent name="title" className = "recipe-title" initialValue = {recipe.title} />
+            <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" initialValue = {recipe.subtitle} />
 
             {viewMode == "VIEWING" && 
                 <>
+                    <AuthorSnippet author = {recipe.author}/>
                     <RatingBar/> 
-                    <AuthorSnippet author = {recipe.author}/> 
+
                 </>
             }
             
             {viewMode == "CREATING" && <TitleId value = {recipe.titleId}/>}
             <RichTextRecipeComponent name="background" className = "recipe-background" initialValue = {recipe.background}/>
             <div className="recipe-card"> 
-                <SimpleTextRecipeComponent name="cardTitle" className = "recipe-title header" value = {recipe.cardTitle} />
+                <SimpleTextRecipeComponent name="cardTitle" className = "recipe-title header" initialValue = {recipe.cardTitle} />
                 {viewMode == "VIEWING" && <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  /> }
                 <RichTextRecipeComponent name="description" className = "recipe-description" initialValue = {recipe.description}/>
+                <b>Ingredients</b>
                 <RichTextRecipeComponent name="ingredients" className = "recipe-ingredients" initialValue = {recipe.ingredients}/>
+                <b>Directions</b>
+
                 <RichTextRecipeComponent name="directions" className = "recipe-directions" initialValue = {recipe.directions}/>
             </div>
         </div>

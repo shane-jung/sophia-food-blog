@@ -120,6 +120,7 @@ strong{
   input {
     border:none;
     border-bottom:2px solid gray;
+    height:100%;
   }
 }
 
@@ -164,11 +165,9 @@ strong{
 }
 
 .input-field-container{
-  width: 50%;
-  margin:auto
+  position:relative;
 }
 .input-field {
-  padding: 1.5rem 0 0 0;
   position:relative;
 }
 

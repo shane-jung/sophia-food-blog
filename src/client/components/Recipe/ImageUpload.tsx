@@ -1,5 +1,6 @@
 import { setRecipe } from "@/client/slices/recipe";
-import { faCheck, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faImage } from "@fortawesome/free-regular-svg-icons";
+import { faCheck, faTrash, faUpload, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -66,25 +67,43 @@ export default function ImageUpload(){
     }
 
     return (
-        <>
+        <div className = "header-image-container">
             {
                 viewMode != "VIEWING" &&
                 <>
-                    <input type= "file" onChange={fileSelect} />
-                    <button onClick = {uploadToS3}>
-                        <FontAwesomeIcon icon = {faCheck}/>
+                    <label 
+                        htmlFor="image-upload"
+                        className = "image-upload-label"
+                    >
+                        <FontAwesomeIcon icon = {faImage}/>
+
+                    </label>
+
+                    <input 
+                        id="image-upload" 
+                        type= "file" 
+                        onChange={fileSelect} 
+                    />
+
+                    <button 
+                        className = "image-upload-button"
+                        onClick = {uploadToS3}>
+                            <FontAwesomeIcon icon = {faCheck}/>
                     </button>
 
                     {   
                         recipe.imageUrl && 
-                        <button onClick = {removeImage}>
-                            <FontAwesomeIcon icon = {faTrash}/>
+                        <button 
+                            onClick = {removeImage}
+                            className = "image-remove-button"
+                        >
+                            <FontAwesomeIcon icon = {faXmark}/>
                         </button>
                     }
                 </>
             }
 
-            <img src={recipe.imageUrl} alt=""  className = "recipe-image"/>
-        </>
+            <img src={recipe.imageUrl} alt="No image uploaded yet!"  className = "header-image"/>
+        </div>
     )
 }

@@ -9,7 +9,7 @@ export default function AuthorSnippet({author}: AuthorSnippetProps){
     
     return(
 
-        author != undefined ? <p>By <a>{author.firstName}</a> </p>
+        author != undefined ? <p>By <a>Sophia</a> </p>
         : 
     
         <>

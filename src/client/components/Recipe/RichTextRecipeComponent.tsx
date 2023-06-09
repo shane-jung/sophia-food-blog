@@ -47,7 +47,8 @@ export default function RichTextRecipeComponent({className, initialValue, name}:
         <>  
             {
                 viewMode != "VIEWING" ?
-                    <>
+                    <div className="input-field-container">
+                        <label className= "input-field-label">{name}</label>
                         <ReactQuill 
                             readOnly = {viewMode == "VIEWING"} 
                             defaultValue = {initialValue} 
@@ -67,7 +68,7 @@ export default function RichTextRecipeComponent({className, initialValue, name}:
                             value={value || ""}  
                             placeholder = {"Recipe " + name} 
                         />
-                    </>
+                    </div>
                 :
                 
                     <div 
