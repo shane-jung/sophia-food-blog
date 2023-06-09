@@ -1,7 +1,5 @@
 import { MongoClient, Db} from 'mongodb';
 
-const MONGODB_URI = "mongodb+srv://shanejung12:d2qRcdc7rTHsauWK@recipes.lcbomjg.mongodb.net/?retryWrites=true&w=majority";
-const DB_NAME = "SophiaRecipeBlog";
 let client: MongoClient;
 let cachedDb: Db;
 
