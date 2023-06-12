@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom"
 import useAuth from "../utils/useAuth"
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { handleLogout } from "../slices/user";
 import { useEffect } from "react";
 
@@ -12,8 +12,10 @@ export default function LoginButton(){
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from || "/";
-    const username = useSelector((state: any) => state.user.username);
-
+    const username = useSelector((state: any) => state.user.username, (prev, next) => prev == next);
+    useEffect(()=>{
+        console.log("USERNAME CHANGED: ", username)
+    }, [username])
     const dispatch = useDispatch();
     
     async function logout(){

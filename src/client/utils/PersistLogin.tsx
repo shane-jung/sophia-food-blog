@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,8 @@ const PersistLogin = () => {
     const refresh = useRefreshToken();
     const { auth, setAuth } = useAuth();
     const dispatch = useDispatch();
+
+    console.log(auth);
 
     useEffect(() => {
         const verifyRefreshToken = async () => { 
@@ -29,7 +31,7 @@ const PersistLogin = () => {
         auth ? verifyRefreshToken() : verifyRefreshToken();;
     },[]);
 
-    useEffect(() => {
+    useMemo(() => {
         async function getUser(){
             const getUser = await axios.get(`/users/${auth.user._id}`)
             console.log("setting user data");
@@ -37,7 +39,7 @@ const PersistLogin = () => {
             dispatch(handleLogin(getUser.data));
         }
         if(auth.user) getUser();
-    })
+    }, [auth.user])
 
 
     return (

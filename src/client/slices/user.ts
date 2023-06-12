@@ -22,13 +22,6 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    setId (state = initialState, action:PayloadAction<string>){
-      // state._id = action.payload
-      return {
-        ...state,
-        _id: action.payload
-      };
-    },
     setLikedComments (state = initialState, action:PayloadAction<any>) {
       return {
         ...state,
@@ -125,6 +118,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer functionikedCommentsForRecipe
-export const { setId, setLikedComments, setLikedComment, handleLogout, handleLogin, setViewMode} = userSlice.actions
+export const { setLikedComments, setLikedComment, handleLogout, handleLogin, setViewMode} = userSlice.actions
 
 export default userSlice.reducer

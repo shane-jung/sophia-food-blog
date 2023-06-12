@@ -30,14 +30,14 @@ function EditButton() {
 
     return(
         <button 
-            className= "recipe-action edit-button simple-button"
+            className= "icon-button round edit-button simple-button"
             type= "button" 
             onClick = {toggleViewMode}> 
                 <FontAwesomeIcon 
-                    className= {"fa-edit-icon "} 
+                    className= {"edit-icon "} 
                     icon= {viewMode == "EDITING" ? faXmark : faEdit} 
                 /> 
-                <span className = "recipe-action-tooltip">
+                <span className = "icon-button-tooltip">
                     {tooltipText}
                 </span>
         </button>
@@ -58,12 +58,12 @@ function SaveButton(){
     }, [viewMode]);
 
     return(
-        <button className = { "recipe-action save-button" + (viewMode == "VIEWING" ? " active" : "") }>
+        <button className = { "icon-button round save-button" + (viewMode == "VIEWING" ? " active" : "") }>
             <FontAwesomeIcon 
                 icon= {faSave}
-                className="fa-save-icon"
+                className= "save-icon"
             />
-            <span className = "recipe-action-tooltip">
+            <span className = "icon-button-tooltip">
                     Save Changes
             </span>
         </button>
@@ -90,12 +90,12 @@ function DeleteButton(){
     }
         
     return(
-        <button className= "delete-button simple-button" onClick= {handleClick}> 
+        <button className= "icon-button round delete-button" onClick= {handleClick}> 
             <FontAwesomeIcon 
                 icon= {faTrashAlt}
-                className = "fa-delete-icon"
+                className = "delete-icon"
             />
-            <span className = "recipe-action-tooltip">
+            <span className = "icon-button-tooltip">
                     Delete this recipe
             </span>
         </button>

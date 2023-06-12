@@ -22,7 +22,7 @@ const router = createBrowserRouter(
             <Route element = {<AuthenticatedRoute allowedRoles = {[8012]}/>}>
               <Route path = "create" loader = {emptyRecipeLoader} element = {<CreateRecipeForm  key = 'create' />}/>
             </Route>
-            <Route path = ":titleId" loader = {recipeLoader} element = {<RecipePage key = {1}/>} />
+            <Route path = ":titleId" loader = {recipeLoader} element = {<RecipePage/>} />
           </Route>
         </Route>
           
