@@ -83,6 +83,25 @@ const recipeController ={
         throw error;
     }
   },
+  rateRecipe: async(req: Request, res: Response) => {
+    console.log(req.body);
+    const {userId, recipeId, rating, date} = req.body;
+    try{
+      const db = await connectToDatabase();
+      const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {$set: {"ratings.$[element]": {rating, userId: new ObjectId(userId), date}}}, {arrayFilters: [{"element.userId": new ObjectId(userId)}]});
+      const result2 = await db.collection('Profiles').updateOne({_id: new ObjectId(userId)}, {$set: {"ratings.$[element]": {rating, recipeId: new ObjectId(recipeId), date}}}, {arrayFilters: [{"element.recipeId": new ObjectId(recipeId)}]});
+      console.log(result2);
+      if(result.modifiedCount === 0){
+        console.log("Didn't update, pushing new rating")
+        const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {$push: { ratings: {rating, userId: new ObjectId(userId), date}}});
+        const result2 = await db.collection('Profiles').updateOne({_id: new ObjectId(userId)}, {$push: { ratings: {rating, recipeId: new ObjectId(recipeId), date}}});
+        console.log(result2);
+      }
+     
+    }catch (error:any){
+      console.log(error);
+    }
+  },
   postComment: async (req: Request, res: Response) => {
     const comment = req.body.comment;
     const reply = req.body.reply;

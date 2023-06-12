@@ -12,7 +12,7 @@ const router = express.Router();
 const s3 = new AWS.S3({
   accessKeyId: 'AKIAV54HMTSXUR4OFDF6',
   secretAccessKey: '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',
-  region: "us-east-2",
+  region: "us-east-1",
 });
 
 // Route for generating a signed URL
@@ -22,7 +22,7 @@ router.get('/sign-s3', (req, res) => {
   console.log(fileName, '|' + fileType + '|');
   // Configure parameters for the signed URL
   const s3Params = {
-    Bucket: 'recipeblog',
+    Bucket: 'recipe-blog-data', 
     Key: fileName,
     ContentType: fileType,
     Expires: 60 // URL expiration time in seconds (e.g., 1 minute)
@@ -43,11 +43,16 @@ router.get('/sign-s3', (req, res) => {
 
 router.post('/create', checkAuth, verifyRoles(8012), recipeController.createRecipe);
 
-router.post('/comment', recipeController.postComment)
+router.post('/comment', recipeController.postComment);
+
+router.route('/rating').post(recipeController.rateRecipe);
+ 
 
 router.route('/titleId/:titleId').get(recipeController.getRecipeByTitleId);
 
 router.route('/:recipeId/comments').get(recipeController.getComments);
+
+
 
 router.route('/:recipeId')
     .get(recipeController.getRecipeById)

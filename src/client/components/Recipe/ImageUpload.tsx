@@ -33,12 +33,14 @@ export default function ImageUpload(){
         const { signedRequest, url } = signedUrlResponse.data;
         console.log(signedRequest);
         // Uploading the image file to S3 using the signed URL
-        const result = await axios.put(signedRequest, image, {
+        const result = await axios.put(signedRequest, image
+            , {
             headers: {
                 'Content-Type': image.type,
-            },
-        });
-        console.log(result);
+            }, 
+        }
+        );
+        console.log(result);    
 
         // ,  {
             // headers: {
@@ -46,10 +48,10 @@ export default function ImageUpload(){
             // },
         // }
 
+       
         const updateResponse = await axiosPrivate.put(`/recipes/${recipe._id}`, {
             imageUrl: url
         });
-
         console.log(updateResponse);
 
         dispatch(setRecipe({imageUrl: url}));

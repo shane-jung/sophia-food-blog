@@ -12,7 +12,7 @@ interface RecipeContainerProps{
     recipe: Recipe,
 }
 
-import RatingBar from '../components/Recipe/RatingBar';
+import RatingBar, { StaticRatingBar } from '../components/Recipe/RatingBar';
 import DateComponent from '../components/Recipe/DateComponent';
 import { useSelector } from 'react-redux';
 import ImageUpload from '../components/Recipe/ImageUpload';
@@ -30,7 +30,7 @@ export default function RecipeContainer() {
             {viewMode == "VIEWING" && 
                 <>
                     <AuthorSnippet author = {recipe.author}/>
-                    <RatingBar/> 
+                    <StaticRatingBar/> 
 
                 </>
             }

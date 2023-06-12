@@ -13,7 +13,7 @@ export type Recipe = {
     ingredients : string;
     // ingredients : Ingredient[];
     directions: string;
-    imageURLs?: string[];
+    imageUrl?: string;
     comments: string[];
     tags? : string [];
     ingredientTags? : string[];
@@ -40,6 +40,7 @@ export type Profile = {
     savedRecipes: any;
     comments: any
     likedComments: any;
+    ratings: any;
 }
 
 export const EmptyProfile:Profile = {
@@ -50,7 +51,7 @@ export const EmptyProfile:Profile = {
     savedRecipes : [],   // an array of Recipe Ids 
     comments : [],       // an array of (Recipe Id, comment Id)'s 
     likedComments : [ ],   // an array of Objects of the form  {recipeId, commentId []}
-    
+    ratings: [],
 }
 
 export interface Author extends Profile {
@@ -70,8 +71,9 @@ export type CommentType= {
 }
 
 export type Rating = {
-    _id: string;
-    profile?: Profile;
+    _id?: string;
+    userId: string;
+    recipeId: string;
     rating: number;
     date: string;
 
@@ -89,5 +91,7 @@ export const EmptyRecipe:Recipe = {
     ingredients : "",
     directions: "",
     subtitle: "",
-    comments: []
+    comments: [],
+    ratings: [],
+    imageUrl: "",
 }
