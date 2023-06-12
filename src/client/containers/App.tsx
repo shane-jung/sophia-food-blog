@@ -43,7 +43,7 @@ export const App: React.FC = () => {
     <HelmetProvider>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Sophia Recipe Blog</title>
+        <title>Once Upon a Thyme- Recipe Blog</title>
         <link rel="canonical" href="/" />
       </Helmet>
       <RouterProvider router = {router}/>

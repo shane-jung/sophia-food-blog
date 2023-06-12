@@ -115,7 +115,7 @@ export default function RegisterPage(){
                 >
                     {errMessage}
                 </p>
-                <label>Display Name</label>
+                <label>Username</label>
                 <input 
                     type="text"
                     id = "username"
@@ -145,7 +145,7 @@ export default function RegisterPage(){
                     id="email-error"
                     className= { 'form-error-message ' + (email && !validEmail ? "active" : "") }
                 >
-                    Please enter a valid email address
+                    {email && !validEmail ? "Please enter a valid email address" : ""}
                 </p>
                 <label>Password</label>
                 <input 
@@ -165,7 +165,7 @@ export default function RegisterPage(){
                     id="password-error"
                     className= { 'form-error-message ' + (password && !validPassword ? "active" : "") }
                 >
-                    Passwords should be between 8 and 24 characters and contain at least one number, one lowercase and one uppercase letter.
+                    {password && !validPassword ? "Passwords should be between 8 and 24 characters and contain at least one number, one lowercase and one uppercase letter." : ""}
                 </p>
                 <label>Confirm Password</label>
                 <input 
@@ -186,7 +186,7 @@ export default function RegisterPage(){
                     className= { "form-error-message " + (confirmPassword && !validConfirmPassword ? "active" : "")}
                     
                 >
-                    Please make sure the passwords match.
+                    { confirmPassword && !validConfirmPassword ? "Please make sure the passwords match." : ""}
                 </p>
                 <button className={ "simple-button " + 
                     ((validUsername && validEmail &&  validPassword && validConfirmPassword)

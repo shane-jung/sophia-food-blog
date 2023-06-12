@@ -1,7 +1,5 @@
 import { Recipe,EmptyRecipe } from '@/client/types'
-
 import AuthorSnippet from '../components/Recipe/AuthorSnippet';
-
 import SimpleTextRecipeComponent from '../components/Recipe/SimpleTextRecipeComponent';
 import RichTextRecipeComponent from '../components/Recipe/RichTextRecipeComponent';
 
@@ -23,21 +21,28 @@ export default function RecipeContainer() {
     // console.log(recipe.ingredients);
     return (
         <div className = "recipe-container">
+            <div className="recipe-header">
             <ImageUpload />
-            <SimpleTextRecipeComponent name="title" className = "recipe-title" initialValue = {recipe.title} />
-            <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" initialValue = {recipe.subtitle} />
 
-            {viewMode == "VIEWING" && 
-                <>
-                    <AuthorSnippet author = {recipe.author}/>
-                    <StaticRatingBar/> 
+                <SimpleTextRecipeComponent name="title" className = "recipe-title" initialValue = {recipe.title} />
+            
+                {viewMode == "VIEWING" && 
+                    <>
+                        <AuthorSnippet author = {recipe.author}/>
+                        <StaticRatingBar/> 
+                        <a href="#comments">{recipe.comments.length} comments</a>
+                        <a href="#recipe">Jump to Recipe</a>
+                    </>
+                 }   
+                
+            </div>
+            {/* <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" initialValue = {recipe.subtitle} /> */}
 
-                </>
-            }
+
             
             {viewMode == "CREATING" && <TitleId value = {recipe.titleId}/>}
             <RichTextRecipeComponent name="background" className = "recipe-background" initialValue = {recipe.background}/>
-            <div className="recipe-card"> 
+            <div id="recipe" className="recipe-card"> 
                 <SimpleTextRecipeComponent name="cardTitle" className = "recipe-title header" initialValue = {recipe.cardTitle} />
                 {viewMode == "VIEWING" && <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  /> }
                 <RichTextRecipeComponent name="description" className = "recipe-description" initialValue = {recipe.description}/>

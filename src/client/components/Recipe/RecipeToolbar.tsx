@@ -58,7 +58,7 @@ function SaveButton(){
     }, [viewMode]);
 
     return(
-        <button className = { "icon-button round save-button" + (viewMode == "VIEWING" ? " active" : "") }>
+        <button className = { "icon-button round save-button" + (viewMode == "VIEWING" ? " active" : "") } type="submit" >
             <FontAwesomeIcon 
                 icon= {faSave}
                 className= "save-icon"

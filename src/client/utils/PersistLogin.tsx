@@ -14,8 +14,6 @@ const PersistLogin = () => {
     const { auth, setAuth } = useAuth();
     const dispatch = useDispatch();
 
-    console.log(auth);
-
     useEffect(() => {
         const verifyRefreshToken = async () => { 
             console.log('verifying refresh token');
@@ -28,7 +26,7 @@ const PersistLogin = () => {
                 setIsLoading(false);
             }
         }
-        auth ? verifyRefreshToken() : verifyRefreshToken();;
+        verifyRefreshToken();;
     },[]);
 
     useMemo(() => {

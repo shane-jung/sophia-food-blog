@@ -8,7 +8,7 @@ import { RootState } from '@/client/slices/store';
 export default function Comments(){
     const comments = useSelector((state: RootState) => state.recipe.comments);
     return (
-        <div className="comments">
+        <section id="comments" className="comments">
             <h2>Recipe Comments ({comments?.length})</h2>
             <CommentForm index = {-1} />
             <div className = "comments-toolbar" />
@@ -27,7 +27,7 @@ export default function Comments(){
                 }
             </div>
             
-        </div>
+        </section>
     )
 }
 ;

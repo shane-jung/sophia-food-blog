@@ -8,21 +8,22 @@ import multer from 'multer';
 import AWS from 'aws-sdk';
 const router = express.Router();
 
-// AWS S3 configuration
-const s3 = new AWS.S3({
-  accessKeyId: 'AKIAV54HMTSXUR4OFDF6',
-  secretAccessKey: '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',
-  region: "us-east-1",
-});
 
 // Route for generating a signed URL
 router.get('/sign-s3', (req, res) => {
+  // AWS S3 configuration
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region:  process.env.AWS_REGION,
+  });
+
   console.log(req);
   const { fileName, fileType } = req.query;
   console.log(fileName, '|' + fileType + '|');
   // Configure parameters for the signed URL
   const s3Params = {
-    Bucket: 'recipe-blog-data', 
+    Bucket: process.env.AWS_BUCKET_NAME, 
     Key: fileName,
     ContentType: fileType,
     Expires: 60 // URL expiration time in seconds (e.g., 1 minute)

@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { Recipe } from '@/client/types'
 import { NavLink } from 'react-router-dom';
 import axios from '@/client/api/axios';
+import {BarLoader as Loader} from 'react-spinners'
 
 let cached = false;
 let cachedRecipes: Recipe [] = [];
 
 export default function Recipes(){
     const [recipes, setRecipes] = useState<any>();
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     
 
 
@@ -17,7 +18,6 @@ export default function Recipes(){
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-        setIsLoading(true);
         const getRecipes = async (): Promise<Recipe []> => {
             try{
                 const response = await axios.get('/recipes', {
@@ -29,17 +29,17 @@ export default function Recipes(){
             }
         }
         if(!cached){
-            // setIsLoading(false);
+            // setLoading(false);
             getRecipes().then((response) => {
                 setRecipes([...response]);
-                setIsLoading(false);
+                setLoading(false);
                 cached = true;
                 cachedRecipes = [...response];
             });
         }
         else {
             setRecipes([...cachedRecipes]);
-            setIsLoading(false);
+            setLoading(false);
         }
         return () => {
             isMounted = false;
@@ -52,7 +52,7 @@ export default function Recipes(){
         <div>
                 <h1>All Recipes</h1>
                 {
-                !isLoading 
+                !loading 
                     
                 ? 
                 <ul className = "recipes-grid"> 
@@ -65,7 +65,7 @@ export default function Recipes(){
                         </li>
                     ))}
                 </ul>
-                : <div>Loading...</div>
+                :  <Loader></Loader>
                 }
             </div>
 

@@ -58,6 +58,7 @@ export default function ImageUpload(){
 
     async function removeImage(event: any){
         event.preventDefault(); 
+        if(!confirm("Are you sure you want to remove this image?")) return;
         setImage(undefined);
         setImageUrl("");
         dispatch(setRecipe({imageUrl:""}))
