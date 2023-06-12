@@ -1,5 +1,5 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
-import { Recipe } from '../types'
+import { Rating, Recipe } from '../types'
 
 interface RecipeState {
     _id : string;
@@ -13,6 +13,7 @@ interface RecipeState {
     dateEdited: string;
     dateCreated: string;
     imageUrl: string;
+    ratings: Rating[],
 
 
 }
@@ -29,6 +30,7 @@ const initialState : RecipeState = {
     dateEdited: "",
     dateCreated: "",
     imageUrl: "",
+    ratings: [],
 }
 
 

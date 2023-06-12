@@ -3,14 +3,14 @@ import useAuth from "@/client/utils/useAuth";
 import axios from "../../api/axios";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import RatingBar from "../Recipe/RatingBar";
+import  { InteractiveRatingBar } from "../Recipe/RatingBar";
 
 import {addComment, addReply} from "@/client/slices/recipe";
+import { Form } from "react-router-dom";
 
 
 export default function CommentForm({index, replyToCommentId, setReplying, setRepliesVisible}: {index: number, replyToCommentId?: string, setReplying?: any, setRepliesVisible?: any}){
     const { auth } = useAuth();
-    const comments = useSelector((state: RootState) => state.recipe.comments);
     const dispatch = useDispatch();;
 
     
@@ -26,10 +26,9 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
     async function handleSubmit(event:any){
         event.preventDefault();
         console.log("submitting comment");
-
-        
         setContent(""); 
 
+        const rating = new FormData(event.target).get("rating");
         
         if(replyToCommentId) { 
             setReplying(false);
@@ -47,6 +46,7 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
             },
             reply: (replyToCommentId ? true : false),
             commentId: replyToCommentId,
+            
         });
         const data = {
                         comment:{
@@ -106,7 +106,7 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
 
                 { !replyToCommentId && <>
                                 <p>Did you make this recipe? Give it a rating!</p>
-                                <RatingBar />
+                                <InteractiveRatingBar />
                             </>
                 }
                 

@@ -203,6 +203,7 @@ form input:focus:not(:read-only){
 }
   
 
+
 .recipe-toolbar{
     position:fixed;
     right:1em;
@@ -301,15 +302,23 @@ form input:focus:not(:read-only){
 
 
 .rating-bar{
-    font-size:1.25em;
-    display:block;
+    font-size:1.375em;
+    display:inline;
+    
+}
+.rating-bar-description {
+    font-size:.75em;
 }
 .rating-star{
-    color:rgb(252, 220, 59);
-    
+    // display:inline;
+    color:rgb(218, 218, 218);
     cursor:pointer;
-    &:hover{
-       
+
+    &.highlighted {
+        color:rgb(252, 220, 59);
+    }
+    &.static{
+        cursor: default;
     }
 }
 
