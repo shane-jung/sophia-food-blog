@@ -62,10 +62,10 @@ const recipeController ={
   },
   updateRecipe: async (req: Request, res: Response) => {
     const recipeId = req.params.recipeId;
-
+    const tags = req.body.tags!=undefined ? JSON.parse(req.body.tags).map((tag: any) => new ObjectId(tag)) : [];
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {"$set": req.body});
+        const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {"$set": {...req.body, tags: tags}});
         console.log(result);
         return res.status(200).json({message: "Recipe updated successfully"});
     } catch (error) {
@@ -164,7 +164,53 @@ const recipeController ={
       console.error(`Error fetching comments in getComments: ${error}`);
       throw error;
     }
+  },
+  createTag: async (req: Request, res: Response) => {
+      const { tag } = req.body;
+      try{
+
+        const db = await connectToDatabase();
+        const response = await db.collection('Tags').insertOne({value: tag, recipes: [], description:""});
+        return res.json(response.insertedId);
+      } catch (error) {
+        console.error(`Error creating tag in createTag: ${error}`);
+        throw error;  
+      }
+  },
+  getAllTags: async (req: Request, res: Response) => {
+    try {
+      const db = await connectToDatabase();
+      const result = await db.collection('Tags').find().toArray();
+      return res.json(result);
+    } catch(error) {
+      console.error(`Error fetching tags in getTags: ${error}`);
+      throw error;
+    }
+  },
+  getTags: async (req: Request, res: Response) => {
+      try {
+        const db = await connectToDatabase();
+        const result = await db.collection('Recipes').findOne({_id: new ObjectId(req.params.recipeId)});
+        const tagIds = result?.tags;
+        const tags = await Promise.all(tagIds.map(async (tagId: ObjectId) => {
+          const tag = await db.collection('Tags').findOne({_id: tagId});
+          return tag;
+        }));
+        return res.json(tags);
+    } catch(error) {    
+      console.error(`Error fetching comments in getComments: ${error}`);
+      throw error;
+    }
+  },
+
+  getTagById: async (req: Request, res: Response) => {
+    try {
+      const db = await connectToDatabase();
+      const result = await db.collection('Tags').findOne({_id: new ObjectId(req.params.tagId)});
+      return res.json(result);
+  } catch(error) {    
   }
+}
 };
 
 export default recipeController;

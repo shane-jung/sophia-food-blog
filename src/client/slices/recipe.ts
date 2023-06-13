@@ -14,7 +14,7 @@ interface RecipeState {
     dateCreated: string;
     imageUrl: string;
     ratings: Rating[],
-
+    tags: any, 
 
 }
 
@@ -31,6 +31,7 @@ const initialState : RecipeState = {
     dateCreated: "",
     imageUrl: "",
     ratings: [],
+    tags: [],
 }
 
 
@@ -39,10 +40,10 @@ export const recipeSlice = createSlice({
   initialState: initialState,
   reducers: {
     setRecipe(state = initialState, action:PayloadAction<any>){
+      // console.log(action.payload);
       return {
         ...state,
-        ...action.payload,
-        comments: state.comments,
+        ...action.payload
       }
     }
 

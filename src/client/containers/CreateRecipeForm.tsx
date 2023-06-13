@@ -9,8 +9,6 @@ export default function CreateRecipeForm(){
     const dispatch = useDispatch();
     
     useEffect(() => {
-        console.log("CREATING RECIPE");
-        console.log("CHANGING VIEW MODE");
         dispatch(setViewMode("CREATE_RECIPE"))
         dispatch(setRecipe({}))
     }, []);

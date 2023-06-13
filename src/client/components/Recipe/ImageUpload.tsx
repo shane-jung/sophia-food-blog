@@ -2,6 +2,7 @@ import { setRecipe } from "@/client/slices/recipe";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import { faCheck, faEdit, faImagePortrait, faTrash, faUpload, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { set } from "mongoose";
 import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -12,10 +13,14 @@ export default function ImageUpload(){
     const viewMode = useSelector((state: any) => state.user.viewMode);
     const initialUrl = useSelector((state:any) => state.recipe.imageUrl);
     const [image, setImage] = useState<File>();
-    const [imageUrl, setImageUrl] = useState<string>(initialUrl);
+    const [imageUrl, setImageUrl] = useState<string>();
     const [imagePreview, setImagePreview] = useState<File>();
     const [imageSelectionOpen, setImageSelectionOpen] = useState(false);
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        setImageUrl(initialUrl);
+    }, [recipeId])
 
     const fileSelect = (event: any) => {
         event.preventDefault();
@@ -33,20 +38,27 @@ export default function ImageUpload(){
         });
 
         const { signedRequest, url } = signedUrlResponse.data;
-        console.log(signedRequest);
+
+
         // Uploading the image file to S3 using the signed URL
-        const result = await axios.put(signedRequest, imagePreview
-            , {
-            headers: {
-                'Content-Type': imagePreview.type,
-            }, 
+        try{
+            console.log(imagePreview, signedRequest)
+            const result = await axios.put(signedRequest, imagePreview, { headers: { 'Content-Type': imagePreview.type, }, });
+            console.log('Response from s3', result)
+        } catch(err){
+            console.log(err);
         }
-        );
-        console.log(result);   
-        const updateResponse = await axiosPrivate.put(`/recipes/${recipeId}`, {
-            imageUrl: url
-        });
-        console.log(updateResponse);
+
+        try{
+            console.log(recipeId)
+            const updateResponse = await axiosPrivate.put(`/recipes/${recipeId}`, {
+                imageUrl: url
+            });
+            console.log(updateResponse);
+
+        } catch(err){
+            console.log(err);
+        }
 
         dispatch(setRecipe({imageUrl: url}));
         setImage(imagePreview)

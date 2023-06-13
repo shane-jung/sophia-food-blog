@@ -9,3 +9,22 @@
 @mixin center-x($margin-y){
     margin: #{$margin-y} auto;  
 }
+
+@mixin center-y(){
+    top:50%;
+    transform:translateY(-50%);
+}
+
+@mixin button-with-background($color){
+    background: $color;
+    border: 1px solid rgba(39, 39, 39, 0.585);
+    padding: .5em 1em;
+    margin: .25em;
+    border-radius: .25em;
+    color: white;
+    text-shadow: 1px 0 1px black;
+    display:inline-block;
+    &:hover{
+        background: darken($color, 10%);
+    }
+}

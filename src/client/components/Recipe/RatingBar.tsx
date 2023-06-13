@@ -90,7 +90,7 @@ export function StaticRatingBar(){
     const ratings = useSelector((state:any) => state.recipe.ratings);
 
     useEffect(() => {
-        console.log(ratings);   
+        // console.log(ratings);   
         setNumberOfRatings(ratings.length);
         setAverageRating(ratings.reduce((a:number, b:Rating) => a + b.rating , 0) / ratings.length);
     }, [ratings])

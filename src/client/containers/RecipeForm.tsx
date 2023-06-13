@@ -24,13 +24,17 @@ export default function RecipeForm(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-  
+    // useEffect(() => {
+    //     console.log(recipe.tags);
+    // },[recipe.tags]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
         const data = new FormData(event.currentTarget);
         if(!verifyInputs(data)) return;
         data.set('dateEdited', new Date().toISOString());
+        data.set('tags', JSON.stringify(recipe.tags.map((tag:any) => tag._id)));
         if(viewMode == "EDITING"){  //In the case that the recipe already exists, we just want to update the recipe. 
             const reqLink = `/recipes/${recipe._id}`;
             // const redirect = `/recipes/${recipe.titleId}`
@@ -46,7 +50,6 @@ export default function RecipeForm(){
             const result = await axiosPrivate.post(reqLink, data, {withCredentials: true});
             navigate(redirect, {replace: true})
         }
-        console.log("CHANGING VIEW MODE")
         dispatch(setViewMode("VIEW_RECIPE"));
     }
     return (

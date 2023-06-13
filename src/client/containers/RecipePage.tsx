@@ -14,32 +14,33 @@ import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import {setComments, setRecipe} from '../slices/recipe'
 import useRecipeLoader from "../utils/useRecipeLoader";
-import { setViewMode } from "../slices/user";
-import ImageUpload from "../components/Recipe/ImageUpload";
-import { deepEqual } from "assert";
-
+import { setViewMode } from "../slices/user";   
 
 
 export default function RecipePage() {
     const {auth} = useAuth();
     const [recipe] = useLoaderData() as any;
-    const userId = useSelector((state:any) => state.user._id, shallowEqual);
     const dispatch = useDispatch();
     const recipeLoader = useRecipeLoader();
-    
-    useMemo(()=> {
-         dispatch(setRecipe(recipe))
-         recipeLoader(recipe._id, userId).then(({comments, likedComments}) :any =>{
-            dispatch(setComments((comments)));
-        });
-        console.log("CHANGING VIEW MODE");
-        if(!recipe.titleId) dispatch(setViewMode("CREATE_RECIPE"));
-        else dispatch(setViewMode("VIEW_RECIPE"));
-    },[recipe]);
+    const recipeId = useSelector((state:any) => state.recipe._id, (prev, next) => prev === next);
+
 
     useEffect(()=>{
-        console.log("USER ID CHANGED: ", userId)
-    }, [userId])
+        dispatch(setRecipe(recipe));
+    },[]);
+
+    useEffect(()=> {
+         recipeLoader(recipe.comments, recipe.tags).then(({comments, tags}: {comments:any, tags:any}) => {
+            dispatch(setRecipe({comments, tags}))
+         });
+        if(!recipe.titleId) dispatch(setViewMode("CREATE_RECIPE"));
+        else dispatch(setViewMode("VIEW_RECIPE"));
+        // console.log("RECIPE ID CHANGED: ", recipeId)
+    },[recipeId]);
+
+    // useEffect(()=>{
+    //     console.log("USER ID CHANGED: ", userId)
+    // }, [userId])
     return (
         <>
             {auth?.user?.roles?.includes(8012) ? <RecipeForm/> : <RecipeContainer /> }

@@ -19,6 +19,7 @@ interface CommentProps{
 }
 
 export default function Comment({comment, index, reply} : CommentProps){
+    
     const { auth } = useAuth();
     const dispatch = useDispatch();
 
@@ -48,7 +49,7 @@ export default function Comment({comment, index, reply} : CommentProps){
     });
 
     useEffect(()=>{
-        console.log(likedComments);
+        // console.log(likedComments);
          setUserLiked(likedComments);
     },[likedComments, comment._id]);
     

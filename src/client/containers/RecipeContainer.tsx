@@ -14,6 +14,7 @@ import RatingBar, { StaticRatingBar } from '../components/Recipe/RatingBar';
 import DateComponent from '../components/Recipe/DateComponent';
 import { useSelector } from 'react-redux';
 import ImageUpload from '../components/Recipe/ImageUpload';
+import Tags from '../components/Recipe/Tags';
 
 export default function RecipeContainer() {
     const viewMode = useSelector((state: any) => state.user.viewMode);
@@ -22,18 +23,18 @@ export default function RecipeContainer() {
     return (
         <div className = "recipe-container">
             <div className="recipe-header">
-            <ImageUpload />
-
+                <ImageUpload />
                 <SimpleTextRecipeComponent name="title" className = "recipe-title" initialValue = {recipe.title} />
             
                 {viewMode == "VIEWING" && 
                     <>
                         <AuthorSnippet author = {recipe.author}/>
                         <StaticRatingBar/> 
-                        <a href="#comments">{recipe.comments.length} comments</a>
-                        <a href="#recipe">Jump to Recipe</a>
+                        <a className="page-link" href="#comments">{recipe.comments.length} comments</a>
+                        <a className="page-link" href="#recipe">Jump to Recipe</a>
                     </>
                  }   
+                <Tags/> 
                 
             </div>
             {/* <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" initialValue = {recipe.subtitle} /> */}
@@ -43,13 +44,13 @@ export default function RecipeContainer() {
             {viewMode == "CREATING" && <TitleId value = {recipe.titleId}/>}
             <RichTextRecipeComponent name="background" className = "recipe-background" initialValue = {recipe.background}/>
             <div id="recipe" className="recipe-card"> 
-                <SimpleTextRecipeComponent name="cardTitle" className = "recipe-title header" initialValue = {recipe.cardTitle} />
-                {viewMode == "VIEWING" && <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  /> }
+                <div className="header">
+                    <SimpleTextRecipeComponent name="cardTitle" className = "recipe-card-title" initialValue = {recipe.cardTitle} />
+                    {viewMode == "VIEWING" && <DateComponent dateCreated = {recipe.dateCreated} dateEdited = {recipe.dateEdited}  /> }
+                </div>
+                
                 <RichTextRecipeComponent name="description" className = "recipe-description" initialValue = {recipe.description}/>
-                <b>Ingredients</b>
                 <RichTextRecipeComponent name="ingredients" className = "recipe-ingredients" initialValue = {recipe.ingredients}/>
-                <b>Directions</b>
-
                 <RichTextRecipeComponent name="directions" className = "recipe-directions" initialValue = {recipe.directions}/>
             </div>
         </div>

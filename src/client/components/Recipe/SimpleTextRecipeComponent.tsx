@@ -21,7 +21,7 @@ export default function SimpleTextRecipeComponent({className, initialValue, name
             {
                 viewMode !== "VIEWING"  ?
                     <div className="input-field-container">
-                        <label className= "input-field-label">{name}</label>
+                        {/* <label className= "input-field-label">{name}</label> */}
                         <input name= {name} className ={className + " input-field"} defaultValue = {value} readOnly = {viewMode == "VIEWING"} required />
                     </div>
                 :

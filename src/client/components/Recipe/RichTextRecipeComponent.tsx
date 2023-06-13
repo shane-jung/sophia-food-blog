@@ -15,11 +15,11 @@ interface RichTextRecipeComponentProps{
 export default function RichTextRecipeComponent({className, initialValue, name}:RichTextRecipeComponentProps){
     const viewMode = useSelector((state: any) => state.user.viewMode);
     const [value, setValue] = useState(initialValue);
-    const recipe = useSelector((state: any) => state.recipe);
+    const recipeId = useSelector((state: any) => state.recipe._id);
 
     useEffect(() => {  
         setValue(initialValue);        
-    }, [recipe])
+    }, [viewMode, recipeId])
 
     const modules = {
         toolbar: [
@@ -48,11 +48,10 @@ export default function RichTextRecipeComponent({className, initialValue, name}:
             {
                 viewMode != "VIEWING" ?
                     <div className="input-field-container">
-                        <label className= "input-field-label">{name}</label>
+                        <label className= "recipe-section-header">{name}</label>
                         <ReactQuill 
                             readOnly = {viewMode == "VIEWING"} 
                             defaultValue = {initialValue} 
-                            placeholder={"Recipe " + name} 
                             className= {className + " input-field"} 
                             theme="snow" 
                             modules = {modules} 
@@ -70,11 +69,13 @@ export default function RichTextRecipeComponent({className, initialValue, name}:
                         />
                     </div>
                 :
-                
-                    <div 
-                        className = {className} 
-                        dangerouslySetInnerHTML= {{__html : value || ""}} 
-                    />
+                    <>  
+                        <h3 className="recipe-section-header">{name}</h3>
+                        <div 
+                            className = {className} 
+                            dangerouslySetInnerHTML= {{__html : value || ""}} 
+                        />
+                    </>
             }
         </>
     )

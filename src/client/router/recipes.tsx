@@ -5,7 +5,7 @@ async function recipeLoader ({request, params} :any){
         `/api/recipes/titleId/${params.titleId}`)
         .then(response => response.json());
 
-    console.dir(recipe);
+    // console.dir(recipe);
     return [recipe];
 }
 

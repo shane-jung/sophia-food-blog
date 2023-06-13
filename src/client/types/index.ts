@@ -11,6 +11,7 @@ export type Recipe = {
     author: any;
     background : string;
     ingredients : string;
+    cardTitle: string;
     // ingredients : Ingredient[];
     directions: string;
     imageUrl?: string;
@@ -94,4 +95,6 @@ export const EmptyRecipe:Recipe = {
     comments: [],
     ratings: [],
     imageUrl: "",
+    tags: [],
+    cardTitle: "",
 }

@@ -2,25 +2,20 @@ import express, {Request, Response} from 'express';
 import recipeController from '../controllers/recipeController';
 import { verifyRoles } from '../middleware/checkAuth';
 import checkAuth from  '../middleware/checkAuth';
-import multer from 'multer';
-
-
 import AWS from 'aws-sdk';
+
 const router = express.Router();
 
 
 // Route for generating a signed URL
-router.get('/sign-s3', (req, res) => {
+router.get('/sign-s3', (req:Request, res:Response) => {
   // AWS S3 configuration
   const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region:  process.env.AWS_REGION,
   });
-
-  console.log(req);
   const { fileName, fileType } = req.query;
-  console.log(fileName, '|' + fileType + '|');
   // Configure parameters for the signed URL
   const s3Params = {
     Bucket: process.env.AWS_BUCKET_NAME, 
@@ -47,11 +42,15 @@ router.post('/create', checkAuth, verifyRoles(8012), recipeController.createReci
 router.post('/comment', recipeController.postComment);
 
 router.route('/rating').post(recipeController.rateRecipe);
- 
+
+router.route('/tags').get(recipeController.getAllTags);
+router.route('/tags/:tagId').get(recipeController.getTagById);
+router.route('/tags/create').post(recipeController.createTag)
 
 router.route('/titleId/:titleId').get(recipeController.getRecipeByTitleId);
 
 router.route('/:recipeId/comments').get(recipeController.getComments);
+router.route('/:recipeId/tags').get(recipeController.getTags);
 
 
 

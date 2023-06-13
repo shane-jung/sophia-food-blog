@@ -24,7 +24,6 @@ function EditButton() {
     const toggleViewMode = (e:any) =>{
         e.preventDefault();
         const action = viewMode == "VIEWING" ? "EDIT_RECIPE" : "VIEW_RECIPE";
-        console.log("CHANGING VIEW MODE");
         dispatch(setViewMode(action));
     }
 

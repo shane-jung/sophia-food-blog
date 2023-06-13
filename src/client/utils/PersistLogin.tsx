@@ -16,7 +16,7 @@ const PersistLogin = () => {
 
     useEffect(() => {
         const verifyRefreshToken = async () => { 
-            console.log('verifying refresh token');
+            // console.log('verifying refresh token');
             try {
                 const result = await refresh();              
             } catch (err:any) {
@@ -32,7 +32,7 @@ const PersistLogin = () => {
     useMemo(() => {
         async function getUser(){
             const getUser = await axios.get(`/users/${auth.user._id}`)
-            console.log("setting user data");
+            // console.log("setting user data");
             // console.log(getUser.data.user.likedComments)
             dispatch(handleLogin(getUser.data));
         }

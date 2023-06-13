@@ -39,7 +39,6 @@
   position:relative;
   * {
     font-family: inherit;
-    font-size:.875em;
   }
   
 }
@@ -89,9 +88,6 @@
   border-radius: .25em;
   margin:0;
   padding:.5em .75em;
-  ol{
-    padding-left:.5em;
-  }
 }
 
 
@@ -170,9 +166,11 @@ strong{
   position:relative;
 }
 
-.input-field-label{
-  position:absolute;
-  left:0;
-  top:0;
-  font-size: min(.75em, .875rem);
+.recipe-section-header{
+  font-size: 1.5em;  
+  margin-top:.5em;
+  text-align:center;
+  text-transform: capitalize;
+  font-weight:bold;
+  color: #151515;
 }

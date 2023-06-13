@@ -14,7 +14,7 @@ export default function LoginButton(){
     const from = location.state?.from || "/";
     const username = useSelector((state: any) => state.user.username, (prev, next) => prev == next);
     useEffect(()=>{
-        console.log("USERNAME CHANGED: ", username)
+        // console.log("USERNAME CHANGED: ", username)
     }, [username])
     const dispatch = useDispatch();
     

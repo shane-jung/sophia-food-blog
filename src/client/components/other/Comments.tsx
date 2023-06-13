@@ -15,12 +15,11 @@ export default function Comments(){
             <div className="comment-list">
                {    
                    
-                    comments?.map((data: any, index: number) => {
-                        return !data.comment?.hidden &&
-                                <Comment 
+                    comments?.map((comment: any, index: number) => {
+                        return <Comment 
                                         reply = {false}
                                         key = {index} 
-                                        comment={data.comment} 
+                                        comment={comment} 
                                         index = {index} 
                                 />;
                     })
