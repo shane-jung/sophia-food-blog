@@ -27,7 +27,7 @@ export default function ViewRecipePage(){
 }
 
 async function loadRecipe(titleId:string){
-    console.log(titleId);
+    // console.log(titleId);
     const {data} = await axios.get(`/recipes/titleId/${titleId}`);
     return data;
 }

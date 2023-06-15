@@ -16,10 +16,9 @@ export default function CommentsList(){
     
     const [comments, setComments] = useState<any>([]);
     const [commentsRender, setCommentsRender] = useState<any>([]);
-    const dispatch = useDispatch();
 
     useEffect(()=>{
-        console.log(data);
+        // console.log(data);
         setComments(data);
     }, [data]);
 

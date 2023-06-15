@@ -13,6 +13,7 @@ export default function CreateRecipePage(){
     useEffect(() => {
         dispatch(setViewMode("creating-recipe"))
         dispatch(setRecipe({type:"clear-recipe"}))
+        // console.log("here");
     }, []);
 
     return( 

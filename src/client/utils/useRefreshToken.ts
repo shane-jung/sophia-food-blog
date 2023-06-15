@@ -12,7 +12,7 @@ const useRefreshToken = () => {
                 withCredentials: true
                 });
                 // console.log("RESPONSE", response);
-            console.log("setting auth");
+            // console.log("setting auth");
             setAuth((prev:any) => {
                 // console.log(JSON.stringify(prev));
                 // console.log(JSON.stringify(response.data));

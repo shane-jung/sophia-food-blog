@@ -10,11 +10,11 @@ interface SimpleTextRecipeComponentProps{
 export default function SimpleTextRecipeComponent({className, initialValue, name}:SimpleTextRecipeComponentProps){
     const viewMode = useSelector((state: any) => state.user.viewMode);
     const [value, setValue] = useState(initialValue);
-    const recipe = useSelector((state: any) => state.recipe);
+    const recipeId = useSelector((state: any) => state.recipe._id);
 
     useEffect(() => {  
         setValue(initialValue);        
-    }, [recipe])
+    }, [recipeId, viewMode])
 
     return (
         <>  
@@ -22,7 +22,7 @@ export default function SimpleTextRecipeComponent({className, initialValue, name
                 viewMode !== "VIEWING"  ?
                     <div className="input-field-container">
                         {/* <label className= "input-field-label">{name}</label> */}
-                        <input name= {name} placeholder= {"Recipe " + name} className ={className + " input-field"} defaultValue = {value} readOnly = {viewMode == "VIEWING"} required />
+                        <input name= {name} placeholder= {"Recipe " + name} className ={className + " input-field"} defaultValue = {initialValue} readOnly = {viewMode == "VIEWING"} required />
                     </div>
                 :
                     <div className = {className}>{initialValue}</div>
