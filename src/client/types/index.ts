@@ -61,7 +61,7 @@ export interface Author extends Profile {
 }
 
 export type CommentType= {
-    _id: string;
+    _id?: string;
     likes:number;
     username:string;
     profile?: Profile;

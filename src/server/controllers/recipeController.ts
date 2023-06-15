@@ -50,10 +50,9 @@ const recipeController ={
     const recipe = req.body;
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').insertOne(recipe);
-        await db.collection('Recipes').updateOne({_id:result.insertedId}, {$set:{'comments':[]}});
+        const result = await db.collection('Recipes').findOneAndUpdate(recipe, {$set: {}}, {upsert: true, returnDocument: 'after'});
         
-        return res.status(200).json({result: result, message: "Recipe created successfully"});
+        return res.status(200).json({recipe: result.value});
     } catch (error) {
         console.error(`Error creating recipe in createRecipe: ${error}`);
         throw error;
@@ -65,9 +64,9 @@ const recipeController ={
     const tags = req.body.tags!=undefined ? JSON.parse(req.body.tags).map((tag: any) => new ObjectId(tag)) : [];
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Recipes').updateOne({_id: new ObjectId(recipeId)}, {"$set": {...req.body, tags: tags}});
+        const result = await db.collection('Recipes').findOneAndUpdate({_id: new ObjectId(recipeId)}, {"$set": {...req.body, tags: tags}}, { returnDocument: 'after'});
         console.log(result);
-        return res.status(200).json({message: "Recipe updated successfully"});
+        return res.status(200).json(result);
     } catch (error) {
         console.error(`Error fetching recipe in updateRecipe: ${error}`);
         throw error; 

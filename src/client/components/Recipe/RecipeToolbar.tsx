@@ -5,6 +5,8 @@ import { faCancel, faEdit, faSave, faTrash, faTrashAlt, faXmark } from '@fortawe
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setViewMode } from '@/client/slices/user';
+import { useMutation } from 'react-query';
+import queryClient from '@/client/utils/queryClient';
 
 export default function RecipeToolbar(){
     return (
@@ -23,7 +25,7 @@ function EditButton() {
 
     const toggleViewMode = (e:any) =>{
         e.preventDefault();
-        const action = viewMode == "VIEWING" ? "EDIT_RECIPE" : "VIEW_RECIPE";
+        const action = viewMode == "VIEWING" ? "editing-recipe" : "viewing-recipe";
         dispatch(setViewMode(action));
     }
 
@@ -75,6 +77,14 @@ function DeleteButton(){
     const recipe = useSelector((state:any) => state.recipe);
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
+    const mutation = useMutation({
+        mutationFn: async () => await axiosPrivate.delete(`/recipes/${recipe._id}`),
+        onSuccess: (response) => {
+            console.log(response);
+            navigate('/recipes', {replace: true});
+            queryClient.invalidateQueries(['recipes']);
+        }
+    })
 
     async function handleDelete(){
         const result = await axiosPrivate.delete(`/recipes/${recipe._id}`); //TODO: Add recipe ID

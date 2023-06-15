@@ -95,19 +95,22 @@ export const userSlice = createSlice({
       }
     },
     setViewMode(state = initialState, action:PayloadAction<string>){
+      console.log(action);
       switch (action.payload){
-        case "EDIT_RECIPE":
+        case "editing-recipe":
           console.log("SETTING TO EDITING")
           return {
             ...state,
             viewMode: "EDITING"
           }
-        case "VIEW_RECIPE": 
+        case "viewing-recipe": 
           return {
             ...state,
             viewMode: "VIEWING"
           }
-        case "CREATE_RECIPE":
+        case "creating-recipe":
+          console.log("SETTING TO CREATING")
+
           return {
             ...state,
             viewMode: "CREATING"

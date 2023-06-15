@@ -3,6 +3,7 @@ import recipeController from '../controllers/recipeController';
 import { verifyRoles } from '../middleware/checkAuth';
 import checkAuth from  '../middleware/checkAuth';
 import AWS from 'aws-sdk';
+import commentController from '../controllers/commentController';
 
 const router = express.Router();
 
@@ -44,12 +45,15 @@ router.post('/comment', recipeController.postComment);
 router.route('/rating').post(recipeController.rateRecipe);
 
 router.route('/tags').get(recipeController.getAllTags);
-router.route('/tags/:tagId').get(recipeController.getTagById);
+router.route('/tags/:tagId')
+    .get(recipeController.getTagById);
+
+
 router.route('/tags/create').post(recipeController.createTag)
 
 router.route('/titleId/:titleId').get(recipeController.getRecipeByTitleId);
 
-router.route('/:recipeId/comments').get(recipeController.getComments);
+router.route('/:recipeId/comments').get(commentController.getAllCommentsForRecipe);
 router.route('/:recipeId/tags').get(recipeController.getTags);
 
 

@@ -5,36 +5,45 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import  { InteractiveRatingBar } from "../Recipe/RatingBar";
 
-import {addComment, addReply} from "@/client/slices/recipe";
-import { Form } from "react-router-dom";
+import { useMutation } from "react-query";
+import queryClient from "@/client/utils/queryClient";
 
 
 export default function CommentForm({index, replyToCommentId, setReplying, setRepliesVisible}: {index: number, replyToCommentId?: string, setReplying?: any, setRepliesVisible?: any}){
     const { auth } = useAuth();
     const dispatch = useDispatch();;
-
-    
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [content, setContent] = useState("");
 
     const recipeId = useSelector((state: RootState) => state.recipe._id);
 
+    const postCommentMutation = useMutation({
+        mutationFn: postComment,
+        onSuccess: ({value}) => {  
+            queryClient.setQueryData(['comments', recipeId], (oldData : any) => oldData ? [
+                ...oldData,
+                value
+            ] : [value]);
+        }
+    })
+
 
     const nameRef = useRef<HTMLInputElement>(null);
    
     async function handleSubmit(event:any){
         event.preventDefault();
-        console.log("submitting comment");
         setContent(""); 
-
-        const rating = new FormData(event.target).get("rating");
-        
         if(replyToCommentId) { 
             setReplying(false);
             setRepliesVisible(true)
         }
-        const addCommentResult = await axios.post('/comments', {
+        window.scrollBy({
+            top: 100,
+            behavior: 'smooth'
+        });
+        
+        const data1 = {
             comment: {
                 profileId : auth?.user?._id || "",
                 recipeId,
@@ -43,29 +52,13 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
                 content : content,
                 date: new Date().toISOString(),
                 likes: 0, 
+                hidden: false,
             },
             reply: (replyToCommentId ? true : false),
             commentId: replyToCommentId,
-            
-        });
-        const data = {
-                        comment:{
-                            _id: addCommentResult.data.insertedId, 
-                            username: name || auth?.user.username, 
-                            content: content, 
-                            date: new Date().toISOString(), 
-                            likes: 0
-                        }
-                    }
-
-        if(index==-1) { 
-            console.log("addingComment")
-            dispatch(addComment({...data, replies: []}));
-        } else {
-            console.log("addingReply");
-            dispatch(addReply({...data, index:index}));     
         }
-        if(addCommentResult.status != 200) return;
+
+        postCommentMutation.mutate(data1);
     }
 
     return(
@@ -113,4 +106,11 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
                 <button type="submit" className="simple-button comment-submit-button">Submit</button>
             </form>
     )
+}
+
+
+async function postComment(comment : any){
+    const {data} = await axios.post('/comments', comment);
+    console.log(data);
+    return data;
 }

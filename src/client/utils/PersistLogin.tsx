@@ -5,6 +5,7 @@ import useAuth from "./useAuth";
 import { useDispatch } from "react-redux";
 import user, {handleLogin, handleLogout } from "../slices/user";
 import axios from "../api/axios";
+import Loading from "../components/other/Loading";
 
 
 const PersistLogin = () => {
@@ -42,7 +43,7 @@ const PersistLogin = () => {
 
     return (
        isLoading
-        ? <p>Loading...</p> 
+        ? <Loading />
         : <Outlet />
     ) 
 }

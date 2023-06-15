@@ -9,7 +9,11 @@ import { recipeLoader, emptyRecipeLoader} from '../router/recipes';
 import RegisterPage from './RegisterPage'
 import AuthenticatedRoute from '../components/AuthenticatedRoute'
 import PersistLogin from '../utils/PersistLogin';
-import CreateRecipeForm from './CreateRecipeForm'
+import Loading from '../components/other/Loading'
+import { Suspense } from 'react'
+import ViewRecipeForm from './ViewRecipePage'
+import  CreateRecipePage  from './CreateRecipePage'
+import ViewRecipePage from './ViewRecipePage'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,11 +22,11 @@ const router = createBrowserRouter(
         <Route element = {<RootLayout />}>
           <Route index element = {<HomePage/>} />
           <Route path = "recipes">
-            <Route index element= {<Recipes/>}/>
+            <Route index element= {<Suspense fallback = { <Loading />} > <Recipes/> </ Suspense>}/>
             <Route element = {<AuthenticatedRoute allowedRoles = {[8012]}/>}>
-              <Route path = "create" loader = {emptyRecipeLoader} element = {<CreateRecipeForm  key = 'create' />}/>
+              <Route path = "create" loader = {emptyRecipeLoader} element =  { <Suspense fallback = { <Loading />} > <CreateRecipePage /> </ Suspense> }/>
             </Route>
-            <Route path = ":titleId" loader = {recipeLoader} element = {<RecipePage/>} />
+            <Route path = ":titleId" element = { <Suspense fallback = { <Loading />} > <ViewRecipePage /> </ Suspense> } />
           </Route>
         </Route>
           

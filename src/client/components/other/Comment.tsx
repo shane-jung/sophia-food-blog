@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CommentForm from "./CommentForm";
 import { useDispatch } from "react-redux";
 import { setLikedComment } from "@/client/slices/user";
-import { removeComment } from "@/client/slices/recipe";
+import queryClient from "@/client/utils/queryClient";
+import { useMutation } from "react-query";
 
 interface CommentProps{
     comment:CommentType;
@@ -42,6 +43,18 @@ export default function Comment({comment, index, reply} : CommentProps){
     const [replying, setReplying] = useState(false);
     const [repliesVisible, setRepliesVisible] = useState(false);
     const [replies, setReplies] = useState<any>([]);
+
+    const deleteCommentMutation = useMutation({
+        mutationFn: deleteComment,
+        onSuccess: ({data}) => {
+            console.log(data);
+            queryClient.setQueryData(['comments', recipeId], (oldData : any) => 
+                oldData ? oldData.filter((comment:any) => comment._id !== commentId) : []
+            );
+        }
+
+    })
+
 
 
     useEffect(()=>{
@@ -103,18 +116,8 @@ export default function Comment({comment, index, reply} : CommentProps){
     
     function handleDelete(e:any){
         e.preventDefault();
-        console.log("Deleting comment... (actually just hiding it)")
-        async function deleteComment(){
-            try{
-                const result = await axios.delete(`/comments/${commentId}`);
-                console.log(result);
-            } catch(err){
-                console.log(err);
-            }
-        }
-        deleteComment();
-        if(reply) dispatch(removeComment({type:"reply", commentId, index}));
-        else dispatch(removeComment({commentId}));
+        if(!commentId) return;
+        deleteCommentMutation.mutate({commentId});
     }
     
 
@@ -183,3 +186,8 @@ export default function Comment({comment, index, reply} : CommentProps){
 
     )
 } 
+
+
+function deleteComment({commentId} : {commentId: string}){
+    return axios.delete(`/comments/${commentId}`);
+}   

@@ -5,28 +5,47 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setRecipe } from '@/client/slices/recipe';
 import axios from '../../api/axios';
 
+import { useQuery } from 'react-query';
+
 export default function Tags(){
+    const dispatch = useDispatch();
+    // const recipeId = useSelector((state:any) => state.recipe._id);
     const viewMode = useSelector((state:any) => state.user.viewMode);
+    const savedTags = useSelector((state:any)=> state.recipe.tags)
+    const selectedTags = useSelector((state:any)=> state.recipe.selectedTags)
     const [selected, setSelected] = useState<any>([]);
     const [options, setOptions] = useState<any>([]);
-    const recipeId = useSelector((state:any) => state.recipe._id);
-    const tags = useSelector((state:any) => state.recipe.tags);
-    const dispatch = useDispatch();
+    const [tagRender, setTagRender] = useState<any>([]);
 
-    useMemo(async () => {
-        const response = await axios.get('/recipes/tags');
-        const options = response.data.map((tag:any) => { 
+    const { data }= useQuery({
+        queryKey: "tags",
+        queryFn: getAllTags, 
+    });
+
+    useEffect(()=>{
+        if(viewMode == "VIEWING") 
+        {
+            setSelected(options.filter((tag:any) => savedTags.includes(tag._id)))
+            dispatch(setRecipe({type:'set-recipe', recipe: {selectedTags: savedTags}}))
+        }
+    }, [viewMode])
+
+    useEffect(()=>{
+        const options = data.map((tag:any) => { 
             return {value: tag.value, label: tag.value, _id: tag._id}
         })
         setOptions(options);
-    }, [recipeId])
+    }, [data]);
 
     useEffect(()=>{
-        if(!tags[0]?._id) return;
-        const tagIds = tags.map((tag:any) => tag._id);
-        setSelected(options.filter((tag:any) => tagIds.includes(tag._id)));
-    }, [tags, options])
+        setSelected(options.filter((tag:any) => savedTags.includes(tag._id)));
+    }, [options])
 
+    
+    useEffect(()=>{
+        dispatch(setRecipe({type:"set-recipe", recipe: {selectedTags: selected.map((tag:any) => tag._id) } } ) );
+    }, [selected])
+   
     async function createOption(option:string){
         try{
             const response = await axios.post('/recipes/tags/create', {tag: option});
@@ -36,9 +55,33 @@ export default function Tags(){
         }   
     }
 
-    function onChange(e:any){
-        dispatch(setRecipe({tags: [...e]}));
+    function onChange(e:any, data:any){
+        // console.log(e, data);
+        if(data.action == 'clear') {
+            setSelected([]);
+        }
+        else if(data.action == 'select-option'){
+            setSelected([...selected, data.option]);
+        } else if(data.action == 'remove-value'){
+            setSelected(selected.filter((tag:any) => tag._id != data.removedValue._id));
+        } else if(data.action == 'create-option'){
+            createOption(data.option.value);
+            setSelected([...selected, data.option]);
+        }
     }
+
+    useEffect(()=>{
+        setTagRender(selected.map((tag:any) => {
+                    return <div key={tag._id} >
+                                <a 
+                                    className="recipe-tag" 
+                                    href= {`/categories/${tag.label.toLowerCase().replace(" ", '-')}`} 
+                                >
+                                    {tag.value}
+                                </a>
+                            </div>
+        }))
+    }, [selected])
 
     return (
          viewMode != "VIEWING" ? 
@@ -47,7 +90,6 @@ export default function Tags(){
                 <CreatableSelect 
                     name='tags'
                     closeMenuOnSelect={false} 
-                    isClearable
                     isMulti
                     onChange={onChange}
                     options = {options} 
@@ -57,13 +99,14 @@ export default function Tags(){
             </div>
             :
             <div className='recipe-tags'>
-                {selected.map((tag:any) => {
-                    return <div key={tag._id} ><a 
-                                
-                                className="recipe-tag" 
-                                href= {`/categories/${tag.label.toLowerCase().replace(" ", '-')}`} 
-                            >{tag.value}</a></div>
-                })} 
+                {tagRender} 
             </div> 
     );
 }
+
+
+async function getAllTags ({queryKey}: any) {
+    const { data } = await axios.get(`/recipes/tags`);
+    return data;
+}
+

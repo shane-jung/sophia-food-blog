@@ -4,7 +4,9 @@ import { Rating, Recipe } from '../types'
 interface RecipeState {
     _id : string;
     comments: any;
+    commentIds: string[];
     title: string;
+    cardTitle:string;
     titleId: string;
     background: string;
     description: string;
@@ -15,13 +17,17 @@ interface RecipeState {
     imageUrl: string;
     ratings: Rating[],
     tags: any, 
-
+    tagIds: string[],
+    selectedTags: any[], 
+    savedTags: any[],
 }
 
 const initialState : RecipeState = {
     _id: "",
     comments: [],
+    commentIds:[],
     title: "",
+    cardTitle: "",
     titleId: "",
     background: "",
     description: "",
@@ -32,6 +38,9 @@ const initialState : RecipeState = {
     imageUrl: "",
     ratings: [],
     tags: [],
+    tagIds:[],
+    selectedTags: [],
+    savedTags: [],
 }
 
 
@@ -40,70 +49,23 @@ export const recipeSlice = createSlice({
   initialState: initialState,
   reducers: {
     setRecipe(state = initialState, action:PayloadAction<any>){
-      // console.log(action.payload);
-      return {
-        ...state,
-        ...action.payload
-      }
-    }
-
-    ,
-    addComment(state = initialState, action:PayloadAction<any>){
-      // state.comments=  [...state.comments, action.payload]
-      return {
-        ...state,
-        comments: [...state.comments, action.payload]
-      }
-    },
-    removeComment(state = initialState, action:PayloadAction<any>){
-      if(action.payload.type === "reply"){
-        const { commentId, index } = action.payload;
-        // console.log(index);
-        const commentRemovedReply = {...state.comments[index], replies: state.comments[index].replies.filter((reply:any) => reply._id !== commentId)};
-        // console.log(commentRemovedReply)
-        const comments = [...state.comments];
-        // console.log(comments);
-        comments[index] = commentRemovedReply;
-        // console.log(comments);
-        return {
-          ...state,
-          comments: [...comments]
-        }
-      }
-      return {
-        ...state,
-        comments: [...state.comments.filter((data:any) => data.comment._id !== action.payload.commentId)]
-      }
-    },
-    setComments (state = initialState, action:PayloadAction<any>){
-      return {
-        ...state,
-        comments: [...action.payload]
-      }
-    },
-    addReply (state = initialState, action:PayloadAction<any>){
-      const { comment, index } = action.payload;
-
-      const newState = {
-        ...state,
-        comments: [...state.comments],
-      };
-
-      const updatedComment = {
-        ...newState.comments[index],
-        replies: [...newState.comments[index].replies, comment],
-      };
-
-      newState.comments[index] = updatedComment;
-      return { 
-        ...state, 
-        ...newState
+      // console.log(action.payload.type);
+      switch (action.payload.type){
+        case "set-recipe":
+          return {
+            ...state,
+            ...action.payload.recipe
+          }
+        case "clear-recipe":
+          return {
+            ...initialState
+          }
       }
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addComment, setComments, addReply, removeComment, setRecipe } = recipeSlice.actions
+export const { setRecipe } = recipeSlice.actions
 
 export default recipeSlice.reducer

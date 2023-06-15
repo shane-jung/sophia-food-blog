@@ -15,6 +15,7 @@ import DateComponent from '../components/Recipe/DateComponent';
 import { useSelector } from 'react-redux';
 import ImageUpload from '../components/Recipe/ImageUpload';
 import Tags from '../components/Recipe/Tags';
+import RecipeToolbar from '../components/Recipe/RecipeToolbar';
 
 export default function RecipeContainer() {
     const viewMode = useSelector((state: any) => state.user.viewMode);
@@ -23,6 +24,8 @@ export default function RecipeContainer() {
     return (
         <div className = "recipe-container">
             <div className="recipe-header">
+                <RecipeToolbar />
+
                 <ImageUpload />
                 <SimpleTextRecipeComponent name="title" className = "recipe-title" initialValue = {recipe.title} />
             
@@ -30,11 +33,11 @@ export default function RecipeContainer() {
                     <>
                         <AuthorSnippet author = {recipe.author}/>
                         <StaticRatingBar/> 
-                        <a className="page-link" href="#comments">{recipe.comments.length} comments</a>
+                        <a className="page-link" href="#comments">{recipe.comments?.length || 0} comments</a>
                         <a className="page-link" href="#recipe">Jump to Recipe</a>
                     </>
-                 }   
-                <Tags/> 
+                 }  
+                <Tags />
                 
             </div>
             {/* <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" initialValue = {recipe.subtitle} /> */}
