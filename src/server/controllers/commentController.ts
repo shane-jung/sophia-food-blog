@@ -5,6 +5,7 @@ import connectToDatabase from '../database/mongodb';
 import {CommentType} from '../../client/types';
 
 import { sampleRecipe } from '../seed';
+import { isReturnStatement } from 'typescript';
 
 
   
@@ -40,22 +41,25 @@ const commentController ={
     const comment = req.body.comment;
     const reply = req.body.reply;
     const commentId = req.body.commentId;
+    console.log(req.body);
     // console.log(req.body);
     // console.log("REPLYING TO COMMENT ? ", reply);
     try{
         const db = await connectToDatabase();
         let result
         if(reply) {
-          result = await db.collection('Comments').findOneAndUpdate({_id: new ObjectId(), ...comment, profileId: new ObjectId(comment.profileId), recipeId: new ObjectId(comment.recipeId)}, {$set : {}}, {upsert: true, returnDocument: 'after'});
+          // result = await db.collection('Comments').findOneAndUpdate({_id: new ObjectId(), ...comment, profileId: new ObjectId(comment.profileId), recipeId: new ObjectId(comment.recipeId)}, {$set : {}}, {upsert: true, returnDocument: 'after'});
+          result = await db.collection('Comments').findOneAndUpdate({_id: new ObjectId(commentId)}, {$push: {replies: {...req.body.comment, _id: new ObjectId(), profileId: new ObjectId(comment.profileId), recipeId: new ObjectId(comment.recipeId)}}}, { returnDocument : 'after' });
         } else  { 
           result = await db.collection('Comments').findOneAndUpdate({_id: new ObjectId(), ...comment, profileId: new ObjectId(comment.profileId), recipeId: new ObjectId(comment.recipeId), replies: []}, {$set : {}}, {upsert: true, returnDocument: 'after'});
+          console.log(result)
         }
 
         // if(comment.profileId) {
         //   // const addToProfile = await db.collection('Profiles').updateOne({_id: new ObjectId(comment.profileId)}, {$push: {comments: new ObjectId(result.insertedId)}});
         //   console.log(addToProfile);  
         // }
-        return res.status(200).json(result);
+        return res.status(200).json(result.value);
     } catch (error) {
         console.error(`Error creating comment in postComment: ${error}`);
         throw error;
@@ -64,12 +68,19 @@ const commentController ={
 
   deleteComment: async (req : Request, res: Response) => {
     const commentId = req.params.commentId;
-    console.log(commentId);
+    console.log(req.params, req.body);
+    const { parentId } = req.body;
     try{
         const db = await connectToDatabase();
-        const result = await db.collection('Comments').updateOne({_id: new ObjectId(commentId)}, {$set:{'hidd en': true}}, {upsert: true});
-        console.log(result);
-        return res.status(200).json({message: "Recipe deleted successfully"});
+        if(!parentId){
+          const result = await db.collection('Comments').updateOne({_id: new ObjectId(commentId)}, {$set:{'hidden': true}}, {upsert: true});
+        } else {
+          // Remove the comment with commentId from the parent's replies array
+          // In the parents replies array, set the comment to be hidden by setting the 'hidden' field to be true
+          const result = await db.collection('Comments').updateOne({_id: new ObjectId(parentId), replies: {$elemMatch: {_id: new ObjectId(commentId)}}}, {$set: { 'replies.$.hidden': true }});          
+          console.log(result);
+        }
+          return res.status(200).json({message: "Recipe deleted successfully"});
     } catch (error) {
         console.error(`Error fetching recipe in deleteRecipe: ${error}`);
         throw error;

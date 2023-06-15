@@ -20,11 +20,11 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
 
     const postCommentMutation = useMutation({
         mutationFn: postComment,
-        onSuccess: ({value}) => {  
-            queryClient.setQueryData(['comments', recipeId], (oldData : any) => oldData ? [
-                ...oldData,
-                value
-            ] : [value]);
+        onSuccess: (newComment) => {  
+            queryClient.setQueryData(['comments', recipeId], (oldComments : any) =>{  
+                const repliesEdited = oldComments.map((comment:any) => comment._id == newComment._id ? newComment : comment );
+                return repliesEdited.map((p:any) => p._id).includes(newComment._id) ? repliesEdited : oldComments ? [ ...oldComments, newComment] : [newComment];
+            });
         }
     })
 
@@ -38,10 +38,10 @@ export default function CommentForm({index, replyToCommentId, setReplying, setRe
             setReplying(false);
             setRepliesVisible(true)
         }
-        window.scrollBy({
-            top: 100,
-            behavior: 'smooth'
-        });
+        // window.scrollBy({
+        //     top: 100,
+        //     behavior: 'smooth'
+        // });
         
         const data1 = {
             comment: {

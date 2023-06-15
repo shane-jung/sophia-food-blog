@@ -10,6 +10,7 @@ router.get('/:commentId', commentController.getCommentById)
       .delete('/:commentId', commentController.deleteComment);
 
 router.post('/:commentId/like', commentController.handleLike)
+router.post('/:commentId/delete', commentController.deleteComment)
 
 
 export default router; 

@@ -17,9 +17,10 @@ interface CommentProps{
     comment:CommentType;
     index: number;
     reply: boolean;
+    parentId?: string;
 }
 
-export default function Comment({comment, index, reply} : CommentProps){
+export default function Comment({comment, index, reply, parentId} : CommentProps){
     
     const { auth } = useAuth();
     const dispatch = useDispatch();
@@ -43,15 +44,16 @@ export default function Comment({comment, index, reply} : CommentProps){
     const [replying, setReplying] = useState(false);
     const [repliesVisible, setRepliesVisible] = useState(false);
     const [replies, setReplies] = useState<any>([]);
+    const [repliesFiltered, setRepliesFiltered] = useState<any>([]);
 
     const deleteCommentMutation = useMutation({
         mutationFn: deleteComment,
         onSuccess: ({data}) => {
             console.log(data);
-            queryClient.setQueryData(['comments', recipeId], (oldData : any) => 
-                oldData ? oldData.filter((comment:any) => comment._id !== commentId) : []
+            queryClient.setQueryData(['comments', recipeId], (oldComments : any) => 
+                oldComments ? oldComments.filter((comment:any) => comment._id !== commentId) : []
             );
-        }
+        },
 
     })
 
@@ -68,10 +70,12 @@ export default function Comment({comment, index, reply} : CommentProps){
     
 
     useEffect(()=>{
-        if(!reply) setReplies(comments[index]?.replies);
-    }, [comments[index]?.replies])
+        if(!reply) setReplies(comment.replies);
+    }, [comment.replies])
 
-
+    useEffect(()=>{
+        setRepliesFiltered(replies?.filter((reply:any) => !reply.hidden))
+    }, [replies])
     useEffect(()=>{
         setIncrement(userLiked ? -1 : 1);
     }, [userLiked])
@@ -116,8 +120,10 @@ export default function Comment({comment, index, reply} : CommentProps){
     
     function handleDelete(e:any){
         e.preventDefault();
+        console.log('here');
+        console.log(comment);
         if(!commentId) return;
-        deleteCommentMutation.mutate({commentId});
+        deleteCommentMutation.mutate({commentId, parentId});
     }
     
 
@@ -146,7 +152,7 @@ export default function Comment({comment, index, reply} : CommentProps){
                 }
 
                 { 
-                    replies != undefined && replies?.length > 0 
+                    replies != undefined && repliesFiltered?.length > 0 
                     ?   <button 
                             onClick = { ()=> setRepliesVisible(!repliesVisible)} 
                             className="simple-button"
@@ -175,8 +181,8 @@ export default function Comment({comment, index, reply} : CommentProps){
                 { 
                     repliesVisible && 
 
-                    replies?.map((reply:any) => {
-                        return !reply.hidden && <Comment reply = {true} key = {index} comment={reply} index={index}/>
+                    repliesFiltered?.map((reply:any, replyIndex: number) => {
+                        return <Comment reply = {true} key = {index + '-reply'+ replyIndex} comment={reply} index={index} parentId= {commentId}/>
                     })
                 
                 } 
@@ -188,6 +194,6 @@ export default function Comment({comment, index, reply} : CommentProps){
 } 
 
 
-function deleteComment({commentId} : {commentId: string}){
-    return axios.delete(`/comments/${commentId}`);
+function deleteComment({commentId, parentId} : {commentId: string, parentId?: string}){
+    return axios.post(`/comments/${commentId}/delete`, {parentId});
 }   
