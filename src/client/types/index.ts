@@ -1,6 +1,7 @@
 
 
 export type Recipe = {
+    subtitle: string;
     _id: string;
     title: string;
     titleId: string;
@@ -10,9 +11,10 @@ export type Recipe = {
     author: any;
     background : string;
     ingredients : string;
+    cardTitle: string;
     // ingredients : Ingredient[];
     directions: string;
-    imageURLs?: string[];
+    imageUrl?: string;
     comments: string[];
     tags? : string [];
     ingredientTags? : string[];
@@ -39,6 +41,7 @@ export type Profile = {
     savedRecipes: any;
     comments: any
     likedComments: any;
+    ratings: any;
 }
 
 export const EmptyProfile:Profile = {
@@ -49,7 +52,7 @@ export const EmptyProfile:Profile = {
     savedRecipes : [],   // an array of Recipe Ids 
     comments : [],       // an array of (Recipe Id, comment Id)'s 
     likedComments : [ ],   // an array of Objects of the form  {recipeId, commentId []}
-    
+    ratings: [],
 }
 
 export interface Author extends Profile {
@@ -58,7 +61,7 @@ export interface Author extends Profile {
 }
 
 export type CommentType= {
-    _id: string;
+    _id?: string;
     likes:number;
     username:string;
     profile?: Profile;
@@ -69,8 +72,9 @@ export type CommentType= {
 }
 
 export type Rating = {
-    _id: string;
-    profile?: Profile;
+    _id?: string;
+    userId: string;
+    recipeId: string;
     rating: number;
     date: string;
 
@@ -87,5 +91,10 @@ export const EmptyRecipe:Recipe = {
     author: "",
     ingredients : "",
     directions: "",
-    comments: []
+    subtitle: "",
+    comments: [],
+    ratings: [],
+    imageUrl: "",
+    tags: [],
+    cardTitle: "",
 }

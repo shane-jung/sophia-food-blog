@@ -1,50 +1,44 @@
 import { Outlet } from "react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 import { useDispatch } from "react-redux";
-import user, {handleLogin, handleLogout } from "../slices/user";
+import user, { handleLogin, handleLogout } from "../slices/user";
 import axios from "../api/axios";
-
+import Loading from "../components/other/Loading";
 
 const PersistLogin = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const refresh = useRefreshToken();
+  const { auth, setAuth } = useAuth();
+  const dispatch = useDispatch();
 
-    const [isLoading, setIsLoading] = useState(true);
-    const refresh = useRefreshToken();
-    const { auth, setAuth } = useAuth();
-    const dispatch = useDispatch();
+  useEffect(() => {
+    const verifyRefreshToken = async () => {
+      // console.log('verifying refresh token');
+      try {
+        const result = await refresh();
+      } catch (err: any) {
+        console.log("Logging out");
+        dispatch(handleLogout());
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    verifyRefreshToken();
+  }, []);
 
-    useEffect(() => {
-        const verifyRefreshToken = async () => { 
-            console.log('verifying refresh token');
-            try {
-                const result = await refresh();              
-            } catch (err:any) {
-                console.log("Logging out")
-                dispatch(handleLogout());
-            } finally {
-                setIsLoading(false);
-            }
-        }
-        auth ? verifyRefreshToken() : verifyRefreshToken();;
-    },[]);
+  useMemo(() => {
+    async function getUser() {
+      const getUser = await axios.get(`/users/${auth.user._id}`);
+      // console.log("setting user data");
+      // console.log(getUser.data.user.likedComments)
+      dispatch(handleLogin(getUser.data));
+    }
+    if (auth.user) getUser();
+  }, [auth.user]);
 
-    useEffect(() => {
-        async function getUser(){
-            const getUser = await axios.get(`/users/${auth.user._id}`)
-            console.log("setting user data");
-            // console.log(getUser.data.user.likedComments)
-            dispatch(handleLogin(getUser.data));
-        }
-        if(auth.user) getUser();
-    })
-
-
-    return (
-       isLoading
-        ? <p>Loading...</p> 
-        : <Outlet />
-    ) 
-}
+  return isLoading ? <Loading /> : <Outlet />;
+};
 
 export default PersistLogin;

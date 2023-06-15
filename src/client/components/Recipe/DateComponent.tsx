@@ -1,24 +1,27 @@
 import { _viewMode } from "@/client/enums";
-import useViewMode from "@/client/utils/useViewMode";
 
 interface DateComponentProps {
-  dateCreated : string, 
-  dateEdited : string
+  dateCreated: string;
+  dateEdited: string;
 }
 
-
-export default function DateComponent( props : DateComponentProps ) {
-    const dateOptions : Intl.DateTimeFormatOptions= {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        } 
-    const formattedDateEdited = new Date(props.dateEdited).toLocaleDateString('en-US', dateOptions);
-    const formattedDateCreated = new Date(props.dateCreated).toLocaleDateString('en-US', dateOptions);
-    return(
-        <div>
-            <span className = "recipe-dates">Created {formattedDateCreated} - Edited {formattedDateEdited} </span>   
-        </div>
-       
-    )
+export default function DateComponent(props: DateComponentProps) {
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  const formattedDateEdited = new Date(props.dateEdited).toLocaleDateString(
+    "en-US",
+    dateOptions
+  );
+  const formattedDateCreated = new Date(props.dateCreated).toLocaleDateString(
+    "en-US",
+    dateOptions
+  );
+  return (
+    <span className="recipe-dates">
+      Created {formattedDateCreated} - Edited {formattedDateEdited}{" "}
+    </span>
+  );
 }

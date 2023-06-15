@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { _viewMode } from '../enums';
 
 interface UserState {
     _id : string;
     likedComments: any;
     email: string;
     username: string;
+    viewMode: string;
 }
 
 const initialState : UserState = {
@@ -12,6 +14,7 @@ const initialState : UserState = {
     likedComments: [],
     email: "",
     username: "",
+    viewMode: "VIEWING"
 }
 
 
@@ -19,13 +22,6 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    setId (state = initialState, action:PayloadAction<string>){
-      // state._id = action.payload
-      return {
-        ...state,
-        _id: action.payload
-      };
-    },
     setLikedComments (state = initialState, action:PayloadAction<any>) {
       return {
         ...state,
@@ -84,7 +80,8 @@ export const userSlice = createSlice({
         _id,
         email,
         username,
-        likedComments
+        likedComments,
+        viewMode: state.viewMode || "VIEWING"
       }
     },
     handleLogout (state = initialState){
@@ -94,12 +91,36 @@ export const userSlice = createSlice({
         likedComments: [],
         email: "",
         username: "",
+        viewMode: "VIEWING"
       }
     },
+    setViewMode(state = initialState, action:PayloadAction<string>){
+      // cosnsole.log(action);
+      switch (action.payload){
+        case "editing-recipe":
+          // console.log("SETTING TO EDITING")
+          return {
+            ...state,
+            viewMode: "EDITING"
+          }
+        case "viewing-recipe": 
+          return {
+            ...state,
+            viewMode: "VIEWING"
+          }
+        case "creating-recipe":
+          // console.log("SETTING TO CREATING")
+
+          return {
+            ...state,
+            viewMode: "CREATING"
+          }
+      }
+    }
   },
 })
 
 // Action creators are generated for each case reducer functionikedCommentsForRecipe
-export const { setId, setLikedComments, setLikedComment, handleLogout, handleLogin} = userSlice.actions
+export const { setLikedComments, setLikedComment, handleLogout, handleLogin, setViewMode} = userSlice.actions
 
 export default userSlice.reducer
