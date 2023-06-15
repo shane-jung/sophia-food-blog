@@ -11,7 +11,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import queryClient from './client/utils/queryClient';
 
 createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <Provider store = {store}> 
       <QueryClientProvider client = {queryClient}>
         <AuthProvider>
@@ -21,5 +21,5 @@ createRoot(document.getElementById('root') as HTMLElement).render(
       </QueryClientProvider>
     </Provider>
     
-  /* </React.StrictMode>, */
+  </React.StrictMode>
 )

@@ -2,32 +2,29 @@ import RecipeContainer from "./RecipeContainer";
 import RecipeForm from "./EditRecipeForm";
 
 import useAuth from "../utils/useAuth";
-import {useSelector, useDispatch, shallowEqual} from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
-import Comments from "../components/other/Comments";
-import RecipeToolbar from "../components/Recipe/RecipeToolbar";
+import Comments from "../components/Recipe/Comments/Comments";
+import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
 
-import 'react-quill/dist/quill.snow.css';
-
+import "react-quill/dist/quill.snow.css";
 
 export default function RecipePage() {
-    
-    const {auth} = useAuth();
-    const recipe = useSelector((state:any) => state.recipe);
+  const { auth } = useAuth();
+  const recipe = useSelector((state: any) => state.recipe);
 
-    return (
+  return (
+    <>
+      {auth?.user?.roles?.includes(8012) ? (
         <>
-            {
-                auth?.user?.roles?.includes(8012) 
-                ? <> 
-                    <RecipeToolbar/>  
-                    <RecipeForm/>  
-                  </>
-                :  <RecipeContainer /> 
-            } 
-            
-            {recipe.titleId && <Comments />}
+          <RecipeToolbar />
+          <RecipeForm />
         </>
-    )
-}
+      ) : (
+        <RecipeContainer />
+      )}
 
+      {recipe.titleId && <Comments />}
+    </>
+  );
+}
