@@ -1,4 +1,3 @@
-import { sampleAuthor } from "@/server/seed";
 import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -46,7 +45,7 @@ export default function CreateRecipeForm() {
     data.set("dateEdited", new Date().toISOString());
     data.set("tags", JSON.stringify(selectedTags));
     data.set("dateCreated", new Date().toISOString());
-    data.set("author", sampleAuthor.toString());
+    // data.set("author", sampleAuthor.toString());
     mutation.mutate(data);
   };
 
