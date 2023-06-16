@@ -1,0 +1,31 @@
+import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
+import { Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import axios from "../api/axios";
+import { useEffect, useState } from "react";
+
+export function RecipesCategoryBlock({ tag }: { tag: any }) {
+  const { data: fetchedRecipeIds } = useQuery(["recipes", tag.value], () =>
+    fetchRecipes({ tag: tag.value!.replace("-", " ") })
+  );
+
+  return (
+    <div key={tag._id}>
+      <h1 className="recipe-category-header">
+        <span className="tag-value">{tag.value}</span> Recipes
+      </h1>
+      <ul className="recipes-grid">
+        {fetchedRecipeIds?.data?.map((recipeId: string, index: any) => (
+          <RecipeThumbnail key={index} recipeId={recipeId} />
+        ))}
+      </ul>
+      <Link to={`/category/${tag.value.replace(" ", "-")}`}>
+        View all {tag.value} recipes{" "}
+      </Link>
+    </div>
+  );
+}
+
+async function fetchRecipes({ tag }: { tag: string }) {
+  return await axios.get(`/recipes/tags/${tag}`);
+}

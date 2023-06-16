@@ -11,19 +11,19 @@ export default function MainNavbar() {
           <NavLink to="/recipes">All Recipes</NavLink>
         </li>
         <li>
-          <NavLink to="/">Breakfast</NavLink>
+          <NavLink to="/category/vegetarian">Vegetarian</NavLink>
         </li>
         <li>
-          <NavLink to="/">Lunch</NavLink>
+          <NavLink to="/category/lunch">Lunch</NavLink>
         </li>
         <li>
-          <NavLink to="/">Dinner</NavLink>
+          <NavLink to="/category/dinner">Dinner</NavLink>
         </li>
         <li>
-          <NavLink to="/">Desert</NavLink>
+          <NavLink to="/category/dessert">Dessert</NavLink>
         </li>
         <li>
-          <NavLink to="/">Snack</NavLink>
+          <NavLink to="/category/snack">Snack</NavLink>
         </li>
       </ul>
     </nav>

@@ -185,7 +185,8 @@ export default function Comment({
           <></>
         )}
 
-        {auth?.user?.roles?.includes(8012) && (
+        { ( comment.profileId == auth?.user?._id ||
+          auth?.user?.roles?.includes(8012)) && (
           <>
             <span> &#x2022; </span>
             <button

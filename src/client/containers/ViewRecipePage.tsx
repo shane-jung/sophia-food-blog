@@ -11,18 +11,17 @@ export default function ViewRecipePage() {
   const location = useLocation();
   const titleId = location.pathname.split("/")[2];
   const dispatch = useDispatch();
-  const { data } = useQuery(["recipe", titleId], () => loadRecipe(titleId));
+  const { data: fetchedRecipe } = useQuery(["recipe", titleId], () => loadRecipe(titleId));
 
   useEffect(() => {
     dispatch(setViewMode("viewing-recipe"));
-    dispatch(setRecipe({ type: "set-recipe", recipe: { ...data } }));
-  }, [data]);
+    dispatch(setRecipe({ type: "set-recipe", recipe: { ...fetchedRecipe.recipe } }));
+  }, [fetchedRecipe]);
 
   return <RecipePage />;
 }
 
 async function loadRecipe(titleId: string) {
-  // console.log(titleId);
   const { data } = await axios.get(`/recipes/titleId/${titleId}`);
   return data;
 }

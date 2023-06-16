@@ -6,7 +6,7 @@ import {
   Routes,
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import Recipes from "./Recipes";
+import AllRecipes from "./AllRecipes";
 import LoginPage from "@/client/components/UserManagement/LoginPage";
 import HomePage from "./HomePage";
 import RootLayout from "@/client/containers/RootLayout";
@@ -17,6 +17,7 @@ import Loading from "../components/other/Loading";
 import { Suspense } from "react";
 import CreateRecipePage from "./CreateRecipePage";
 import ViewRecipePage from "./ViewRecipePage";
+import RecipesByTag from "./RecipesByTag";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,13 +25,20 @@ const router = createBrowserRouter(
       <Route path="/">
         <Route element={<RootLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="category">
+            <Route path=":tag" element={
+                <Suspense fallback={<Loading />}>
+                  <RecipesByTag />
+                </Suspense>
+              } 
+            />
+          </Route>
           <Route path="recipes">
             <Route
               index
               element={
                 <Suspense fallback={<Loading />}>
-                  {" "}
-                  <Recipes />{" "}
+                  <AllRecipes />
                 </Suspense>
               }
             />
@@ -39,8 +47,7 @@ const router = createBrowserRouter(
                 path="create"
                 element={
                   <Suspense fallback={<Loading />}>
-                    {" "}
-                    <CreateRecipePage />{" "}
+                    <CreateRecipePage />
                   </Suspense>
                 }
               />
@@ -49,8 +56,7 @@ const router = createBrowserRouter(
               path=":titleId"
               element={
                 <Suspense fallback={<Loading />}>
-                  {" "}
-                  <ViewRecipePage />{" "}
+                  <ViewRecipePage />
                 </Suspense>
               }
             />

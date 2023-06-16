@@ -64,7 +64,7 @@ export type CommentType= {
     _id?: string;
     likes:number;
     username:string;
-    profile?: Profile;
+    profileId: string,
     content: string;
     date: string;
     replies?: CommentType[];

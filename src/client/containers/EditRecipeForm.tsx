@@ -12,23 +12,37 @@ export default function EditRecipeForm() {
   const axiosPrivate = useAxiosPrivate();
   const recipeId = useSelector((state: any) => state.recipe._id);
   const selectedTags = useSelector((state: any) => state.recipe.selectedTags);
-  const mutation = useMutation({
+  
+  const recipeMutation = useMutation({
     mutationFn: async (recipe: any) =>
       await axiosPrivate.put(`/recipes/${recipeId}`, recipe, {
         withCredentials: true,
       }),
     onSuccess: (response) => {
+      dispatch(setViewMode("viewing-recipe"));
       queryClient.setQueryData(
         ["recipe", response.data.value.titleId],
         (oldData: any) => {
           return response.data.value;
         }
       );
-      dispatch(setViewMode("viewing-recipe"));
+      tagsMutation.mutate({recipeId: response.data.value._id, tagIds: selectedTags})
       dispatch(
         setRecipe({ type: "set-recipe", recipe: { tags: selectedTags } })
       );
     },
+  });
+
+  const tagsMutation = useMutation({
+    mutationFn: async (payload: any) =>
+      await axiosPrivate.post("/tags/addRecipeToTags", payload, {
+        withCredentials: true,
+      }),
+    onSuccess: (response) => {
+      console.log(response);
+
+    }
+
   });
 
   const handleRecipeUpdate = async (
@@ -40,7 +54,7 @@ export default function EditRecipeForm() {
     data.set("dateEdited", new Date().toISOString());
     console.log(selectedTags);
     data.set("tags", JSON.stringify(selectedTags));
-    mutation.mutate(data);
+    recipeMutation.mutate(data);
   };
 
   return (

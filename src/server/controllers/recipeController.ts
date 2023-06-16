@@ -14,17 +14,59 @@ const recipeController = {
       throw error;
     }
   },
-  getRecipeById: async (req: Request, res: Response) => {
-    const recipeId = req.params.recipeId;
+  getRecipesByTag: async (req: Request, res: Response) => {
+    const tag = req.params.tag;
+    // console.log(tag);
     try {
       const db = await connectToDatabase();
-      const recipe = await db
-        .collection("Recipes")
-        .findOne({ _id: new ObjectId(recipeId) });
-      if (!recipe) {
+      const recipeIds = await db
+        .collection("Tags")
+        .findOne({ value: tag })
+        .then((tag) => tag?.recipes);
+      // console.log(recipeIds);
+      if (!recipeIds) {
+        console.log("here");
         return res.status(500).json({ message: "Internal server error" });
       }
+      return res.status(200).json(recipeIds);
 
+      const recipes = await db
+        .collection("Recipes")
+        .find({ _id: { $in: recipeIds } })
+        .project({ title: 1, titleId: 1, imageUrl: 1, _id: 1 })
+        .toArray();
+
+      // console.log(recipes);
+      if (!recipes) res.status(500).json({ message: "Internal server error" });
+      return res.status(200).json(recipes);
+    } catch (error) {
+      console.error(`Error fetching recipes in getRecipesByTag: ${error}`);
+      throw error;
+    }
+  },
+  getRecipeById: async (req: Request, res: Response) => {
+    const recipeId = req.params.recipeId;
+    const { shortened } = req.query;
+    try {
+      const db = await connectToDatabase();
+      let recipe;
+      if (shortened == "true"){
+        recipe = await db
+          .collection("Recipes")
+          .findOne(
+            { _id: new ObjectId(recipeId) },
+            { projection: { title: 1, titleId: 1, imageUrl: 1, _id: 1 } }
+          );
+      } else {
+        recipe = await db
+          .collection("Recipes")
+          .findOne({ _id: new ObjectId(recipeId) });
+      }
+
+      // if (!recipe) {
+      //   return res.status(500).json({ message: "Internal server error" });
+      // }
+      console.log(recipe);
       return res.status(200).json(recipe);
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
@@ -41,7 +83,7 @@ const recipeController = {
         return res.status(500).json({ message: "Internal server error" });
       }
 
-      return res.status(200).json(recipe);
+      return res.status(200).json({ recipe: recipe });
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
     }
@@ -49,12 +91,13 @@ const recipeController = {
 
   createRecipe: async (req: Request, res: Response) => {
     const recipe = req.body;
+    const tags = req.body.tags.split(",").map((tag: any) => new ObjectId(tag));
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
-          recipe,
+          { ...recipe, tags },
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
@@ -81,7 +124,7 @@ const recipeController = {
           { $set: { ...req.body, tags: tags } },
           { returnDocument: "after" }
         );
-      console.log(result);
+      // console.log(result);
       return res.status(200).json(result);
     } catch (error) {
       console.error(`Error fetching recipe in updateRecipe: ${error}`);
@@ -101,64 +144,55 @@ const recipeController = {
     }
   },
   rateRecipe: async (req: Request, res: Response) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { userId, recipeId, rating, date } = req.body;
     try {
       const db = await connectToDatabase();
-      const result = await db
-        .collection("Recipes")
-        .updateOne(
-          { _id: new ObjectId(recipeId) },
-          {
-            $set: {
-              "ratings.$[element]": {
-                rating,
-                userId: new ObjectId(userId),
-                date,
-              },
+      const result = await db.collection("Recipes").updateOne(
+        { _id: new ObjectId(recipeId) },
+        {
+          $set: {
+            "ratings.$[element]": {
+              rating,
+              userId: new ObjectId(userId),
+              date,
             },
           },
-          { arrayFilters: [{ "element.userId": new ObjectId(userId) }] }
-        );
-      const result2 = await db
-        .collection("Profiles")
-        .updateOne(
-          { _id: new ObjectId(userId) },
-          {
-            $set: {
-              "ratings.$[element]": {
-                rating,
-                recipeId: new ObjectId(recipeId),
-                date,
-              },
+        },
+        { arrayFilters: [{ "element.userId": new ObjectId(userId) }] }
+      );
+      const result2 = await db.collection("Profiles").updateOne(
+        { _id: new ObjectId(userId) },
+        {
+          $set: {
+            "ratings.$[element]": {
+              rating,
+              recipeId: new ObjectId(recipeId),
+              date,
             },
           },
-          { arrayFilters: [{ "element.recipeId": new ObjectId(recipeId) }] }
-        );
-      console.log(result2);
+        },
+        { arrayFilters: [{ "element.recipeId": new ObjectId(recipeId) }] }
+      );
       if (result.modifiedCount === 0) {
         console.log("Didn't update, pushing new rating");
-        const result = await db
-          .collection("Recipes")
-          .updateOne(
-            { _id: new ObjectId(recipeId) },
-            {
-              $push: {
-                ratings: { rating, userId: new ObjectId(userId), date },
-              },
-            }
-          );
-        const result2 = await db
-          .collection("Profiles")
-          .updateOne(
-            { _id: new ObjectId(userId) },
-            {
-              $push: {
-                ratings: { rating, recipeId: new ObjectId(recipeId), date },
-              },
-            }
-          );
-        console.log(result2);
+        const result = await db.collection("Recipes").updateOne(
+          { _id: new ObjectId(recipeId) },
+          {
+            $push: {
+              ratings: { rating, userId: new ObjectId(userId), date },
+            },
+          }
+        );
+        const result2 = await db.collection("Profiles").updateOne(
+          { _id: new ObjectId(userId) },
+          {
+            $push: {
+              ratings: { rating, recipeId: new ObjectId(recipeId), date },
+            },
+          }
+        );
+        // console.log(result2);
       }
     } catch (error: any) {
       console.log(error);
@@ -173,21 +207,19 @@ const recipeController = {
     try {
       const db = await connectToDatabase();
       if (!reply) {
-        const result = await db
-          .collection("Recipes")
-          .updateOne(
-            { _id: new ObjectId(recipeId) },
-            {
-              $push: {
-                comments: {
-                  _id: new ObjectId(),
-                  ...comment,
-                  replies: [],
-                  profileId: new ObjectId(comment.profileId),
-                },
+        const result = await db.collection("Recipes").updateOne(
+          { _id: new ObjectId(recipeId) },
+          {
+            $push: {
+              comments: {
+                _id: new ObjectId(),
+                ...comment,
+                replies: [],
+                profileId: new ObjectId(comment.profileId),
               },
-            }
-          );
+            },
+          }
+        );
         // console.log(result);
       } else {
         // console.log(req.body);
@@ -250,58 +282,6 @@ const recipeController = {
       console.error(`Error fetching comments in getComments: ${error}`);
       throw error;
     }
-  },
-  createTag: async (req: Request, res: Response) => {
-    const { tag } = req.body;
-    try {
-      const db = await connectToDatabase();
-      const response = await db
-        .collection("Tags")
-        .insertOne({ value: tag, recipes: [], description: "" });
-      return res.json(response.insertedId);
-    } catch (error) {
-      console.error(`Error creating tag in createTag: ${error}`);
-      throw error;
-    }
-  },
-  getAllTags: async (req: Request, res: Response) => {
-    try {
-      const db = await connectToDatabase();
-      const result = await db.collection("Tags").find().toArray();
-      return res.json(result);
-    } catch (error) {
-      console.error(`Error fetching tags in getTags: ${error}`);
-      throw error;
-    }
-  },
-  getTags: async (req: Request, res: Response) => {
-    try {
-      const db = await connectToDatabase();
-      const result = await db
-        .collection("Recipes")
-        .findOne({ _id: new ObjectId(req.params.recipeId) });
-      const tagIds = result?.tags;
-      const tags = await Promise.all(
-        tagIds.map(async (tagId: ObjectId) => {
-          const tag = await db.collection("Tags").findOne({ _id: tagId });
-          return tag;
-        })
-      );
-      return res.json(tags);
-    } catch (error) {
-      console.error(`Error fetching comments in getComments: ${error}`);
-      throw error;
-    }
-  },
-
-  getTagById: async (req: Request, res: Response) => {
-    try {
-      const db = await connectToDatabase();
-      const result = await db
-        .collection("Tags")
-        .findOne({ _id: new ObjectId(req.params.tagId) });
-      return res.json(result);
-    } catch (error) {}
   },
 };
 

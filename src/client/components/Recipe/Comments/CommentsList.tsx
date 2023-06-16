@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment";
 import { useQuery } from "react-query";
 
-export default function CommentsList() {
+export default function CommentsList({setCommentsLength } : any){
   const recipeId = useSelector((state: any) => state.recipe._id);
   const queryKey = ["comments", recipeId];
   const { data, status } = useQuery({
@@ -19,6 +19,8 @@ export default function CommentsList() {
   useEffect(() => {
     // console.log(data);
     setComments(data);
+    console.log(data);
+    setCommentsLength(data.length);
   }, [data]);
 
   useEffect(() => {

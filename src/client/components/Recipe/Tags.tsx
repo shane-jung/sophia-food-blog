@@ -6,6 +6,7 @@ import { setRecipe } from "@/client/slices/recipe";
 import axios from "../../api/axios";
 
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 export default function Tags() {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ export default function Tags() {
   const [tagRender, setTagRender] = useState<any>([]);
 
   const { data } = useQuery({
-    queryKey: "tags",
+    queryKey: ["tags"],
     queryFn: getAllTags,
   });
 
@@ -53,7 +54,7 @@ export default function Tags() {
 
   async function createOption(option: string) {
     try {
-      const response = await axios.post("/recipes/tags/create", {
+      const response = await axios.post("/tags/create", {
         tag: option,
       });
       options.push({ value: option, label: option, _id: response.data });
@@ -83,12 +84,12 @@ export default function Tags() {
       selected.map((tag: any) => {
         return (
           <div key={tag._id}>
-            <a
+            <Link
               className="recipe-tag"
-              href={`/categories/${tag.label.toLowerCase().replace(" ", "-")}`}
+              to={`/category/${tag.label.toLowerCase().replace(" ", "-")}`}
             >
               {tag.value}
-            </a>
+            </Link>
           </div>
         );
       })
@@ -114,6 +115,6 @@ export default function Tags() {
 }
 
 async function getAllTags({ queryKey }: any) {
-  const { data } = await axios.get(`/recipes/tags`);
+  const { data } = await axios.get(`/tags`);
   return data;
 }

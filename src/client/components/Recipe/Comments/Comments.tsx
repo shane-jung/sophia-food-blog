@@ -7,14 +7,15 @@ import { useSelector } from "react-redux";
 const CommentsList = lazy(() => import("./CommentsList"));
 
 export default function Comments() {
+  const [commentsLength, setCommentsLength] = useState(0);
   return (
     <section id="comments" className="comments">
-      <h2>Recipe Comments ({2})</h2>
+      <h2>Recipe Comments ({commentsLength})</h2>
       <CommentForm index={-1} />
       <div className="comments-toolbar" />
 
       <Suspense fallback={<Loading />}>
-        <CommentsList />
+        <CommentsList setCommentsLength = {(n:number)=>setCommentsLength(n)} />
       </Suspense>
     </section>
   );
