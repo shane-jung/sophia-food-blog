@@ -4,6 +4,7 @@ import Loading from "../components/other/Loading";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { RecipesCategoryBlock } from "./RecipesCategoryBlock";
+import SearchBar from "../components/other/SearchBar";
 
 export default function AllRecipes() {
   const { data: fetchedTags } = useQuery(["tags"], getAllTags);
@@ -12,6 +13,7 @@ export default function AllRecipes() {
     <div>
       <h1 className="recipe-category-header">All Recipes</h1>
       {/* <RecipeFiltersToolbar />  */}
+      <SearchBar /> 
       <div>
         {fetchedTags?.map((tag: any) => (
           <Link
@@ -19,12 +21,12 @@ export default function AllRecipes() {
             to={`/category/${tag.value.replace(" ", "-")}`}
             className="category-link"
           >
-            {tag.value}{" "}
+            {tag.value}
           </Link>
         ))}
       </div>
       <Suspense fallback={<Loading />}>
-        {fetchedTags?.map((tag: any) => (
+        {fetchedTags?.slice(0, 6).map((tag: any) => (
           <RecipesCategoryBlock key={tag.value + " category"} tag={tag} />
         ))}
       </Suspense>

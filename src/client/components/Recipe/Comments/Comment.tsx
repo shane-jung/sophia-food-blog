@@ -141,7 +141,7 @@ export default function Comment({
   return (
     <div className="comment">
       <span>
-        <span className="comment-user">{comment.username}</span> &#x2022;{" "}
+        <span className="comment-user">{comment.username}</span> &#x2022;
         <span className="comment-date">{dateString}</span>
       </span>
       {/* <h1>{comment._id}</h1> */}
@@ -156,7 +156,7 @@ export default function Comment({
         />
 
         <span className="comment-like-counter">
-          {" "}
+          
           {comment.likes + " likes"}
         </span>
 
@@ -178,7 +178,7 @@ export default function Comment({
             onClick={() => setRepliesVisible(!repliesVisible)}
             className="simple-button"
           >
-            &#x2022;{" "}
+            &#x2022;
             {!reply && repliesVisible ? "Hide Replies" : "Show Replies"}
           </button>
         ) : (

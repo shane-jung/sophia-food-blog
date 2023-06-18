@@ -283,6 +283,36 @@ const recipeController = {
       throw error;
     }
   },
+
+  async searchRecipes(req: Request, res: Response) {
+    console.log(req.query);
+    try {
+      const db = await connectToDatabase();
+      // const result = await db
+      //   .collection("Recipes")
+      //   .find({"title": {$regex : regex, $options: 'i'}}, { projection: { title: 1, titleId: 1, description: 1, imageUrl: 1} }).toArray();
+      const result = await db
+        .collection("Recipes")
+        .aggregate([{ $search: 
+          {
+            'index': 'default',
+            'autocomplete' : {
+              'query': req.query.query,
+              'path' : 'title', 
+              'fuzzy': {
+                'maxEdits': 1,
+                'prefixLength': 3
+              }
+            }
+          }
+        }]).toArray();
+      // console.log(result);
+      return res.status(200).json(result);
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
 };
 
 export default recipeController;

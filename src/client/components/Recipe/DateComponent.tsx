@@ -21,7 +21,7 @@ export default function DateComponent(props: DateComponentProps) {
   );
   return (
     <span className="recipe-dates">
-      Created {formattedDateCreated} - Edited {formattedDateEdited}{" "}
+      Created {formattedDateCreated} - Edited {formattedDateEdited}
     </span>
   );
 }

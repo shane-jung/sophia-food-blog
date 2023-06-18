@@ -15,12 +15,12 @@ export function RecipesCategoryBlock({ tag }: { tag: any }) {
         <span className="tag-value">{tag.value}</span> Recipes
       </h1>
       <ul className="recipes-grid">
-        {fetchedRecipeIds?.data?.map((recipeId: string, index: any) => (
+        {fetchedRecipeIds?.data?.slice(0, 8).map((recipeId: string, index: any) => (
           <RecipeThumbnail key={index} recipeId={recipeId} />
         ))}
       </ul>
       <Link to={`/category/${tag.value.replace(" ", "-")}`}>
-        View all {tag.value} recipes{" "}
+        View all {tag.value} recipes
       </Link>
     </div>
   );

@@ -45,6 +45,8 @@ router.post(
   recipeController.createRecipe
 );
 
+router.get("/search", recipeController.searchRecipes);
+
 router.post("/comment", recipeController.postComment);
 
 router.route("/rating").post(recipeController.rateRecipe);

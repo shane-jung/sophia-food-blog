@@ -40,11 +40,11 @@ export default function LoginButton() {
   }
   return auth.isAuthenticated ? (
     <>
-      {" "}
-      <p>Welcome, {username}!</p>{" "}
+      
+      <p>Welcome, {username}!</p>
       <button className="simple-button" onClick={logout}>
         Logout
-      </button>{" "}
+      </button>
     </>
   ) : (
     <Link
