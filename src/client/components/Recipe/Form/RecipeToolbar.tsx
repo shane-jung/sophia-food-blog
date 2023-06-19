@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCancel,
+  faCog,
   faEdit,
   faSave,
   faTrash,
@@ -18,6 +19,7 @@ import queryClient from "@/client/utils/queryClient";
 export default function RecipeToolbar() {
   return (
     <div className="recipe-toolbar">
+      <Settings/>
       <EditButton />
       <SaveButton />
       <DeleteButton />
@@ -105,6 +107,25 @@ function DeleteButton() {
     <button className="icon-button round delete-button" onClick={handleClick}>
       <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" />
       <span className="icon-button-tooltip">Delete this recipe</span>
+    </button>
+  );
+}
+
+
+
+function Settings() {
+  const recipe = useSelector((state: any) => state.recipe);
+  const navigate = useNavigate();
+
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    navigate('/admin')
+
+  }
+
+  return (
+    <button className="icon-button round settings-button" onClick={handleClick}>
+      <FontAwesomeIcon icon={faCog} className="settings-icon" />
+      <span className="icon-button-tooltip">Settings</span>
     </button>
   );
 }

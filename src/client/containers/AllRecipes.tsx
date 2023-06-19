@@ -5,14 +5,13 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { RecipesCategoryBlock } from "./RecipesCategoryBlock";
 import SearchBar from "../components/other/SearchBar";
-import CustomizeTagOrder from "../components/other/CustomizeTagOrder";
+import TagEditor from "../components/other/TagEditor";
 
 export default function AllRecipes() {
   const { data: fetchedTags } = useQuery(["tags"], getAllTags);
   
   return (
     <div>
-      <CustomizeTagOrder tags= {fetchedTags} />
       <h1 className="recipe-category-header">All Recipes</h1>
       {/* <RecipeFiltersToolbar />  */}
       <SearchBar /> 

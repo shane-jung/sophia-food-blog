@@ -24,8 +24,6 @@ export default function RecipeContainer() {
   return (
     <div className="recipe-container">
       <div className="recipe-header">
-        <RecipeToolbar />
-
         <ImageUpload />
         <SimpleTextRecipeComponent
           name="title"

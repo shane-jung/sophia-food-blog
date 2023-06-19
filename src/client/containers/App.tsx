@@ -18,6 +18,8 @@ import { Suspense } from "react";
 import CreateRecipePage from "./CreateRecipePage";
 import ViewRecipePage from "./ViewRecipePage";
 import RecipesByTag from "./RecipesByTag";
+import TagEditor from "../components/other/TagEditor";
+import Settings from "./SettingsContainer";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -61,8 +63,11 @@ const router = createBrowserRouter(
               }
             />
           </Route>
-        </Route>
+          <Route path= "admin" element = {<Settings />} />
 
+        </Route>
+        
+        
         <Route path="users">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
