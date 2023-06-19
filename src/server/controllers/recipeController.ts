@@ -97,7 +97,7 @@ const recipeController = {
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
-          { ...recipe, tags },
+          { ...recipe, tags, comments: [], ratings: [] },
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
@@ -293,19 +293,37 @@ const recipeController = {
       //   .find({"title": {$regex : regex, $options: 'i'}}, { projection: { title: 1, titleId: 1, description: 1, imageUrl: 1} }).toArray();
       const result = await db
         .collection("Recipes")
-        .aggregate([{ $search: 
-          {
-            'index': 'default',
-            'autocomplete' : {
-              'query': req.query.query,
-              'path' : 'title', 
-              'fuzzy': {
-                'maxEdits': 1,
-                'prefixLength': 3
+        .aggregate(
+          [
+            { 
+              $search: {
+                'index': 'default',
+                'autocomplete' : {
+                  'query': req.query.query,
+                  'path' : 'title', 
+                  'fuzzy': {
+                    'maxEdits': 1,
+                    'prefixLength': 3
+                  }
+                },
+                // "highlight": {  
+                //   "path": "title",
+                //   "maxNumPassages": 1,
+                //   "maxCharsToExamine": 100,
+                // }
+              }
+            },
+            {
+              $project: {
+                "title": 1,
+                "titleId": 1,
+                "description": 1,
+                "imageUrl": 1,
+                "highlights"  : { $meta: "searchHighlights" },
               }
             }
-          }
-        }]).toArray();
+          ]
+        ).toArray();
       // console.log(result);
       return res.status(200).json(result);
     }

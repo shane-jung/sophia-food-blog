@@ -22,7 +22,7 @@ export default function RecipesByTag() {
   return (
     <div>
       <h1 className="recipe-category-header">
-        <span className="tag-value">{tagValue?.replace("-", " ")}</span> Recipes
+        <span className="tag-value">{fetchedTag?.data?.heading}</span>
       </h1>
       <p>{tag?.description}</p>
       <ul className="recipes-grid">

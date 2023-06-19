@@ -8,6 +8,8 @@ import axios from "../../api/axios";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 
+import * as emoji from "node-emoji";
+
 export default function Tags() {
   const dispatch = useDispatch();
   // const recipeId = useSelector((state:any) => state.recipe._id);
@@ -88,7 +90,7 @@ export default function Tags() {
               className="recipe-tag"
               to={`/category/${tag.label.toLowerCase().replace(" ", "-")}`}
             >
-              {tag.value}
+              {emoji.emojify(tag.label)}
             </Link>
           </div>
         );

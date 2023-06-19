@@ -9,19 +9,48 @@ const tagsController = {
         const { tag } = req.body;
         try {
           const db = await connectToDatabase();
+          const highestVal = (await db.collection('Tags').find().sort({order: -1}).limit(1).toArray())[0].order;
           const response = await db
             .collection("Tags")
-            .insertOne({ value: tag.toLowercase(), description: "", recipes: [] });
+            .insertOne({ value: tag.toLowerCase(), description: "", recipes: [] , order: highestVal + 1});
           return res.json(response.insertedId);
         } catch (error) {
           console.error(`Error creating tag in createTag: ${error}`);
           throw error;
         }
       },
+      deleteTag: async (req: Request, res: Response) => {
+        try {
+          const db = await connectToDatabase();
+          const response = await db
+            .collection("Tags")
+            .deleteOne({ _id: new ObjectId(req.params.tagId) });
+          const test = await db
+            .collection("Recipes")
+            .updateMany({}, { $pull: { tags : new ObjectId(req.params.tagId)}  }, {multi: true});
+          console.log(test);
+          return res.json(response);
+        } catch (error) {
+          console.error(`Error deleting tag in deleteTag: ${error}`);
+          throw error;
+        }
+      },
+      updateTag: async (req: Request, res: Response) => { 
+        delete req.body._id;
+        try{
+          const db = await connectToDatabase(); 
+          const response = await db.collection("Tags").updateOne({_id: new ObjectId(req.params.tagId)}, {$set: req.body});
+          console.log(response);
+        } catch (err) {
+          console.error(`Error updating tag in updateTag: ${err}`);
+          throw err;
+        }
+
+      },
       getAllTags: async (req: Request, res: Response) => {
         try {
           const db = await connectToDatabase();
-          const result = await db.collection("Tags").find().toArray();
+          const result = await db.collection("Tags").find().sort({order:1}).toArray();
           return res.json(result);
         } catch (error) {
           console.error(`Error fetching tags in getTags: ${error}`);
@@ -65,6 +94,21 @@ const tagsController = {
         } catch (error) {
           console.error(`Error adding recipe to tags in addRecipeToTags: ${error}`);
           throw error;
+        }
+      },
+
+      setTagOrder: async (req: Request, res: Response) => {
+        console.log(req.body);
+        const { newOrder } = req.body;
+        try{
+          const db = await connectToDatabase();
+          newOrder.forEach(async (tagId: string, index: number) => {
+            await db.collection("Tags").updateOne({_id: new ObjectId(tagId)}, {$set: {order: index}});
+          });
+          return res.status(200).json({success: true})
+        } catch (err) {
+          console.error(`Error setting tag order in setTagOrder: ${err}`);
+          throw err;
         }
       }
 };

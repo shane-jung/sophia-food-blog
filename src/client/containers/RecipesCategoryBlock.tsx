@@ -10,18 +10,18 @@ export function RecipesCategoryBlock({ tag }: { tag: any }) {
   );
 
   return (
-    <div key={tag._id}>
+    <div key={tag._id} className ="recipe-category-block">
       <h1 className="recipe-category-header">
-        <span className="tag-value">{tag.value}</span> Recipes
+        <span className="tag-value">{tag.heading || (tag.value +  " Recipes")}</span> 
       </h1>
       <ul className="recipes-grid">
         {fetchedRecipeIds?.data?.slice(0, 8).map((recipeId: string, index: any) => (
           <RecipeThumbnail key={index} recipeId={recipeId} />
         ))}
       </ul>
-      <Link to={`/category/${tag.value.replace(" ", "-")}`}>
-        View all {tag.value} recipes
-      </Link>
+       <Link to={`/category/${tag.value.replace(" ", "-")}`} className="more-recipes">
+          View all {tag.value} recipes
+        </Link>
     </div>
   );
 }
