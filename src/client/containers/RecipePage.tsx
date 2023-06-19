@@ -8,10 +8,15 @@ import Comments from "../components/Recipe/Comments/Comments";
 import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
 
 import "react-quill/dist/quill.snow.css";
+import { useEffect } from "react";
 
 export default function RecipePage() {
   const { auth } = useAuth();
   const recipe = useSelector((state: any) => state.recipe);
+
+  useEffect(() => { 
+    document.title = recipe.title + " - Once Upon a Thyme";
+  }, [recipe]);
 
   return (
     <>

@@ -4,6 +4,7 @@ import { verifyRoles } from "../middleware/checkAuth";
 import checkAuth from "../middleware/checkAuth";
 import AWS from "aws-sdk";
 import commentController from "../controllers/commentController";
+import tagsController from "../controllers/tagsController";
 
 const router = express.Router();
 
@@ -44,22 +45,21 @@ router.post(
   recipeController.createRecipe
 );
 
+router.get("/search", recipeController.searchRecipes);
+
 router.post("/comment", recipeController.postComment);
 
 router.route("/rating").post(recipeController.rateRecipe);
 
-router.route("/tags").get(recipeController.getAllTags);
-router.route("/tags/:tagId").get(recipeController.getTagById);
-
-router.route("/tags/create").post(recipeController.createTag);
-
 router.route("/titleId/:titleId").get(recipeController.getRecipeByTitleId);
+router.route("/tags/:tag").get(recipeController.getRecipesByTag);
+
 
 router
   .route("/:recipeId/comments")
   .get(commentController.getAllCommentsForRecipe);
-router.route("/:recipeId/tags").get(recipeController.getTags);
-
+  
+// router.route("/:recipeId/tags").get(tagsController.getTags);
 router
   .route("/:recipeId")
   .get(recipeController.getRecipeById)

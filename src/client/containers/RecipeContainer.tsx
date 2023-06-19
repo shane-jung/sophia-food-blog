@@ -4,7 +4,7 @@ import SimpleTextRecipeComponent from "../components/Recipe/Form/SimpleTextRecip
 import RichTextRecipeComponent from "../components/Recipe/Form/RichTextRecipeComponent";
 
 import { _viewMode } from "../enums";
-import TitleId from "../components/Recipe/TitleID";
+import TitleId from "../components/Recipe/Form/TitleID";
 
 interface RecipeContainerProps {
   recipe: Recipe;
@@ -24,8 +24,6 @@ export default function RecipeContainer() {
   return (
     <div className="recipe-container">
       <div className="recipe-header">
-        <RecipeToolbar />
-
         <ImageUpload />
         <SimpleTextRecipeComponent
           name="title"

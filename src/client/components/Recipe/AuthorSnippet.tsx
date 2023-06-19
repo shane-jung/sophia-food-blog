@@ -7,7 +7,7 @@ interface AuthorSnippetProps {
 export default function AuthorSnippet({ author }: AuthorSnippetProps) {
   return author != undefined ? (
     <p>
-      By <a>Sophia</a>{" "}
+      By <a>Sophia</a>
     </p>
   ) : (
     <>

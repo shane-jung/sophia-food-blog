@@ -1,17 +1,19 @@
 import { CSSProperties } from "react";
-import { ClipLoader, DotLoader } from "react-spinners";
+import { ClipLoader as Loader } from "react-spinners";
+// import { SyncLoader as Loader } from "react-spinners";
+
 
 const override: CSSProperties = {
-  display: "block",
-  margin: "3em auto",
-  height: "5em",
-  width: "5em",
+  display: 'block',
+  margin: "1em auto",
+  height: "2em",
+  width: "2em",
 };
 
 export default function Loading() {
   return (
     <div className="loading">
-      <ClipLoader color={"#0066aa"} cssOverride={override} />
+      <Loader color={"#006688"} cssOverride={override} speedMultiplier= {.75}/>
     </div>
   );
 }
