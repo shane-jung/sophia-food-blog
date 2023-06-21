@@ -1,20 +1,14 @@
 import { Author } from "@/client/types";
+import { Link } from "react-router-dom";
 
 interface AuthorSnippetProps {
   author?: Author;
 }
 
 export default function AuthorSnippet({ author }: AuthorSnippetProps) {
-  return author != undefined ? (
-    <p>
-      By <a>Sophia</a>
-    </p>
-  ) : (
-    <>
-      <select>
-        <option defaultChecked>Sophia Manicor</option>
-        <option>Shane Jung</option>
-      </select>
-    </>
-  );
+  return (
+    <div>
+      By <Link to="/" className="link-primary text-decoration-none">Sophia</Link>
+    </div>
+  ) 
 }

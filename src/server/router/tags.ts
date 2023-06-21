@@ -9,6 +9,8 @@ router.route("/").get(tagsController.getAllTags);
 router.route("/create").post(tagsController.createTag);
 router.route("/reorder").post(tagsController.setTagOrder);
 router.route("/addRecipeToTags").post(tagsController.addRecipeToTags)
+router.route("/removeRecipeFromTags").post(tagsController.removeRecipeFromTags)
+
 router.route("/:tagId").put(tagsController.updateTag);
 router.route("/:tagValue").get(tagsController.getTagByValue);
 

@@ -8,6 +8,11 @@ import { InteractiveRatingBar } from "../RatingBar";
 import { useMutation } from "react-query";
 import queryClient from "@/client/utils/queryClient";
 
+import Form from "react-bootstrap/Form";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Container from "react-bootstrap/Container";
+import { Button } from "react-bootstrap";
+
 export default function CommentForm({
   index,
   replyToCommentId,
@@ -76,7 +81,7 @@ export default function CommentForm({
   }
 
   return (
-    <form
+    <Form
       className={"comment-form " + (replyToCommentId ? "reply" : "")}
       onSubmit={handleSubmit}
       method="POST"
@@ -84,51 +89,51 @@ export default function CommentForm({
       {auth?.user ? (
         <></>
       ) : (
-        <div>
-          <label htmlFor="name">Your Name</label>
-          <input
-            id="name"
-            name="name"
-            placeholder="Name"
-            ref={nameRef}
-            onChange={(e) => setName(e.target.value)}
-            value={name}
-          />
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required
-          />
-        </div>
+        <>
+          <FloatingLabel label="Your name">
+            <Form.Control
+              id="name"
+              name="name"
+              placeholder="Name"
+              ref={nameRef}
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+            />
+          </FloatingLabel>
+          
+          <FloatingLabel label="email">
+            <Form.Control
+              id="email"
+              name="email"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+            />
+          </FloatingLabel>
+        </>
       )}
 
-      <textarea
+      <Form.Control as="textarea" rows={3}
         name="content"
-        className="comment-textarea"
         placeholder={
           replyToCommentId ? "Reply to this comment..." : "Add a comment..."
         }
-        cols={50}
-        rows={3}
         onChange={(e) => setContent(e.target.value)}
         value={content}
       />
 
       {!replyToCommentId && (
         <>
-          <p>Did you make this recipe? Give it a rating!</p>
+          <Form.Text>Did you make this recipe? Give it a rating!</Form.Text>
           <InteractiveRatingBar />
         </>
       )}
 
-      <button type="submit" className="simple-button comment-submit-button">
+      <Button variant="outline-success" type="submit">
         Submit
-      </button>
-    </form>
+      </Button>
+    </Form>
   );
 }
 

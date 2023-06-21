@@ -6,6 +6,7 @@ import {
   Routes,
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import '@/client/styles/index.scss'
 import AllRecipes from "./AllRecipes";
 import LoginPage from "@/client/components/UserManagement/LoginPage";
 import HomePage from "./HomePage";
@@ -18,16 +19,23 @@ import { Suspense } from "react";
 import CreateRecipePage from "./CreateRecipePage";
 import ViewRecipePage from "./ViewRecipePage";
 import RecipesByTag from "./RecipesByTag";
-import TagEditor from "../components/other/TagEditor";
 import Settings from "./SettingsContainer";
+import RecipeCategories from "./RecipeCategories";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<PersistLogin />}>
       <Route path="/">
         <Route element={<RootLayout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<Suspense fallback={<Loading />}>
+                  <HomePage />
+                </Suspense>} />
           <Route path="category">
+            <Route index element = {
+                <Suspense fallback={<Loading />}>
+                  <RecipeCategories />
+                </Suspense>
+              } />
             <Route path=":tag" element={
                 <Suspense fallback={<Loading />}>
                   <RecipesByTag />
@@ -89,3 +97,5 @@ export const App: React.FC = () => {
     </HelmetProvider>
   );
 };
+
+

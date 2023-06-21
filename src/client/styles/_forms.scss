@@ -1,35 +1,7 @@
-%forms {
-    display: block;   
-    background:none;
-    outline: none;
-    border:none; 
-    text-align: center; 
-    border-radius:.5rem; 
-  }
-  
-  %forms-focus {
-
-   // outline:1px solid $primary;
-  }
-   
-  #{$forms} {
-    @extend %forms;
-    
-    &:focus,
-    &:active {
-      @extend %forms-focus;
-    }
-  }
-  
-.ql-toolbar.ql-snow + .ql-container.ql-snow{
-  border: 1px solid rgb(62, 62, 62);
-  margin:   1px solid rgb(62, 62, 62);
-
-}
+ 
 
 .ql-container.ql-snow{
   // font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-size: 1.125em;
   position: relative;
   
 
@@ -40,7 +12,6 @@
   * {
     font-family: inherit;
   }
-  
 }
 
 .ql-toolbar.ql-snow {
@@ -51,11 +22,12 @@
   transform:translate(150%,-50%);
   top:55%;
   background:white;
-  box-shadow: 0 0 5px 1px rgb(113, 113, 113);
+  box-shadow: 0 0 4px 1px rgb(166, 166, 166);
   .ql-formats{
     display:flex;
     flex-direction:column;
-    margin:.25em;
+    margin-right:0 !important;
+    margin:.25em auto;
     button{
       font-size:1.25em;
       margin: .25em 0;
@@ -70,24 +42,12 @@
   .ql-toolbar.ql-snow{ 
     display:flex;
   }
-  .ql-editor{
-    
-    outline: 2px solid $accent
-  }
 }
 
 .ql-editor{
   line-height: inherit;
   font-size:inherit; 
-  font-style: inherit;
-  width:100%;
-  height:100%;  
-  // border:none;
-  outline:.125em solid transparent;
-  transition: .1s outline ease-out;
-  border-radius: .25em;
-  margin:0;
-  padding:.5em .75em;
+  font-family:inherit !important;
 }
 
 
@@ -95,55 +55,7 @@
   display:none;
 }
 
-// .input-field:focus-within{
-//   //outline:1px solid black;
 
-// }
-
-// .quill, .ql-container, .ql-editor{
-// }
-
-strong{
-  font-weight:bold;
-}
-
-.recipe-form{
-  input {
-    border:none;
-    border-bottom:2px solid gray;
-    height:100%;
-  }
-}
-
-.user-form{
-  padding: .25em 2em;
-  text-align:left;
-  font-family:inherit;
-  width: clamp(300px, 50%, 600px);
-  margin:auto;
-  outline:2px solid black;
-  input{
-    text-align:left;
-    margin-top:.25em;
-    padding:.5em;
-    border:1px solid black;
-    font-size:1.0625em;
-  }
-}
-
-.form-error-message{
-  padding:0;
-  margin:0;
-  font-size:.825em;
-  color:rgb(255, 26, 26);
-  margin: .125em 0;
-  padding: .25em 0;
-  border-radius:.25em;
-  opacity: 0; 
-  &.active {
-    opacity: 1;
-  }
-}
 
 .offscreen{ 
   position: absolute;
@@ -152,20 +64,4 @@ strong{
   width:    1px;
   height:   1px;
   overflow: hidden;
-}
-
-.input-field-container{
-  position:relative;
-}
-.input-field {
-  position:relative;
-}
-
-.recipe-section-header{
-  font-size: 1.5em;  
-  margin-top:.5em;
-  text-align:center;
-  text-transform: capitalize;
-  font-weight:bold;
-  color: #151515;
 }

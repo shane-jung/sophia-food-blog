@@ -10,23 +10,32 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { set } from "mongoose";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Button, Container, Image } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import { shallowEqual, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios, { axiosPrivate } from "../../api/axios";
 
+import Form from 'react-bootstrap/Form';
+
 export default function ImageUpload() {
   const recipeId = useSelector(
-    (state: any) => state.recipe._id,
-    (a, b) => a == b
-  );
+    (state: any) => state.recipe._id,);
   const viewMode = useSelector((state: any) => state.user.viewMode);
-  const initialUrl = useSelector((state: any) => state.recipe.imageUrl);
+  const initialUrl = useSelector((state: any) => state.recipe.imageUrl);  
   const [image, setImage] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [imagePreview, setImagePreview] = useState<File>();
-  const [imageSelectionOpen, setImageSelectionOpen] = useState(false);
   const dispatch = useDispatch();
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => {
+    setImagePreview(undefined);
+    setShow(false);
+  }
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     setImageUrl(initialUrl);
@@ -39,42 +48,38 @@ export default function ImageUpload() {
 
   const uploadToS3 = async (event: any) => {
     event.preventDefault();
-    if (!imagePreview) return;
     const signedUrlResponse = await axios.get("/recipes/sign-s3", {
       params: {
-        fileName: imagePreview.name,
-        fileType: imagePreview.type,
+        fileName: imagePreview?.name,
+        fileType: imagePreview?.type,
       },
     });
 
     const { signedRequest, url } = signedUrlResponse.data;
-
-    // Uploading the image file to S3 using the signed URL
     try {
-      console.log(imagePreview, signedRequest);
       const result = await axios.put(signedRequest, imagePreview, {
-        headers: { "Content-Type": imagePreview.type },
+        headers: { "Content-Type": imagePreview?.type },
       });
-      console.log("Response from s3", result);
+      console.log(result, url);
     } catch (err) {
       console.log(err);
     }
 
-    try {
-      console.log(recipeId);
-      const updateResponse = await axiosPrivate.put(`/recipes/${recipeId}`, {
-        imageUrl: url,
-      });
-      console.log(updateResponse);
-    } catch (err) {
-      console.log(err);
-    }
-
-    dispatch(setRecipe({ imageUrl: url }));
+    // try {
+    //   console.log(recipeId);
+    //   const updateResponse = await axiosPrivate.put(`/recipes/${recipeId}`, {
+    //     imageUrl: url,
+    //   });
+    //   console.log(updateResponse);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    console.log("SETTING RECIPE")
+    dispatch(setRecipe({ type: "set-recipe", recipe: { imageUrl: url } }))
     setImage(imagePreview);
+    console.log("SETTING IMAGE URL" + url);
     setImageUrl(url);
-    setImagePreview(undefined);
-    setImageSelectionOpen(false);
+    handleClose();
   };
 
   async function removeImage(event: any) {
@@ -90,79 +95,37 @@ export default function ImageUpload() {
   }
 
   return (
-    <div className="header-image-container">
-      {viewMode != "VIEWING" && (
-        <>
-          <button
-            className="icon-button select-image"
-            onClick={(e) => {
-              e.preventDefault();
-              setImageSelectionOpen(true);
-            }}
+    <div className="text-center" style={{position:"relative"}}>
+      {viewMode != "VIEWING" &&
+          <Button
+            onClick={handleShow}
+            variant={"secondary"}
+            className= "image-upload-button"
           >
             <FontAwesomeIcon icon={faImage} />
-          </button>
+          </Button>
+      }
 
-          {imageUrl != "" && (
-            <button onClick={removeImage} className="icon-button remove-image">
-              <FontAwesomeIcon icon={faXmark} />
-            </button>
-          )}
-        </>
-      )}
-
-      <img
+      <Image
         src={imageUrl || "https://recipe-blog-data.s3.amazonaws.com/null.png"}
-        className="header-image"
+        className="img-fluid recipe-header-image mb-2"
       />
 
-      <dialog className="image-selection" open={imageSelectionOpen}>
-        <button
-          className="icon-button cancel"
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            setImageSelectionOpen(false);
-            setImagePreview(undefined);
-          }}
-        >
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-        <strong>Image Upload</strong>
-
-        <div className="image-preview-container">
-          {imagePreview ? (
-            <img
-              src={URL.createObjectURL(imagePreview)}
-              alt=""
-              className="image-preview"
-            />
-          ) : (
-            <>
-              <input
-                id="file-input"
-                type="file"
-                className="drop-image offscreen"
-                onChange={fileSelect}
-              />
-              <label htmlFor="file-input" className="container">
-                <FontAwesomeIcon icon={faUpload} className="upload-image" />
-                <p>
-                  <strong>Choose a file</strong> or drag and drop.
-                </p>
-              </label>
-            </>
-          )}
-        </div>
-        {imagePreview && (
-          <div className="image-upload-info">
-            <p>Filename: {imagePreview?.name}</p>
-            <button className="icon-button confirm-image" onClick={uploadToS3}>
-              <FontAwesomeIcon icon={faCheck} />
-            </button>
-          </div>
-        )}
-      </dialog>
+      <Modal show = {show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Image Upload</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          
+          <Form.Label>
+            Upload a file
+          </Form.Label>
+          <Form.Control type="file" onChange={ (event:any) => setImagePreview(event?.target.files[0])}/>
+          <Button variant="success" onClick={uploadToS3} className="mt-3">
+              Upload Photo <FontAwesomeIcon icon={faCheck} />
+          </Button>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

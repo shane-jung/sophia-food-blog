@@ -49,7 +49,7 @@ export const recipeSlice = createSlice({
   initialState: initialState,
   reducers: {
     setRecipe(state = initialState, action:PayloadAction<any>){
-      // console.log(action.payload.type);
+      console.log("HERE", action.payload);
       switch (action.payload.type){
         case "set-recipe":
           return {

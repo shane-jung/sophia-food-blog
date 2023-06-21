@@ -1,14 +1,21 @@
 import { _viewMode } from "@/client/enums";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Form from "react-bootstrap/Form";
+import { FloatingLabel } from "react-bootstrap";
+
+const dictionary: {[key:string]: string} = {
+  "title": "display-3 ",
+  "cardTitle": "h2",
+  "subtitle": "lead",
+  "titleId": "h3",
+};
 
 interface SimpleTextRecipeComponentProps {
-  className: string;
   initialValue: string;
   name: string;
 }
 export default function SimpleTextRecipeComponent({
-  className,
   initialValue,
   name,
 }: SimpleTextRecipeComponentProps) {
@@ -23,20 +30,25 @@ export default function SimpleTextRecipeComponent({
   return (
     <>
       {viewMode !== "VIEWING" ? (
-        <div className="input-field-container">
-          {/* <label className= "input-field-label">{name}</label> */}
-          <input
+        // <div className="input-field-container">
+        <FloatingLabel label = {name} className="text-capitalize">
+          <Form.Control
             name={name}
             placeholder={"Recipe " + name}
-            className={className + " input-field"}
+            className={dictionary[name] + " mb-2"}
             defaultValue={initialValue}
             readOnly={viewMode == "VIEWING"}
             required
+
           />
-        </div>
+          </FloatingLabel>
+        // </div>
       ) : (
-        <div className={className}>{initialValue}</div>
+        <div 
+          className={ dictionary[name]  }
+        >{initialValue}</div>
       )}
     </>
   );
 }
+

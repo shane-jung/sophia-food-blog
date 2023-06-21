@@ -9,16 +9,17 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 
 import * as emoji from "node-emoji";
+import { Container } from "react-bootstrap";
+
+import Form from "react-bootstrap/Form";
 
 export default function Tags() {
   const dispatch = useDispatch();
   // const recipeId = useSelector((state:any) => state.recipe._id);
   const viewMode = useSelector((state: any) => state.user.viewMode);
   const savedTags = useSelector((state: any) => state.recipe.tags);
-  const selectedTags = useSelector((state: any) => state.recipe.selectedTags);
   const [selected, setSelected] = useState<any>([]);
   const [options, setOptions] = useState<any>([]);
-  const [tagRender, setTagRender] = useState<any>([]);
 
   const { data } = useQuery({
     queryKey: ["tags"],
@@ -81,26 +82,9 @@ export default function Tags() {
     }
   }
 
-  useEffect(() => {
-    setTagRender(
-      selected.map((tag: any) => {
-        return (
-          <div key={tag._id}>
-            <Link
-              className="recipe-tag"
-              to={`/category/${tag.label.toLowerCase().replace(" ", "-")}`}
-            >
-              {emoji.emojify(tag.label)}
-            </Link>
-          </div>
-        );
-      })
-    );
-  }, [selected]);
-
   return viewMode != "VIEWING" ? (
-    <div className="tags-select-container">
-      <label>Tags</label>
+    <Container className="mb-4" style={{ zIndex: "200", position: "relative" }}>
+      <Form.Label>Tags</Form.Label>
       <CreatableSelect
         name="tags"
         closeMenuOnSelect={false}
@@ -110,13 +94,28 @@ export default function Tags() {
         onCreateOption={createOption}
         value={selected}
       />
-    </div>
+    </Container>
   ) : (
-    <div className="recipe-tags">{tagRender}</div>
+
+      selected.map((tag: any) => (
+        <Tag tag={tag} key={tag._id} />
+      ))
   );
 }
 
 async function getAllTags({ queryKey }: any) {
   const { data } = await axios.get(`/tags`);
   return data;
+}
+
+function Tag({ tag }: any) {
+  return (
+    <Link
+      to={`/category/${tag.label.toLowerCase().replace(" ", "-")}`}
+      className="btn btn-secondary mx-1 text-capitalize text-light"
+      key={tag._id}
+    >
+      {emoji.emojify(tag.label)}
+    </Link>
+  );
 }

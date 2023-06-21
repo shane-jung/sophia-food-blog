@@ -7,9 +7,8 @@ import { useQuery } from "react-query";
 
 export default function CommentsList({setCommentsLength } : any){
   const recipeId = useSelector((state: any) => state.recipe._id);
-  const queryKey = ["comments", recipeId];
   const { data, status } = useQuery({
-    queryKey: queryKey,
+    queryKey:  ["comments", recipeId],
     queryFn: retrieveComments,
   });
 
@@ -37,7 +36,8 @@ export default function CommentsList({setCommentsLength } : any){
 }
 
 async function retrieveComments({ queryKey }: any) {
-  // console.log(queryKey);
+  console.log(queryKey);
+  if(queryKey[1] === '') return [];
   const recipeId = queryKey[1];
   const response = await axios.get(`/recipes/${recipeId}/comments`);
   const data = response.data;

@@ -97,6 +97,27 @@ const tagsController = {
         }
       },
 
+      removeRecipeFromTags: async (req: Request, res: Response) => {
+        const { recipeId, tags } = req.body;
+        const tagIdsObjectIds = tags.map((tag: any) => new ObjectId(tag));
+        console.log(recipeId, tagIdsObjectIds)
+        try {
+          const db = await connectToDatabase();
+          const response = await db
+            .collection("Tags")
+            .updateMany(
+              { _id: { $in: tagIdsObjectIds} },
+              { $pull: { recipes: new ObjectId(recipeId)} }
+            );
+          console.log(response);
+          return res.json(response);
+        } catch (error) {
+          console.error(`Error adding recipe to tags in addRecipeToTags: ${error}`);
+          throw error;
+        }
+      },
+
+
       setTagOrder: async (req: Request, res: Response) => {
         console.log(req.body);
         const { newOrder } = req.body;

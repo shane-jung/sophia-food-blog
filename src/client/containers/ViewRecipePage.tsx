@@ -15,6 +15,7 @@ export default function ViewRecipePage() {
 
   useEffect(() => {
     dispatch(setViewMode("viewing-recipe"));
+    console.log(fetchedRecipe); 
     dispatch(setRecipe({ type: "set-recipe", recipe: { ...fetchedRecipe.recipe } }));
   }, [fetchedRecipe]);
 

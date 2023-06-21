@@ -14,6 +14,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { handleLogin } from "../../slices/user";
 
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import { Button, Container } from "react-bootstrap";
+
 export default function LoginPage() {
   const { auth, setAuth } = useAuth();
 
@@ -71,46 +75,56 @@ export default function LoginPage() {
     }
   };
   return (
-    <>
+    <Container>
       <Logo />
-      <form className="user-form" onSubmit={handleSubmit}>
-        <p
+      <Form className="user-form" onSubmit={handleSubmit}>
+        <Form.Text
           ref={errRef}
           id="error-message"
           className={errMessage ? "error-message" : "offscreen"}
           aria-live="assertive"
         >
           {errMessage}
-        </p>
+        </Form.Text>
         <h1>Login</h1>
-        <label> Email Address</label>
-        <input
-          type="email"
-          id="email"
-          ref={emailRef}
-          name="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoComplete="username"
-          required
-        />
-        <label>Password</label>
-        <input
-          name="password"
-          id="password"
-          placeholder="Password"
-          type="password"
-          minLength={8}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
-        <button>Submit</button>
-      </form>
-      <p>
-        Don't have an account? <Link to="/users/register">Make an Account</Link>
+        <FloatingLabel 
+          className="pb-3"
+          label = "Email Address" 
+          controlId="email">
+          <Form.Control
+            type="email"
+            id="email"
+            ref={emailRef}
+            name="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+            required
+          />
+        </FloatingLabel>
+        
+        <FloatingLabel 
+          label = "Password" 
+          controlId="password"
+          className="pb-3"
+        >
+          <Form.Control
+            name="password"
+            id="password"
+            placeholder="Password"
+            type="password"
+            minLength={8}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+          />
+        </FloatingLabel>
+        <Button variant= "success" className="mx-auto" type='submit'>Submit</Button>
+      </Form>
+      <p className="text-center">
+        Don't have an account? <Link to="/users/register">Create an Account</Link>
       </p>
-    </>
+    </Container>
   );
 }

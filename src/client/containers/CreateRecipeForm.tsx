@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
 import { setRecipe } from "../slices/recipe";
 import { setViewMode } from "../slices/user";
 import queryClient from "../utils/queryClient";
@@ -13,10 +15,14 @@ export default function CreateRecipeForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const selectedTags = useSelector((state: any) => state.recipe.selectedTags);
+  const imageUrl = useSelector((state: any) => state.recipe.imageUrl);
 
+    useEffect(()=>{
+        console.log(imageUrl);
+    }, [imageUrl])
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) =>
-      await axiosPrivate.post("/recipes/create", payload, {
+      await axiosPrivate.post("/recipes", payload, {
         withCredentials: true,
       }),
     onSuccess: (response) => {
@@ -50,33 +56,27 @@ export default function CreateRecipeForm() {
   ) => {
     event.preventDefault();
     console.log("here");
+    console.log(event.target);
     const data = new FormData(event.currentTarget);
     // if(!verifyInputs(data)) return;
     data.set("dateEdited", new Date().toISOString());
     data.set("tags", selectedTags);
     data.set("dateCreated", new Date().toISOString());
+    data.set("imageUrl", imageUrl);
     // data.set("author", sampleAuthor.toString());
     recipeMutation.mutate(data);
   };
 
   return (
     <form
-      className="recipe-form"
+      className="container"
       method="POST"
       encType="multipart/form-data"
       onSubmit={handleRecipeCreate}
+      id="recipe-form"
     >
+      <RecipeToolbar />
       <RecipeContainer />
     </form>
   );
-}
-
-function verifyInputs(data: FormData) {
-  for (const [field, value] of data) {
-    if (!value) {
-      console.log(`Error: ${field} field cannot be empty.`);
-      return false;
-    }
-  }
-  return true;
 }

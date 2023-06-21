@@ -13,6 +13,7 @@ import { useEffect } from "react";
 export default function RecipePage() {
   const { auth } = useAuth();
   const recipe = useSelector((state: any) => state.recipe);
+  const viewMode = useSelector((state:any) => state.user.viewMode)
 
   useEffect(() => { 
     document.title = recipe.title + " - Once Upon a Thyme";
@@ -22,14 +23,13 @@ export default function RecipePage() {
     <>
       {auth?.user?.roles?.includes(8012) ? (
         <>
-          <RecipeToolbar />
           <RecipeForm />
         </>
       ) : (
         <RecipeContainer />
       )}
 
-      {recipe.titleId && <Comments />}
+      {viewMode=="VIEWING" && <Comments />}
     </>
   );
 }

@@ -4,25 +4,37 @@ import { useQuery } from "react-query";
 import axios from "../api/axios";
 import { useEffect, useState } from "react";
 
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Button } from "react-bootstrap";
+
 export function RecipesCategoryBlock({ tag }: { tag: any }) {
   const { data: fetchedRecipeIds } = useQuery(["recipes", tag.value], () =>
     fetchRecipes({ tag: tag.value!.replace("-", " ") })
   );
 
   return (
-    <div key={tag._id} className ="recipe-category-block">
-      <h1 className="recipe-category-header">
-        <span className="tag-value">{tag.heading || (tag.value +  " Recipes")}</span> 
-      </h1>
-      <ul className="recipes-grid">
-        {fetchedRecipeIds?.data?.slice(0, 8).map((recipeId: string, index: any) => (
-          <RecipeThumbnail key={index} recipeId={recipeId} />
-        ))}
-      </ul>
-       <Link to={`/category/${tag.value.replace(" ", "-")}`} className="more-recipes">
+    <>
+      <h2 className = "text-center mt-5 mb-3">
+        {tag.heading}
+      </h2>
+      <Row className="text-center">
+          {fetchedRecipeIds?.data?.slice(0, 8).map((recipeId: string, index: any) => (
+            <RecipeThumbnail key={index} recipeId={recipeId} />
+          ))} 
+      </Row>
+      
+       <Button 
+          variant="outline-secondary"
+          href={`/category/${tag.value.replace(" ", "-")}`}
+          className="text-capitalize text-center text-decoration-none fs-5 mx-auto d-block"
+          style= {{width: "fit-content"}}
+
+        >
           View all {tag.value} recipes
-        </Link>
-    </div>
+        </Button>
+    </>
   );
 }
 
