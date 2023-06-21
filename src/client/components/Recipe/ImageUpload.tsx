@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { set } from "mongoose";
 import { useEffect, useRef, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Image } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import { shallowEqual, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -106,9 +106,9 @@ export default function ImageUpload() {
           </Button>
       }
 
-      <img
+      <Image
         src={imageUrl || "https://recipe-blog-data.s3.amazonaws.com/null.png"}
-        className="img-fluid recipe-header-image"
+        className="img-fluid recipe-header-image mb-2"
       />
 
       <Modal show = {show} onHide={handleClose}>

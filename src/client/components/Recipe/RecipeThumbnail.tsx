@@ -25,7 +25,7 @@ export default function RecipeThumbnail({recipeId} : {recipeId: string}) {
         className= "text-decoration-none text-center"
       >
           <Image src={recipe?.imageUrl} alt=""  thumbnail/>
-          {recipe?.title}
+          <div className="text-center">{recipe?.title}</div>
       </Link>
     </Container>
     </Col>

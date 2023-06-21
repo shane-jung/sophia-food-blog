@@ -17,6 +17,25 @@ export default function HomePage() {
  
   return (
     <Container>
+      <Container className={"landing-block mb-3"}> 
+        <h1 className="text-center">Welcome to Once Upon A Thyme....</h1>
+        <h3 className="text-center"></h3>  
+        <p>
+          Once Upon a Thyme is my personal recipe collection. 
+          I have been collecting recipes for years and I wanted to have a place to store them all. 
+          I also wanted to be able to share them with my friends and family. I hope you enjoy them as much as I do!
+        </p>
+        <div className="text-center">
+          <NavLink to="/recipes" className="btn btn-primary btn-lg mt-3">
+            View Recipes
+          </NavLink>
+        </div>
+
+
+      </Container>
+      
+
+
       <Carousel>
         <Carousel.Item>
           <Image src = {fetchedRecipes[8]?.imageUrl} className="image-carousel" />

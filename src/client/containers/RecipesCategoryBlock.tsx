@@ -24,7 +24,7 @@ export function RecipesCategoryBlock({ tag }: { tag: any }) {
             <RecipeThumbnail key={index} recipeId={recipeId} />
           ))} 
       </Row>
-        
+      
        <Button 
           variant="outline-secondary"
           href={`/category/${tag.value.replace(" ", "-")}`}

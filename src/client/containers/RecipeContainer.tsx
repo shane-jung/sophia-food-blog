@@ -41,19 +41,22 @@ export default function RecipeContainer() {
       </Row>
       <ImageUpload />
       
-      <Tags />
+      <Container>
+        <Tags />
 
       
-       { viewMode == "VIEWING"  &&
+        { viewMode == "VIEWING"  &&
         <>
 
-              <Link className="btn btn-primary mx-1" to="#comments" >
+              <Link className="btn btn-primary mx-1 text-light" to="#comments" >
               {recipe.comments?.length || 0} comments
               </Link>
-              <Link className="btn btn-primary mx-1" to="#recipe">
+              <Link className="btn btn-primary mx-1 text-light" to="#recipe">
                 Jump to Recipe
               </Link>
         </>}
+      </Container>
+      
       
         
 

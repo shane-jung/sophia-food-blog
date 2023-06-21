@@ -48,16 +48,24 @@ function AddRecipe(){
 function EditButton() {
   const viewMode = useSelector((state: any) => state.user.viewMode);
   const dispatch = useDispatch();
-  const tooltipText = viewMode == "VIEWING" ? "Edit Recipe" : "Cancel";
+  const [buttonText, setButtonText] = useState('Edit Recipe');
+  const [buttonIcon, setButtonIcon] = useState(faEdit);
 
   const toggleViewMode = (e: any) => {
     e.preventDefault();
+    if(viewMode == "VIEWING"){
+      setButtonText("Cancel");
+      setButtonIcon(faCancel);
+    } else {
+      setButtonText("Edit Recipe");
+      setButtonIcon(faEdit);
+    }
     const action = viewMode == "VIEWING" ? "editing-recipe" : "viewing-recipe";
     dispatch(setViewMode(action));
   };
 
   return (
-    <IconButton handleClick={toggleViewMode} faIcon={faEdit} name={tooltipText} />
+    <IconButton handleClick={toggleViewMode} faIcon={buttonIcon} name={buttonText} />
   );
 }
 
