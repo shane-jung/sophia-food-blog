@@ -5,6 +5,7 @@ import {
   faCancel,
   faCog,
   faEdit,
+  faPlus,
   faSave,
   faTrash,
   faTrashAlt,
@@ -15,17 +16,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { setViewMode } from "@/client/slices/user";
 import { useMutation } from "react-query";
 import queryClient from "@/client/utils/queryClient";
+import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export default function RecipeToolbar() {
   return (
     <div className="recipe-toolbar">
-      <Settings/>
+      <AddRecipe />
+      <Settings />
       <EditButton />
       <SaveButton />
       <DeleteButton />
     </div>
   );
 }
+
+function AddRecipe(){
+  const navigate = useNavigate();
+  function handleClick (){
+    navigate('/recipes/create');
+  }
+  return (
+    <IconButton
+      handleClick={handleClick}
+      name= {"Create New Recipe"}
+      faIcon = {faPlus}
+    />
+  )
+}
+
 
 function EditButton() {
   const viewMode = useSelector((state: any) => state.user.viewMode);
@@ -39,17 +57,7 @@ function EditButton() {
   };
 
   return (
-    <button
-      className="icon-button round edit-button simple-button"
-      type="button"
-      onClick={toggleViewMode}
-    >
-      <FontAwesomeIcon
-        className={"edit-icon "}
-        icon={viewMode == "EDITING" ? faXmark : faEdit}
-      />
-      <span className="icon-button-tooltip">{tooltipText}</span>
-    </button>
+    <IconButton handleClick={toggleViewMode} faIcon={faEdit} name={tooltipText} />
   );
 }
 
@@ -62,17 +70,11 @@ function SaveButton() {
     else setButtonText("Save");
   }, [viewMode]);
 
+  
+
   return (
-    <button
-      className={
-        "icon-button round save-button" +
-        (viewMode == "VIEWING" ? " active" : "")
-      }
-      type="submit"
-    >
-      <FontAwesomeIcon icon={faSave} className="save-icon" />
-      <span className="icon-button-tooltip">Save Changes</span>
-    </button>
+    <IconButton handleClick={null} faIcon={faSave} name={buttonText} />
+
   );
 }
 
@@ -84,14 +86,27 @@ function DeleteButton() {
     mutationFn: async () => await axiosPrivate.delete(`/recipes/${recipe._id}`),
     onSuccess: (response) => {
       console.log(response);
+
+
       navigate("/recipes", { replace: true });
       queryClient.invalidateQueries(["recipes"]);
     },
   });
+  const tagsMutation = useMutation({
+      mutationFn  : async () => await axiosPrivate.post(`/tags/removeRecipeFromTags`, {tags: recipe.tags, recipeId: recipe._id} ),
+      onSuccess: (response:any) => {  
+        // console.log(response);
+        mutation.mutate();
+
+        queryClient.invalidateQueries(["tags"]);
+      }
+  });
+
+
 
   async function handleDelete() {
-    const result = await axiosPrivate.delete(`/recipes/${recipe._id}`); //TODO: Add recipe ID
-    if (result.status === 200) navigate("/recipes", { replace: true });
+    tagsMutation.mutate(); 
+    // if (result.status === 200) navigate("/recipes", { replace: true });
   }
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -104,28 +119,30 @@ function DeleteButton() {
   }
 
   return (
-    <button className="icon-button round delete-button" onClick={handleClick}>
-      <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" />
-      <span className="icon-button-tooltip">Delete this recipe</span>
-    </button>
+    <IconButton
+      handleClick={handleClick}
+      name={"Delete Recipe"}
+      faIcon={faTrashAlt}
+    />
   );
 }
 
-
-
 function Settings() {
-  const recipe = useSelector((state: any) => state.recipe);
   const navigate = useNavigate();
-
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
-    navigate('/admin')
-
+    navigate("/admin");
   }
-
   return (
-    <button className="icon-button round settings-button" onClick={handleClick}>
-      <FontAwesomeIcon icon={faCog} className="settings-icon" />
-      <span className="icon-button-tooltip">Settings</span>
-    </button>
+    <IconButton handleClick={handleClick} faIcon={faCog} name={"Settings"} />
+  );
+}
+
+function IconButton({ handleClick, faIcon, name }: any) {
+  return (
+    <OverlayTrigger placement={"left"} overlay={<Tooltip>{name}</Tooltip>}>
+      <Button variant={"secondary"} className="mt-2 icon-button round p-4 text-light" onClick={handleClick} type="submit">
+        <FontAwesomeIcon icon={faIcon} />
+      </Button>
+    </OverlayTrigger>
   );
 }

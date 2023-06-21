@@ -6,6 +6,14 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { handleLogout } from "../../slices/user";
 import { useEffect } from "react";
 
+import Col from "react-bootstrap/Col";
+import Button  from "react-bootstrap/Button";
+import Navbar from "react-bootstrap/Navbar";
+import Dropdown from "react-bootstrap/Dropdown";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { Container } from "react-bootstrap";
+
 export default function LoginButton() {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
@@ -39,13 +47,21 @@ export default function LoginButton() {
     navigate(from, { replace: true });
   }
   return auth.isAuthenticated ? (
-    <>
-      
-      <p>Welcome, {username}!</p>
-      <button className="simple-button" onClick={logout}>
-        Logout
-      </button>
-    </>
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <span>Welcome, {username}!</span>
+          <FontAwesomeIcon icon= {faUser} className="ml-5 " />
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+          <Dropdown.Item href="#/action-2" >Another action</Dropdown.Item>
+          <Dropdown.Divider />
+          <Dropdown.Item onClick={logout} className="font-weight-bold danger">Logout</Dropdown.Item>
+        </Dropdown.Menu>
+        
+      </Dropdown>
+
   ) : (
     <Link
       to="/users/login"

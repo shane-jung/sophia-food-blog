@@ -20,8 +20,8 @@ export default function DateComponent(props: DateComponentProps) {
     dateOptions
   );
   return (
-    <span className="recipe-dates">
-      Created {formattedDateCreated} - Edited {formattedDateEdited}
+    <span className="text-center center">
+      {formattedDateCreated}
     </span>
   );
 }

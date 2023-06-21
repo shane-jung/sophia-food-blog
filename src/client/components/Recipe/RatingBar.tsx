@@ -5,7 +5,9 @@ import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 import axios from "@/client/api/axios";
+
 import { Rating } from "@/client/types";
+import Container from "react-bootstrap/Container";
 
 interface RatingStarInterface {
   index: number;
@@ -84,7 +86,7 @@ export default function RatingBar({
       />
     );
   });
-  return <div className="rating-bar"> {stars} </div>;
+  return <Container className="text-center"> {stars} </Container>;
 }
 
 export function StaticRatingBar() {
@@ -104,7 +106,7 @@ export function StaticRatingBar() {
   return (
     <>
       <RatingBar initialRating={Math.round(averageRating)} />
-      <div className="rating-bar-description">
+      <div className="text-center">
         ({averageRating.toFixed(2)} from {numberOfRatings} ratings)
       </div>
     </>

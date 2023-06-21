@@ -6,13 +6,15 @@ import queryClient from "../utils/queryClient";
 import { useDispatch } from "react-redux";
 import { setViewMode } from "../slices/user";
 import { setRecipe } from "../slices/recipe";
+import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
 
 export default function EditRecipeForm() {
   const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const recipeId = useSelector((state: any) => state.recipe._id);
   const selectedTags = useSelector((state: any) => state.recipe.selectedTags);
-  
+  const imageUrl = useSelector((state: any) => state.recipe.imageUrl);
+
   const recipeMutation = useMutation({
     mutationFn: async (recipe: any) =>
       await axiosPrivate.put(`/recipes/${recipeId}`, recipe, {
@@ -49,34 +51,27 @@ export default function EditRecipeForm() {
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    // console.log('here');
+    console.log('here');
     const data = new FormData(event.currentTarget);
     data.set("dateEdited", new Date().toISOString());
     console.log(selectedTags);
     data.set("tags", JSON.stringify(selectedTags));
+    data.set('imageUrl', imageUrl);
     recipeMutation.mutate(data);
   };
 
   return (
     <>
       <form
-        className="recipe-form"
+        className="container"
         method="POST"
         encType="multipart/form-data"
         onSubmit={handleRecipeUpdate}
+        name="recipe-form"
       >
+        <RecipeToolbar />
         <RecipeContainer />
       </form>
     </>
   );
-}
-
-function verifyInputs(data: FormData) {
-  for (const [field, value] of data) {
-    if (!value) {
-      console.log(`Error: ${field} field cannot be empty.`);
-      return false;
-    }
-  }
-  return true;
 }

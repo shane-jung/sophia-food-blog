@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import { _viewMode } from "@/client/enums";
 import { useSelector } from "react-redux";
+import Form from "react-bootstrap/Form";
+import { FloatingLabel } from "react-bootstrap";
 
 interface RichTextRecipeComponentProps {
   className: string;
@@ -55,17 +57,20 @@ export default function RichTextRecipeComponent({
   return (
     <>
       {viewMode != "VIEWING" ? (
-        <div className="input-field-container">
-          <label className="recipe-section-header">{name}</label>
-          <ReactQuill
-            readOnly={viewMode == "VIEWING"}
-            defaultValue={initialValue}
-            className={className + " input-field"}
-            theme="snow"
-            modules={modules}
-            formats={formats}
-            onChange={onChange}
-          />
+       <>
+          <Form.Group className="mb-4">
+            <Form.Label className="text-capitalize">
+              {name}
+            </Form.Label>
+            <ReactQuill
+              readOnly={viewMode == "VIEWING"}
+              defaultValue={initialValue}
+              theme="snow"
+              modules={modules}
+              formats={formats}
+              onChange={onChange}
+            />  
+          </Form.Group>
 
           <input
             aria-hidden="true"
@@ -75,12 +80,12 @@ export default function RichTextRecipeComponent({
             value={value || ""}
             placeholder={"Recipe " + name}
           />
-        </div>
+          </>
       ) : (
         <>
-          <h3 className="recipe-section-header">{name}</h3>
+          <h3 className= "text-center text-capitalize">{name}</h3>
           <div
-            className={className}
+            className={"fw-normal text-body-primary lh-lg fs-5"}
             dangerouslySetInnerHTML={{ __html: value || "" }}
           />
         </>

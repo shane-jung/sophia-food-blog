@@ -101,7 +101,12 @@ const recipeController = {
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
-
+      if(result && result.value){
+         await db
+          .collection("Tags")
+          .updateOne({_id: new ObjectId('64921eb1bd1b50d757f00170')}, {$push: {recipes: { $each: [new ObjectId(result?.value?._id)], $position: 0}}})
+      }
+      
       return res.status(200).json({ recipe: result.value });
     } catch (error) {
       console.error(`Error creating recipe in createRecipe: ${error}`);
@@ -137,6 +142,13 @@ const recipeController = {
       const result = await db
         .collection("Recipes")
         .deleteOne({ _id: new ObjectId(req.params.recipeId) });
+
+      if(result){
+          await db
+           .collection("Tags")
+           .updateOne({_id: new ObjectId('64921eb1bd1b50d757f00170')}, {$pull: {recipes: new ObjectId(req.params.recipeId)}})
+       }
+       
       return res.status(200).json({ message: "Recipe deleted successfully" });
     } catch (error) {
       console.error(`Error fetching recipe in deleteRecipe: ${error}`);

@@ -1,10 +1,13 @@
 import axios from "@/client/api/axios";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Button from "react-bootstrap/Button";
 import { useState, useEffect } from "react";
+import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 
-import Loading from "./Loading";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Col, Container, ListGroup, Row } from "react-bootstrap";
 
 
 let timer:NodeJS.Timeout | null = null;
@@ -14,14 +17,14 @@ export default function SearchBar(){
     const [query, setQuery] = useState("");
     const [searchFocus, setSearchFocus] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
-    const [recipes, setResults] = useState([]); // [{title: "cauliflower tacos", id: 1}, {title: "cauliflower tacos", id: 1}
+    const [results, setResults] = useState([]); // [{title: "cauliflower tacos", id: 1}, {title: "cauliflower tacos", id: 1}
     // const regExp = /cauliflower tacos/
 
-        window.onclick = (event:any)=> {
-            if(!event.target.matches(".search-bar *") && searchFocus){
-                setSearchFocus(false);
-            }
-        }
+    window.onclick = (event:any)=> {
+        if(!event.target.matches(".search-bar *")){
+            setSearchFocus(false);
+        } 
+    }
 
     useEffect(()=>{
         if(!query) return setResults([]);
@@ -39,6 +42,7 @@ export default function SearchBar(){
         timer = setTimeout(()=>{
             searchDb(query).then((results)=> { 
                 setResults(results);
+                console.log(results);
             })
         }, 500)
     }
@@ -59,40 +63,39 @@ export default function SearchBar(){
     }
 
     return (
-        <div className = "search-bar" onFocus = {()=> setSearchFocus(true)}
-            >
-            <div className = "search-bar-input">
-                <input type="text" 
+        <Form className="d-flex search-bar" onFocus = {()=> setSearchFocus(true)} >
+            <Form.Control 
+                    type="search" 
+                    className="me-2"
                     onChange={(e)=> setQuery(e.target.value)} 
-                    style={ {"outline": "1px solid black"}}
-                    placeholder = "Search for recipes"
-                    
-                />
-                <button onClick= {(event:any)=>event?.preventDefault()}>
-                    <FontAwesomeIcon icon= {faSearch} />
-                </button>
-            </div>
-            
+                    placeholder = "Search for a recipes"
+                    value={query}
+            />
+            <Button variant= "outline-success" onClick= {(event:any)=>event?.preventDefault()}>
+                    {/* <FontAwesomeIcon icon= {faSearch} /> */} Search
+            </Button>
+            <ListGroup className= "search-results">
 
-            <div className = { "search-results " +( searchFocus ? "focus" : "")} onFocus = {()=> setSearchFocus(true)} >
-                {/* <button onClick = {(event:any)=> { event.preventDefault(); setSearchFocus(false)}}>Close results</button> */}
-                { recipes?.length > 0 ?
-                    recipes.map((recipe: any)=> {
-                        return <div key={recipe.titleId} className = "search-result">    
-                                    <img src={recipe.imageUrl} alt="" />
-                                    <div>
-                                        <Link to= {`/recipes/${recipe.titleId}`} >{recipe.title}</Link>
-                                        <div dangerouslySetInnerHTML={{__html: recipe.description.slice(0, 200) + '...'}}></div>
-                                    </div>
-                                </div>
-                    })
-                    :  
-                    <div className = "search-result">No results found</div>
-                }
-                    { searchLoading &&
-                    <Loading /> }
-            
-            </div>
-        </div>
+                    { searchFocus && results.map((recipe: any)=> {
+                            return <ListGroup.Item key={recipe.titleId}className = "search-result" >  
+
+                                                <Link 
+                                                    to= {`/recipes/${recipe.titleId}`} 
+                                                    className="fs-6 text-decoration-none d-flex align-items-center"
+                                                    onClick = {()=> {setSearchFocus(false); setQuery("")}}
+                                                >
+                                                    <img src={recipe.imageUrl} alt="" className=" mx-3" />
+
+                                                    {recipe.title}
+                                                </Link>
+
+                                        
+                                        {/* <div dangerouslySetInnerHTML={{__html: recipe.description.slice(0, 200) + '...'}}></div> */}
+
+                                    </ListGroup.Item>
+                        })
+                    }
+            </ListGroup>
+        </Form>
     )
 }

@@ -9,6 +9,9 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 
 import * as emoji from "node-emoji";
+import { Container } from "react-bootstrap";
+
+import Form from "react-bootstrap/Form"
 
 export default function Tags() {
   const dispatch = useDispatch();
@@ -85,23 +88,23 @@ export default function Tags() {
     setTagRender(
       selected.map((tag: any) => {
         return (
-          <div key={tag._id}>
             <Link
-              className="recipe-tag"
               to={`/category/${tag.label.toLowerCase().replace(" ", "-")}`}
+              className= "btn btn-outline-primary mx-1 text-capitalize"
+              key={tag._id}
             >
               {emoji.emojify(tag.label)}
             </Link>
-          </div>
         );
       })
     );
   }, [selected]);
 
   return viewMode != "VIEWING" ? (
-    <div className="tags-select-container">
-      <label>Tags</label>
+    <Container className="mb-4" style={{zIndex: '200', position:'relative'}}>
+      <Form.Label>Tags</Form.Label>
       <CreatableSelect
+
         name="tags"
         closeMenuOnSelect={false}
         isMulti
@@ -110,9 +113,9 @@ export default function Tags() {
         onCreateOption={createOption}
         value={selected}
       />
-    </div>
+    </Container>
   ) : (
-    <div className="recipe-tags">{tagRender}</div>
+    <Container className="my-2">{tagRender}</Container>
   );
 }
 

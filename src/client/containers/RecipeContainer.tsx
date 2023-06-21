@@ -2,50 +2,60 @@ import { Recipe, EmptyRecipe } from "@/client/types";
 import AuthorSnippet from "../components/Recipe/AuthorSnippet";
 import SimpleTextRecipeComponent from "../components/Recipe/Form/SimpleTextRecipeComponent";
 import RichTextRecipeComponent from "../components/Recipe/Form/RichTextRecipeComponent";
-
 import { _viewMode } from "../enums";
 import TitleId from "../components/Recipe/Form/TitleID";
-
-interface RecipeContainerProps {
-  recipe: Recipe;
-}
-
 import RatingBar, { StaticRatingBar } from "../components/Recipe/RatingBar";
 import DateComponent from "../components/Recipe/DateComponent";
 import { useSelector } from "react-redux";
 import ImageUpload from "../components/Recipe/ImageUpload";
 import Tags from "../components/Recipe/Tags";
-import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
+import { Link } from "react-router-dom";
+import Container from "react-bootstrap/Container"
+import { Breadcrumb, Col, Row } from "react-bootstrap";
 
 export default function RecipeContainer() {
   const viewMode = useSelector((state: any) => state.user.viewMode);
   const recipe = useSelector((state: any) => state.recipe);
-  // console.log(recipe.ingredients);
   return (
-    <div className="recipe-container">
-      <div className="recipe-header">
-        <ImageUpload />
-        <SimpleTextRecipeComponent
-          name="title"
-          className="recipe-title"
-          initialValue={recipe.title}
-        />
 
-        {viewMode == "VIEWING" && (
-          <>
-            <AuthorSnippet author={recipe.author} />
-            <StaticRatingBar />
-            <a className="page-link" href="#comments">
+    <Container>
+      <Breadcrumb>
+      <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>Home</Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/recipes" }}>
+          Recipes
+        </Breadcrumb.Item>
+      <Breadcrumb.Item active>{recipe.title}</Breadcrumb.Item>
+      </Breadcrumb>
+      <Row className = "align-items-center justify-content-around my-4">
+        <Col xs= {8}>
+          <SimpleTextRecipeComponent name="title" initialValue={recipe.title} />
+          <SimpleTextRecipeComponent
+            name="subtitle"
+            initialValue={recipe.subtitle}
+          />
+          { viewMode == "VIEWING" && <AuthorSnippet author={recipe.author} /> } 
+        </Col>
+        <Col xs={3}>
+          { viewMode == "VIEWING" &&  <StaticRatingBar /> }
+        </Col>
+      </Row>
+      <ImageUpload />
+      
+      <Tags />
+
+      
+       { viewMode == "VIEWING"  &&
+        <>
+
+              <Link className="btn btn-primary mx-1" to="#comments" >
               {recipe.comments?.length || 0} comments
-            </a>
-            <a className="page-link" href="#recipe">
-              Jump to Recipe
-            </a>
-          </>
-        )}
-        <Tags />
-      </div>
-      {/* <SimpleTextRecipeComponent name="subtitle" className = "recipe-subtitle" initialValue = {recipe.subtitle} /> */}
+              </Link>
+              <Link className="btn btn-primary mx-1" to="#recipe">
+                Jump to Recipe
+              </Link>
+        </>}
+      
+        
 
       {viewMode == "CREATING" && <TitleId value={recipe.titleId} />}
       <RichTextRecipeComponent
@@ -53,11 +63,10 @@ export default function RecipeContainer() {
         className="recipe-background"
         initialValue={recipe.background}
       />
-      <div id="recipe" className="recipe-card">
+      <div id="recipe" className="container-sm\">
         <div className="header">
           <SimpleTextRecipeComponent
             name="cardTitle"
-            className="recipe-card-title"
             initialValue={recipe.cardTitle}
           />
           {viewMode == "VIEWING" && (
@@ -84,6 +93,6 @@ export default function RecipeContainer() {
           initialValue={recipe.directions}
         />
       </div>
-    </div>
+    </Container>
   );
 }
