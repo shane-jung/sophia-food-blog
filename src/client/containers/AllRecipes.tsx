@@ -21,9 +21,8 @@ export default function AllRecipes() {
       <Col xs={10} className="mb-3 mx-auto text-center">
 
         {fetchedTags?.map((tag: any) => (
-          <LinkContainer to = {`/category/${tag.value.replace(" ", "-")}`}>
+          <LinkContainer key={tag._id} to = {`/category/${tag.value.replace(" ", "-")}`}>
             <Button
-              key={tag._id}
               variant="secondary" 
               size="sm"
               className= "text-capitalize mx-1 my-1 text-light"

@@ -24,7 +24,7 @@ export default function LoginButton() {
     shallowEqual
   );
   useEffect(() => {
-    // console.log("USERNAME CHANGED: ", username)
+    console.log(auth);
   }, [username]);
   const dispatch = useDispatch();
 
@@ -52,10 +52,10 @@ export default function LoginButton() {
           <span>Welcome, {username}!</span>
           <FontAwesomeIcon icon= {faUser} className="ml-5 " />
         </Dropdown.Toggle>
-
         <Dropdown.Menu>
-          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-          <Dropdown.Item href="#/action-2" >Another action</Dropdown.Item>
+          { auth?.user?.roles?.includes(8012) &&
+            <Dropdown.Item href="/admin" >Manage Site</Dropdown.Item>
+          }
           <Dropdown.Divider />
           <Dropdown.Item onClick={logout} className="font-weight-bold danger">Logout</Dropdown.Item>
         </Dropdown.Menu>

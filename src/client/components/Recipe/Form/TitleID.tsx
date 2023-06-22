@@ -23,22 +23,22 @@ export default function TitleId({ value }: { value: string }) {
             readOnly={false}
           />
         </FloatingLabel>
-        <OverlayTrigger
-          placement={"top"}
-          overlay={
-            <Tooltip >
-              The Title ID is the string that appears at the end of a URL. For
-              example, the "cauliflower-tacos" in
-              wastingmythyme.com/recipes/cauliflower-tacos. Keep it short and
-              descriptive. The Title ID should be unique. Don't use any special
-              characters, aside from hyphens that should separate words.
-            </Tooltip>
-          }
-        >
-          <Button variant="secondary" className= "text-light" style ={{height: '100%', }}>
-            <FontAwesomeIcon icon={faQuestionCircle} />
-          </Button>
-        </OverlayTrigger>
+          <OverlayTrigger
+            placement={"top"}
+            overlay={
+              <Tooltip >
+                The Title ID is the string that appears at the end of a URL. For
+                example, the "cauliflower-tacos" in
+                wastingmythyme.com/recipes/cauliflower-tacos. Keep it short and
+                descriptive. The Title ID should be unique. Don't use any special
+                characters, aside from hyphens that should separate words.
+              </Tooltip>
+            }
+          >
+            <Button variant="secondary" className= "text-light input-group-append" >
+              <FontAwesomeIcon icon={faQuestionCircle} />
+            </Button>
+          </OverlayTrigger>
       </InputGroup>
     )
   );

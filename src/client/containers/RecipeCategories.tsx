@@ -29,8 +29,8 @@ export default function RecipeCategories(){
                 <h1>All Categories</h1>
                 <Row>
                     {
-                        tags.map((tag: any) =>    
-                            <Col xs={3}>
+                        tags.map((tag: any, index:number) =>    
+                            <Col xs={3} key={index}>
                                 <Link to= {`/category/${tag.value}`} className="text-capitalize">{tag.value}</Link>
                             </Col>
                         )

@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
+import RecipeToolbar, { CreateRecipeToolbar } from "../components/Recipe/Form/RecipeToolbar";
 import { setRecipe } from "../slices/recipe";
 import { setViewMode } from "../slices/user";
 import queryClient from "../utils/queryClient";
@@ -75,7 +75,7 @@ export default function CreateRecipeForm() {
       onSubmit={handleRecipeCreate}
       id="recipe-form"
     >
-      <RecipeToolbar />
+      <CreateRecipeToolbar />
       <RecipeContainer />
     </form>
   );

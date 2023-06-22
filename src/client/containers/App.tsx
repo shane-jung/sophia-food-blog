@@ -19,8 +19,8 @@ import { Suspense } from "react";
 import CreateRecipePage from "./CreateRecipePage";
 import ViewRecipePage from "./ViewRecipePage";
 import RecipesByTag from "./RecipesByTag";
-import Settings from "./SettingsContainer";
 import RecipeCategories from "./RecipeCategories";
+import AdminPage from "./AdminPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -71,7 +71,7 @@ const router = createBrowserRouter(
               }
             />
           </Route>
-          <Route path= "admin" element = {<Settings />} />
+          <Route path= "admin" element = {<Suspense fallback={<Loading />}> <AdminPage /> </Suspense>} />
 
         </Route>
         

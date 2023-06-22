@@ -14,6 +14,12 @@
     &.round{
         border-radius:100%;
     }
+    &.inactive{
+        opacity:.5;
+        background: gray;
+        cursor: default;
+        
+    }
 }
 
 .recipe-thumbnail{
@@ -84,12 +90,18 @@
 
 .search-bar{
     position:relative;
-    .search-results{
-        position: absolute;
-        top: 100%;
-        transform: translateY(10px);
-        background: white;
-        width: 100%;
+    min-width: 300px;
+    
+}
+
+.search-results{
+    position: absolute;
+    top: 100%;
+    transform: translateY(10px);
+    background: white;
+
+    input[type="radio"]{
+        display:none;
     }
 }
 
@@ -142,7 +154,7 @@
 }
 
 .image-carousel{
-    max-height: 400px;
+    height: 400px;
     width:100%;
     object-fit:cover;
 }
@@ -159,4 +171,13 @@
     h5{
         font-size:1.5em;
     }
+}
+
+
+.dragging{
+
+}
+
+.dragover, .tag-list-item:has(.dragover){
+    background-color: lighten($primary, 20%);
 }

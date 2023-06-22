@@ -4,9 +4,12 @@ import connectToDatabase from "../database/mongodb";
 
 const recipeController = {
   getAllRecipes: async (req: Request, res: Response) => {
+    const { sort } = req.query ;
+    const sortVar = sort?.toString() || "dateCreated";
     try {
       const db = await connectToDatabase();
-      const recipes = await db.collection("Recipes").find().toArray();
+      const recipes = await db.collection("Recipes").find().sort({[sortVar] : -1}).toArray();
+      console.log(recipes.map((recipe) => recipe.featured));
       return res.status(200).json(recipes);
     } catch (error) {
       console.error(`Error fetching recipes in getAllRecipes: ${error}`);
@@ -115,6 +118,7 @@ const recipeController = {
     return;
   },
   updateRecipe: async (req: Request, res: Response) => {
+    console.log(req.body);
     const recipeId = req.params.recipeId;
     const tags =
       req.body.tags != undefined

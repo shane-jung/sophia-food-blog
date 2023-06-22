@@ -18,14 +18,28 @@ import { useMutation } from "react-query";
 import queryClient from "@/client/utils/queryClient";
 import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
 
-export default function RecipeToolbar() {
+export function CreateRecipeToolbar(){
+  return (<div className="recipe-toolbar">
+      <SaveButton />
+    </div>)
+}
+
+
+export default function EditRecipeToolbar() {
+  return (
+    <div className="recipe-toolbar">
+      <EditButton />
+      <SaveButton />
+      <DeleteButton />
+    </div>
+  );
+}
+
+export function HomepageToolbar() {
   return (
     <div className="recipe-toolbar">
       <AddRecipe />
       <Settings />
-      <EditButton />
-      <SaveButton />
-      <DeleteButton />
     </div>
   );
 }
@@ -74,14 +88,14 @@ function SaveButton() {
   const [buttonText, setButtonText] = useState("");
 
   useEffect(() => {
-    if (viewMode == "CREATING") setButtonText("Create Recipe");
+    if (viewMode == "CREATING") setButtonText("Save");
     else setButtonText("Save");
   }, [viewMode]);
 
   
 
   return (
-    <IconButton handleClick={null} faIcon={faSave} name={buttonText} />
+    <IconButton className= {viewMode == "VIEWING" ? "inactive" : "" } handleClick={null} faIcon={faSave} name={buttonText} />
 
   );
 }
@@ -145,10 +159,10 @@ function Settings() {
   );
 }
 
-function IconButton({ handleClick, faIcon, name }: any) {
+function IconButton({ handleClick, faIcon, name, className }: any) {
   return (
     <OverlayTrigger placement={"left"} overlay={<Tooltip>{name}</Tooltip>}>
-      <Button variant={"secondary"} className="mt-2 icon-button round p-4 text-light" onClick={handleClick} type="submit">
+      <Button variant={"secondary"} className={"mt-2 icon-button round p-4 text-light " + className } onClick={handleClick} type ="submit">
         <FontAwesomeIcon icon={faIcon} />
       </Button>
     </OverlayTrigger>

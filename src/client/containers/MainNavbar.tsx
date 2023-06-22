@@ -25,7 +25,7 @@ export default function MainNavbar() {
               <Nav.Link className= "nav-link">About</Nav.Link>
             </LinkContainer>
           </Nav>
-          <SearchBar />
+          <SearchBar type={"link"}/>
           
       </Container>
          

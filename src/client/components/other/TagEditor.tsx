@@ -23,13 +23,11 @@ export default function TagEditor({ tags }: any) {
         }
     })
     useEffect(()=>{
-        console.log("INDEX CHANGED", Number(selectedTagIndex))
         setSelectedTag(tags[Number(selectedTagIndex)]);
+        // const newTag :HTMLElement= document.getElementsByClassName("tag-list-itemz")[selectedTagIndex] as HTMLElement;
+        // console.log(newTag);
+        // newTag.click();
     }, [selectedTagIndex])
-
-    useEffect(()=>{
-      console.log(selectedTag)
-},[selectedTag])
   
     function saveTag(e: any){
         e.preventDefault();
@@ -123,7 +121,7 @@ function CustomizeTagOrder({ tags, setSelectedTagIndex, selectedTagIndex}: any) 
 
   function handleDragEnd(e: any) {
     e.target.classList.toggle("dragging");
-    if(Number(newIndex) === -1 || Number(newIndex) === Number(draggedElementIndex)) return;
+    if(Number(newIndex) === -1 || Number(newIndex) === Number(draggedElementIndex) || newIndex==null || newIndex == undefined) return;
     tagsOrder.splice((Number(draggedElementIndex) < Number(newIndex) ? 1 : 0) + Number(newIndex), 0, tagsOrder[draggedElementIndex]);
     tagsOrder.splice(
       Number(draggedElementIndex) + (Number(draggedElementIndex) < Number(newIndex) ? 0 : 1),
@@ -132,7 +130,6 @@ function CustomizeTagOrder({ tags, setSelectedTagIndex, selectedTagIndex}: any) 
     setDraggedElementIndex(-1);
     tagsMutation.mutate({ tags: tagsOrder.map((tag: any) => tag._id) });
     setSelectedTagIndex(newIndex);
-    console.log(newIndex);
   }
 
   function handleDragEnter(e: any) {
@@ -143,8 +140,6 @@ function CustomizeTagOrder({ tags, setSelectedTagIndex, selectedTagIndex}: any) 
     e.target.classList.toggle("dragover");
   }
 
-  function handleSave() {
-  }
   return (
     <ListGroup 
       style={{ maxHeight: "60vh", overflowY: "scroll" }}
@@ -164,7 +159,7 @@ function CustomizeTagOrder({ tags, setSelectedTagIndex, selectedTagIndex}: any) 
 
         >
           <span
-            className="text-capitalize"
+            className="text-capitalize tag-list-item-text"
             style={{ cursor: "pointer" }}
             data-index={index}
             onClick= {() => setSelectedTagIndex(index)}>{tag.value}</span>
