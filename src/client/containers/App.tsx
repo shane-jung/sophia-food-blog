@@ -20,7 +20,7 @@ import CreateRecipePage from "./CreateRecipePage";
 import ViewRecipePage from "./ViewRecipePage";
 import RecipesByTag from "./RecipesByTag";
 import RecipeCategories from "./RecipeCategories";
-import AdminPage from "./AdminPage";
+import AdminPage from "../components/AdminPage/AdminPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

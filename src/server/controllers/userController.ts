@@ -128,6 +128,17 @@ const userController = {
       throw error;
     }
   },
+  getAllUsers: async (req: Request, res: Response) => {
+    try {
+      const db = await connectToDatabase();
+      const users = await db.collection("Profiles").find().toArray();
+      console.log(users);
+      return res.json(users);
+    } catch (error) {
+      console.error(`Error getting users in getAllUsers: ${error}`);
+      throw error;
+    }
+  }
 };
 async function saveUser(user: any) {
   try {

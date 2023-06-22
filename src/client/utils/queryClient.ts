@@ -3,11 +3,11 @@ import { QueryClient } from "react-query";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       suspense: true,
       refetchOnReconnect: false,
       refetchOnMount: false,
-      retry: false,
+      retry: 5,
     },
   },
 });

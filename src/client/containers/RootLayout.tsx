@@ -12,10 +12,10 @@ export default function RootLayout() {
       <Container >
         <Row className="align-items-center justify-content-between">
           <Col xs="auto">
-            <Logo />
+            {/* <Logo /> */}
           </Col>
           <Col xs="auto" >
-            <LoginButton />
+            {/*  */}
 
           </Col>
         </Row>

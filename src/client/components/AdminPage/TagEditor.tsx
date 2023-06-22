@@ -1,8 +1,6 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "@/client/api/axios";
-import { set } from "mongoose";
-import React from "react";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import queryClient from "@/client/utils/queryClient";

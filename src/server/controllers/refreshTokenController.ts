@@ -13,7 +13,7 @@ const handleRefreshToken = (req: Request, res: Response) => {
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET!,
-    (err: any, decoded: any) => {
+    (err: any, decoded: any) => { 
       if (err) return res.status(403).json({ message: err });
       // console.log("Generating new access token from refresh token.")
       const accessToken = jwt.sign(

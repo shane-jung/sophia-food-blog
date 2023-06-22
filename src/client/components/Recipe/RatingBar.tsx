@@ -99,7 +99,7 @@ export function StaticRatingBar() {
     // console.log(ratings);
     setNumberOfRatings(ratings.length);
     setAverageRating(
-      ratings.reduce((a: number, b: Rating) => a + b.rating, 0) / ratings.length
+      ratings.length===0 ? 0 : ratings.reduce((a: number, b: Rating) => a + b.rating, 0) / ratings.length
     );
   }, [ratings]);
 

@@ -37,9 +37,10 @@ const tagsController = {
       },
       updateTag: async (req: Request, res: Response) => { 
         delete req.body._id;
+
         try{
           const db = await connectToDatabase(); 
-          const response = await db.collection("Tags").updateOne({_id: new ObjectId(req.params.tagId)}, {$set: req.body});
+          const response = await db.collection("Tags").updateOne({_id: new ObjectId(req.params.tagId)}, {$set: {...req.body, recipes: req.body.recipes?.map((recipe: any) => new ObjectId(recipe))}});
           console.log(response);
         } catch (err) {
           console.error(`Error updating tag in updateTag: ${err}`);

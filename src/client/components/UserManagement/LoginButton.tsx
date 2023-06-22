@@ -12,7 +12,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 
 export default function LoginButton() {
   const { auth, setAuth } = useAuth();
@@ -48,9 +48,9 @@ export default function LoginButton() {
   }
   return auth.isAuthenticated ? (
       <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
+        <Dropdown.Toggle className="d-flex justify-content-between align-items-center gap-2" variant="outline-success" id="dropdown-basic">
           <span>Welcome, {username}!</span>
-          <FontAwesomeIcon icon= {faUser} className="ml-5 " />
+          <FontAwesomeIcon icon= {faUser} className=" " />
         </Dropdown.Toggle>
         <Dropdown.Menu>
           { auth?.user?.roles?.includes(8012) &&
