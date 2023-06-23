@@ -11,10 +11,11 @@ export async function getAllRecipes({sort} : { sort?: string } ){
 
 
 export const useGetAllRecipes = () => {
+    const axiosPrivate = useAxiosPrivate();
     const res = useQuery({
         queryKey: ["recipes"],
         queryFn: async ()=> {
-            const res = await axios.get("/recipes");
+            const res = await axiosPrivate.get("/recipes");
             console.log(res);
             return res.data;
         }
@@ -31,11 +32,11 @@ export async function getAllTags() {
 
 
 export const useGetAllUsers = () => {
-    const axiosPrivate = useAxiosPrivate();
+    
     const res = useQuery({
         queryKey: ["users"],
         queryFn: async ()=> {
-            const res = await axiosPrivate.get("/users");
+            const res = await axios.get("/users");
             return res.data;
         }
     });

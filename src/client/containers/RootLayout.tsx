@@ -1,7 +1,5 @@
 import MainNavbar from "@/client/containers/MainNavbar";
-import Logo from "../components/other/Logo";
 import { Outlet } from "react-router";
-import LoginButton from "../components/UserManagement/LoginButton";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

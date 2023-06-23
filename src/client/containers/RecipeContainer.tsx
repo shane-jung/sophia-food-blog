@@ -61,24 +61,23 @@ export default function RecipeContainer() {
         
 
       {viewMode == "CREATING" && <TitleId value={recipe.titleId} />}
-      <RichTextRecipeComponent
-        name="background"
-        className="recipe-background"
-        initialValue={recipe.background}
-      />
-      <div id="recipe" className="container-sm\">
-        <div className="header">
-          <SimpleTextRecipeComponent
-            name="cardTitle"
-            initialValue={recipe.cardTitle}
+
+      
+        <RichTextRecipeComponent
+          name="background"
+          className="recipe-background"
+          initialValue={recipe.background}
+        />
+        <SimpleTextRecipeComponent
+          name="cardTitle"
+          initialValue={recipe.cardTitle}
+        />
+        {viewMode == "VIEWING" && (
+          <DateComponent
+            dateCreated={recipe.dateCreated}
+            dateEdited={recipe.dateEdited}
           />
-          {viewMode == "VIEWING" && (
-            <DateComponent
-              dateCreated={recipe.dateCreated}
-              dateEdited={recipe.dateEdited}
-            />
-          )}
-        </div>
+        )}
 
         <RichTextRecipeComponent
           name="description"
@@ -95,7 +94,6 @@ export default function RecipeContainer() {
           className="recipe-directions"
           initialValue={recipe.directions}
         />
-      </div>
     </Container>
   );
 }

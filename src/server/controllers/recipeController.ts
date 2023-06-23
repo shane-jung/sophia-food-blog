@@ -120,17 +120,15 @@ const recipeController = {
   updateRecipe: async (req: Request, res: Response) => {
     console.log(req.body);
     const recipeId = req.params.recipeId;
-    const tags =
-      req.body.tags != undefined
-        ? JSON.parse(req.body.tags).map((tag: any) => new ObjectId(tag))
-        : [];
+    if(req.body.tags)
+      req.body.tags = JSON.parse(req.body.tags).map((tag: any) => new ObjectId(tag));
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
           { _id: new ObjectId(recipeId) },
-          { $set: { ...req.body, tags: tags } },
+          {  $set : { ...req.body} },
           { returnDocument: "after" }
         );
       // console.log(result);

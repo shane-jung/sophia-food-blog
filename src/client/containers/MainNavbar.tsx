@@ -29,7 +29,7 @@ export default function MainNavbar() {
             </LinkContainer>
 
           </Nav>
-          <SearchBar type={"link"}/>
+          <SearchBar/>
           <LoginButton />
           
       </Container>

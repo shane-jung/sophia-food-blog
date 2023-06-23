@@ -8,7 +8,7 @@ import {
 
 let timer: NodeJS.Timeout | null = null;
 
-export default function SearchBar({ type }: { type: string }) {
+export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [searchFocus, setSearchFocus] = useState(false);
   const [recipes, setResults] = useState([]);

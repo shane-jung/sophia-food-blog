@@ -9,6 +9,7 @@ import Container from "react-bootstrap/Container";
 import { getAllRecipes } from "../queries";
 
 import { HomepageToolbar } from "../components/Recipe/Form/RecipeToolbar";
+import SearchBar from "../components/other/SearchBar";
 export default function HomePage() {
   const { data: fetchedRecipes } = useQuery({
     queryKey: ["recipes", "featured"],
@@ -49,6 +50,11 @@ export default function HomePage() {
         })}
       </Carousel>
 
+      <Container className="bg-secondary text-light py-5 px-4 my-5" >
+        <h2 className="text-center pb-3">Looking for something in particular?</h2>
+        <SearchBar />
+      </Container>
+
       <RecipesCategoryBlock
         tag={{
           value: "recent",
@@ -57,6 +63,8 @@ export default function HomePage() {
           heading: "Recent Recipes",
         }}
       />
+
+      
     </Container>
   );
 }
