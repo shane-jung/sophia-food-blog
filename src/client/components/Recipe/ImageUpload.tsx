@@ -2,7 +2,7 @@ import { setRecipe } from "@/client/slices/recipe";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Button, Container, Image } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import { shallowEqual, useDispatch } from "react-redux";
@@ -11,8 +11,16 @@ import axios, { axiosPrivate } from "../../api/axios";
 
 import Form from "react-bootstrap/Form";
 
-export default function ImageUpload({imageURL: initialUrl} : {imageURL?: string}) {
-  const recipeId = useSelector((state: any) => state.recipe._id);
+export default function ImageUpload({
+  imageUrl: initialUrl,
+  setBody,
+  index,
+}: {
+  imageUrl?: string;
+  setBody?: any;
+  index: number;
+}) {
+  console.log("ImageUpload", initialUrl)
   const viewMode = useSelector((state: any) => state.user.viewMode);
   const [image, setImage] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>(initialUrl || "");
@@ -26,11 +34,6 @@ export default function ImageUpload({imageURL: initialUrl} : {imageURL?: string}
     setShow(false);
   };
   const handleShow = () => setShow(true);
-
-  useEffect(() => {
-    setImageUrl(initialUrl || "");
-  }, [recipeId]);
-
   const uploadToS3 = async (event: any) => {
     event.preventDefault();
     const signedUrlResponse = await axios.get("/recipes/sign-s3", {
@@ -55,6 +58,13 @@ export default function ImageUpload({imageURL: initialUrl} : {imageURL?: string}
     console.log("SETTING IMAGE URL" + url);
     setImageUrl(url);
     handleClose();
+    if (index != -1) {
+      setBody((prevBody: any) => {
+        const newBody = [...prevBody];
+        newBody[index].value = url;
+        return newBody;
+      });
+    }
   };
 
   return (

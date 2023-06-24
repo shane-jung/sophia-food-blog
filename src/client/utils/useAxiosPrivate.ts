@@ -6,7 +6,6 @@ import useAuth from "./useAuth";
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
   const { auth } = useAuth();
-  console.log("USING AXIOS PRIVATE: ", axiosPrivate.interceptors.request);
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       async (config) => {

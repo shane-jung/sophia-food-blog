@@ -7,13 +7,9 @@ export type Recipe = {
     titleId: string;
     dateCreated: string;
     dateEdited: string;
-    description: string;
     author: any;
-    background : string;
-    ingredients : string;
     cardTitle: string;
     // ingredients : Ingredient[];
-    directions: string;
     imageUrl?: string;
     comments: string[];
     tags? : string [];
@@ -22,6 +18,7 @@ export type Recipe = {
     cookTime? : string; 
     ratings? : Rating [];
     notes? : string [];
+    body : any[];
 
 }
 

@@ -1,6 +1,5 @@
-import { faPlus, faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ObjectId } from "mongodb";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { useMutation } from "react-query";
@@ -12,7 +11,6 @@ import RecipeToolbar, {
 } from "../components/Recipe/Form/RecipeToolbar";
 import RichTextInput from "../components/Recipe/Form/RichTextInput";
 import SimpleTextInput from "../components/Recipe/Form/SimpleTextInput";
-import SimpleTextRecipeComponent from "../components/Recipe/Form/SimpleTextComponent";
 import ImageUpload from "../components/Recipe/ImageUpload";
 import Tags from "../components/Recipe/Tags";
 import { setRecipe } from "../slices/recipe";
@@ -20,8 +18,13 @@ import { setViewMode } from "../slices/user";
 import queryClient from "../utils/queryClient";
 import useAxiosPrivate from "../utils/useAxiosPrivate";
 import * as uuid from "uuid";
+import Select from "@/client/components/Recipe/Form/Select";
+
+
 import Dropdown from "react-bootstrap/Dropdown";
-import { CloseButton, Overlay, OverlayTrigger, Tooltip } from "react-bootstrap";
+import Tooltip  from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Image from "react-bootstrap/Image";
 
 const defaultRecipeBody = [
   {
@@ -61,10 +64,10 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const selectedTags = useSelector((state: any) => state.recipe.selectedTags);
+
+  const [selectedTags, setSelectedTags] = useState(recipe ? recipe.tags : []);
   const imageUrl = useSelector((state: any) => state.recipe.imageUrl);
   const [body, setBody] = useState(recipe ? recipe.body : defaultRecipeBody);
-  
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) => {
       if(viewMode == "CREATING")
@@ -77,10 +80,7 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
     },
     onSuccess: (response) => {
       dispatch(setViewMode("viewing-recipe"));
-      dispatch(
-        setRecipe({ type: "set-recipe", recipe: { tags: selectedTags } })
-      );
-      console.log(response.data.value);
+
       tagsMutation.mutate({
         recipeId: response.data.value._id,
         tagIds: selectedTags,
@@ -117,7 +117,7 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
     },
   });
 
-  const handleRecipeCreate = async (
+  const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
@@ -126,14 +126,10 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
       data.append("body[]", JSON.stringify(el))
     );
 
-    const images = [...document.getElementsByClassName("file-input")];
-    console.log(images[0])
-    console.log(images);
     selectedTags.forEach((tag: any) => data.append("tags[]", tag));
     data.set("dateEdited", new Date().toISOString());
     data.set("dateCreated", new Date().toISOString());
     if(imageUrl) data.set("imageUrl", imageUrl);
-    return; 
     recipeMutation.mutate(data);
   };
 
@@ -152,15 +148,16 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
       className="container"
       method="POST"
       encType="multipart/form-data"
-      onSubmit={handleRecipeCreate}
+      onSubmit={handleSubmit}
       id="recipe-form"
     >
       <CreateRecipeToolbar />
       <SimpleTextInput name="title" label="Title" value= {recipe?.title}/>
       <SimpleTextInput name="subtitle" label="Subtitle" value = {recipe?.subtitle}/>
       <SimpleTextInput name="titleId" label="titleID" value = {recipe?.titleId} />
-      <ImageUpload />
-      <Tags />
+      <ImageUpload imageUrl = {recipe.imageUrl} index = {-1} />
+      <Select selected = {recipe.tags} setSelected = {setSelectedTags} />
+
       { body.map((element:any, index: number) => (
         <div key={element._id} className="position-relative">
           <RecipeBodyElement
@@ -229,12 +226,12 @@ function RecipeBodyElement({
         />
       );
     case "image":
-      return <ImageUpload />;
+      return <ImageUpload imageUrl={element.value} setBody={setBody} index={index}/>;
     case "double-image":
       return (
         <div className="d-flex double-image">
-          <ImageUpload />
-          <ImageUpload />
+          <ImageUpload imageUrl= {element.value} setBody={setBody} index = {index} />
+          <ImageUpload imageUrl= {element.value} setBody = {setBody} index = {index} />
         </div>
       );
 

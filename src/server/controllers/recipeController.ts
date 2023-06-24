@@ -129,8 +129,6 @@ const recipeController = {
         : [];
 
     const recipe =  {...req.body, tags: tags, body: req.body.body.map((step: any) => JSON.parse(step))};
-    console.log(recipe);
-    
     try {
       const db = await connectToDatabase();
       const result = await db
