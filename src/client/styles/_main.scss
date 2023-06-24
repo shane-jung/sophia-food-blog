@@ -1,4 +1,10 @@
-
+:root {
+  background-color: $accent;
+  .container-fluid{
+    background-color: $accent;
+    color: $primary;
+  }
+}
 
 .simple-button{
   appearance:none;
