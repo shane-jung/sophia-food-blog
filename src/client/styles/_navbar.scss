@@ -1,5 +1,18 @@
+@import "variables";
+
 .nav-link{
     color: white;
+    &:hover{
+        color: lighten($secondary, 30%);
+    }
+}
+
+.navbar-nav .nav-link.active{
+    color: lighten($secondary, 30%);
+}
+
+.navbar{
+    border-radius:10px;
 }
 
 // nav {
