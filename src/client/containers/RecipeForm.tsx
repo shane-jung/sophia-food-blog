@@ -66,7 +66,6 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
   const navigate = useNavigate();
 
   const [selectedTags, setSelectedTags] = useState(recipe ? recipe.tags : []);
-  const imageUrl = useSelector((state: any) => state.recipe.imageUrl);
   const [body, setBody] = useState(recipe ? recipe.body : defaultRecipeBody);
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) => {
@@ -129,7 +128,7 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
     selectedTags.forEach((tag: any) => data.append("tags[]", tag));
     data.set("dateEdited", new Date().toISOString());
     data.set("dateCreated", new Date().toISOString());
-    if(imageUrl) data.set("imageUrl", imageUrl);
+    // if(imageUrl) data.set("imageUrl", imageUrl);
     recipeMutation.mutate(data);
   };
 
@@ -155,8 +154,8 @@ export default function RecipeForm({recipe} : {recipe?: any}) {
       <SimpleTextInput name="title" label="Title" value= {recipe?.title}/>
       <SimpleTextInput name="subtitle" label="Subtitle" value = {recipe?.subtitle}/>
       <SimpleTextInput name="titleId" label="titleID" value = {recipe?.titleId} />
-      <ImageUpload imageUrl = {recipe.imageUrl} index = {-1} />
-      <Select selected = {recipe.tags} setSelected = {setSelectedTags} />
+      <ImageUpload imageUrl = {recipe?.imageUrl} index = {-1} />
+      <Select selected = {recipe?.tags} setSelected = {setSelectedTags} />
 
       { body.map((element:any, index: number) => (
         <div key={element._id} className="position-relative">

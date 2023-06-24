@@ -123,12 +123,13 @@ const recipeController = {
   updateRecipe: async (req: Request, res: Response) => {
     console.log(req.body);
     const recipeId = req.params.recipeId;
-    const tags =
-      req.body.tags != undefined
-        ? req.body.tags.map((tag: any) => new ObjectId(tag))
-        : [];
 
-    const recipe =  {...req.body, tags: tags, body: req.body.body.map((step: any) => JSON.parse(step))};
+    var recipe = req.body
+    if(recipe.body != undefined) 
+      recipe = {...recipe, body: req.body.body.map((step: any) => JSON.parse(step))}
+    if(recipe.tags != undefined) 
+    recipe = {...recipe, tags: req.body.tags.map((tag: any) => new ObjectId(tag))}
+
     try {
       const db = await connectToDatabase();
       const result = await db
