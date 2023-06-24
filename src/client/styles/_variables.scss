@@ -17,6 +17,7 @@ $accent: #e5d5dd;
 $primary: #093824;
 // $success: rgb(113, 154, 0);
 $secondary: #51344D;
+$secondary-light: lighten($secondary, 30%);
 
 
 // $accent-light: lighten($accent, 10%); 
