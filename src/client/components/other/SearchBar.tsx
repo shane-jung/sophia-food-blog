@@ -71,7 +71,7 @@ export default function SearchBar(){
                     placeholder = "Search for a recipes"
                     value={query}
             />
-            <Button variant= "outline-success" onClick= {(event:any)=>event?.preventDefault()}>
+            <Button variant= "outline-light" onClick= {(event:any)=>event?.preventDefault()}>
                     {/* <FontAwesomeIcon icon= {faSearch} /> */} Search
             </Button>
             <ListGroup className= "search-results">

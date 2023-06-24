@@ -48,7 +48,7 @@ export default function LoginButton() {
   }
   return auth.isAuthenticated ? (
       <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
+        <Dropdown.Toggle variant="primary" id="dropdown-basic">
           <span>Welcome, {username}!</span>
           <FontAwesomeIcon icon= {faUser} className="ml-5 " />
         </Dropdown.Toggle>
