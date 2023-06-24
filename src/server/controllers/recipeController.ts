@@ -83,21 +83,23 @@ const recipeController = {
         return res.status(500).json({ message: "Internal server error" });
       }
 
-      return res.status(200).json({ recipe: recipe });
+      return res.status(200).json(recipe);
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
 
   createRecipe: async (req: Request, res: Response) => {
-    const recipe = req.body;
-    const tags = req.body.tags.split(",").map((tag: any) => new ObjectId(tag));
+ 
+    const tags = req.body.tags?.map((tag: any) => new ObjectId(tag)) || [];
+    const recipe = {...req.body, tags: tags, body: req.body.body.map((step: any) => JSON.parse(step))};
+
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
-          { ...recipe, tags, comments: [], ratings: [] },
+          { ...recipe, comments: [], ratings: [] },
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
@@ -107,7 +109,8 @@ const recipeController = {
           .updateOne({_id: new ObjectId('64921eb1bd1b50d757f00170')}, {$push: {recipes: { $each: [new ObjectId(result?.value?._id)], $position: 0}}})
       }
       
-      return res.status(200).json({ recipe: result.value });
+      console.log(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(`Error creating recipe in createRecipe: ${error}`);
       throw error;
@@ -118,18 +121,22 @@ const recipeController = {
     const recipeId = req.params.recipeId;
     const tags =
       req.body.tags != undefined
-        ? JSON.parse(req.body.tags).map((tag: any) => new ObjectId(tag))
+        ? req.body.tags.map((tag: any) => new ObjectId(tag))
         : [];
+
+    const recipe =  {...req.body, tags: tags, body: req.body.body.map((step: any) => JSON.parse(step))};
+    console.log(recipe);
+    
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
           { _id: new ObjectId(recipeId) },
-          { $set: { ...req.body, tags: tags } },
+          { $set: { ...recipe} },
           { returnDocument: "after" }
         );
-      // console.log(result);
+      console.log(result);
       return res.status(200).json(result);
     } catch (error) {
       console.error(`Error fetching recipe in updateRecipe: ${error}`);

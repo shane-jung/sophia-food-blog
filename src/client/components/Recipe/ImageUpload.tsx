@@ -17,15 +17,13 @@ import { shallowEqual, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axios, { axiosPrivate } from "../../api/axios";
 
-import Form from 'react-bootstrap/Form';
+import Form from "react-bootstrap/Form";
 
-export default function ImageUpload() {
-  const recipeId = useSelector(
-    (state: any) => state.recipe._id,);
+export default function ImageUpload({imageURL: initialUrl} : {imageURL?: string}) {
+  const recipeId = useSelector((state: any) => state.recipe._id);
   const viewMode = useSelector((state: any) => state.user.viewMode);
-  const initialUrl = useSelector((state: any) => state.recipe.imageUrl);  
   const [image, setImage] = useState<File>();
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageUrl, setImageUrl] = useState<string>(initialUrl || "");
   const [imagePreview, setImagePreview] = useState<File>();
   const dispatch = useDispatch();
 
@@ -34,11 +32,11 @@ export default function ImageUpload() {
   const handleClose = () => {
     setImagePreview(undefined);
     setShow(false);
-  }
+  };
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    setImageUrl(initialUrl);
+    setImageUrl(initialUrl || "");
   }, [recipeId]);
 
   const fileSelect = (event: any) => {
@@ -74,8 +72,8 @@ export default function ImageUpload() {
     // } catch (err) {
     //   console.log(err);
     // }
-    console.log("SETTING RECIPE")
-    dispatch(setRecipe({ type: "set-recipe", recipe: { imageUrl: url } }))
+    console.log("SETTING RECIPE");
+    dispatch(setRecipe({ type: "set-recipe", recipe: { imageUrl: url } }));
     setImage(imagePreview);
     console.log("SETTING IMAGE URL" + url);
     setImageUrl(url);
@@ -95,34 +93,35 @@ export default function ImageUpload() {
   }
 
   return (
-    <div className="text-center" style={{position:"relative"}}>
-      {viewMode != "VIEWING" &&
-          <Button
-            onClick={handleShow}
-            variant={"secondary"}
-            className= "image-upload-button"
-          >
-            <FontAwesomeIcon icon={faImage} />
-          </Button>
-      }
+    <div className="text-center" style={{ position: "relative" }}>
+      {viewMode != "VIEWING" && (
+        <Button
+          onClick={handleShow}
+          variant={"secondary"}
+          className="image-upload-button"
+        >
+          <FontAwesomeIcon icon={faImage} />
+        </Button>
+      )}
 
       <Image
         src={imageUrl || "https://recipe-blog-data.s3.amazonaws.com/null.png"}
         className="img-fluid recipe-header-image mb-2"
       />
 
-      <Modal show = {show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Image Upload</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          
-          <Form.Label>
-            Upload a file
-          </Form.Label>
-          <Form.Control type="file" onChange={ (event:any) => setImagePreview(event?.target.files[0])}/>
+          <Form.Label>Upload a file</Form.Label>
+          <Form.Control
+            className="file-input"
+            type="file"
+            onChange={(event: any) => setImagePreview(event?.target.files[0])}
+          />
           <Button variant="success" onClick={uploadToS3} className="mt-3">
-              Upload Photo <FontAwesomeIcon icon={faCheck} />
+            Upload Photo <FontAwesomeIcon icon={faCheck} />
           </Button>
         </Modal.Body>
       </Modal>
