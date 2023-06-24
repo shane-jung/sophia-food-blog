@@ -11,12 +11,11 @@ import axios, { axiosPrivate } from "../../api/axios";
 
 import Form from "react-bootstrap/Form";
 
-export default function ImageUpload() {
+export default function ImageUpload({imageURL: initialUrl} : {imageURL?: string}) {
   const recipeId = useSelector((state: any) => state.recipe._id);
   const viewMode = useSelector((state: any) => state.user.viewMode);
-  const initialUrl = useSelector((state: any) => state.recipe.imageUrl);
   const [image, setImage] = useState<File>();
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageUrl, setImageUrl] = useState<string>(initialUrl || "");
   const [imagePreview, setImagePreview] = useState<File>();
   const dispatch = useDispatch();
 
@@ -29,7 +28,7 @@ export default function ImageUpload() {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    setImageUrl(initialUrl);
+    setImageUrl(initialUrl || "");
   }, [recipeId]);
 
   const uploadToS3 = async (event: any) => {
@@ -82,6 +81,7 @@ export default function ImageUpload() {
         <Modal.Body>
           <Form.Label>Upload a file</Form.Label>
           <Form.Control
+            className="file-input"
             type="file"
             onChange={(event: any) => setImagePreview(event?.target.files[0])}
           />

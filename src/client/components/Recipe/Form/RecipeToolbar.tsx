@@ -44,6 +44,14 @@ export function HomepageToolbar() {
   );
 }
 
+export  function CreateRecipeToolbar() {
+  return (
+    <div className="recipe-toolbar">
+      <SaveButton />
+    </div>
+  );
+}
+
 function AddRecipe(){
   const navigate = useNavigate();
   function handleClick (){
@@ -64,18 +72,20 @@ function EditButton() {
   const dispatch = useDispatch();
   const [buttonText, setButtonText] = useState('Edit Recipe');
   const [buttonIcon, setButtonIcon] = useState(faEdit);
+  const navigate = useNavigate();
 
   const toggleViewMode = (e: any) => {
     e.preventDefault();
-    if(viewMode == "VIEWING"){
-      setButtonText("Cancel");
-      setButtonIcon(faCancel);
-    } else {
-      setButtonText("Edit Recipe");
-      setButtonIcon(faEdit);
-    }
-    const action = viewMode == "VIEWING" ? "editing-recipe" : "viewing-recipe";
-    dispatch(setViewMode(action));
+    // if(viewMode == "VIEWING"){
+    //   setButtonText("Cancel");
+    //   setButtonIcon(faCancel);
+    // } else {
+    //   setButtonText("Edit Recipe");
+    //   setButtonIcon(faEdit);
+    // }
+    // const action = viewMode == "VIEWING" ? "editing-recipe" : "viewing-recipe";
+    // dispatch(setViewMode(action));
+    navigate("edit");
   };
 
   return (

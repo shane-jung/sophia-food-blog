@@ -83,10 +83,10 @@ export default function Tags() {
   }
 
   return viewMode != "VIEWING" ? (
-    <Container className="mb-4" style={{ zIndex: "200", position: "relative" }}>
+    <div className="mb-4" style={{ zIndex: "200", position: "relative" }}>
       <Form.Label>Tags</Form.Label>
       <CreatableSelect
-        name="tags"
+        // name="tags"
         closeMenuOnSelect={false}
         isMulti
         onChange={onChange}
@@ -94,7 +94,7 @@ export default function Tags() {
         onCreateOption={createOption}
         value={selected}
       />
-    </Container>
+    </div>
   ) : (
 
       selected.map((tag: any) => (

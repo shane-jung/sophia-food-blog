@@ -6,7 +6,7 @@ import {
   Routes,
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import '@/client/styles/index.scss'
+import "@/client/styles/index.scss";
 import AllRecipes from "./AllRecipes";
 import LoginPage from "@/client/components/UserManagement/LoginPage";
 import HomePage from "./HomePage";
@@ -17,30 +17,43 @@ import PersistLogin from "../utils/PersistLogin";
 import Loading from "../components/other/Loading";
 import { Suspense } from "react";
 import CreateRecipePage from "./CreateRecipePage";
-import ViewRecipePage from "./ViewRecipePage";
 import RecipesByTag from "./RecipesByTag";
 import RecipeCategories from "./RecipeCategories";
 import AdminPage from "../components/AdminPage/AdminPage";
+import RecipeContainer from "./RecipeContainer";
+
+import "react-quill/dist/quill.snow.css";
+import EditRecipePage from "./EditRecipePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<PersistLogin />}>
       <Route path="/">
         <Route element={<RootLayout />}>
-          <Route index element={<Suspense fallback={<Loading />}>
-                  <HomePage />
-                </Suspense>} />
+          <Route
+            index
+            element={
+              <Suspense fallback={<Loading />}>
+                <HomePage />
+              </Suspense>
+            }
+          />
           <Route path="category">
-            <Route index element = {
+            <Route
+              index
+              element={
                 <Suspense fallback={<Loading />}>
                   <RecipeCategories />
                 </Suspense>
-              } />
-            <Route path=":tag" element={
+              }
+            />
+            <Route
+              path=":tag"
+              element={
                 <Suspense fallback={<Loading />}>
                   <RecipesByTag />
                 </Suspense>
-              } 
+              }
             />
           </Route>
           <Route path="recipes">
@@ -62,20 +75,29 @@ const router = createBrowserRouter(
                 }
               />
             </Route>
-            <Route
-              path=":titleId"
-              element={
-                <Suspense fallback={<Loading />}>
-                  <ViewRecipePage />
-                </Suspense>
-              }
-            />
+            <Route path=":titleId">
+              <Route
+                index
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <RecipeContainer />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="edit"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <EditRecipePage />
+                  </Suspense>
+                }
+              />
+            </Route>
           </Route>
           <Route path= "admin" element = {<Suspense fallback={<Loading />}> <AdminPage /> </Suspense>} />
 
         </Route>
-        
-        
+
         <Route path="users">
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
@@ -97,5 +119,3 @@ export const App: React.FC = () => {
     </HelmetProvider>
   );
 };
-
-

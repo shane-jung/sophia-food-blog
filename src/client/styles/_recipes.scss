@@ -126,27 +126,56 @@
     margin-top: 0; /* remove the gap so it doesn't close */
 }
 
-
+.quill{
+    border:none !important;
+}
 .ql-toolbar.ql-snow + .ql-container.ql-snow{
     border: none !important;
     font-family:inherit !important;
     background-color: var(--bs-body-bg) !important;
     background-clip: padding-box !important;
-    border: var(--bs-border-width) solid var(--bs-border-color) !important;
+    // border: var(--bs-border-width) solid var(--bs-border-color) !important;
     appearance: none !important;
+    border-radius: var(--bs-border-radius) !important;
+    // transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+
+    &:focus-within{
+        
+            // color: var(--bs-body-color) !important;
+            // background-color: var(--bs-body-bg) !important;
+            // border-color: #86b7fe !important;
+            // outline: 0 !important;
+            // box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important
+    
+    }
+}
+
+.rich-text-input{
+    .section-title-input{
+        box-shadow:none;
+        border: none !important;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom: var(--bs-border-width) solid var(--bs-border-color) !important;
+        &:focus{
+            border-bottom: var(--bs-border-width) solid var(--bs-border-color) !important;
+        }
+    }
+    border: var(--bs-border-width) solid var(--bs-border-color) !important;
     border-radius: var(--bs-border-radius) !important;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
 
     &:focus-within{
         
-            color: var(--bs-body-color) !important;
-            background-color: var(--bs-body-bg) !important;
-            border-color: #86b7fe !important;
-            outline: 0 !important;
-            box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important
-    
+        color: var(--bs-body-color) !important;
+        background-color: var(--bs-body-bg) !important;
+        border-color: $primary !important;
+        outline: 0 !important;
+        box-shadow:0 0 0 0.25rem rgba($primary, .25) !important
+
     }
 }
+
 
 .light-tooltip + .tooltip > .tooltip-inner {
     background:white !important;
@@ -158,6 +187,18 @@
     width:100%;
     object-fit:cover;
 }
+
+.double-image{
+    display:flex;
+    gap:1em;
+    div{  
+        height:auto;
+        width:50%;
+        object-fit:cover;
+    }
+
+}
+
 
 .carousel-caption{
     background: rgba(7, 2, 37, 0.664);
