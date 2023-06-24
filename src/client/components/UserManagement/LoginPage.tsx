@@ -120,7 +120,7 @@ export default function LoginPage() {
             required
           />
         </FloatingLabel>
-        <Button variant= "success" className="mx-auto" type='submit'>Submit</Button>
+        <Button variant= "secondary" className="mx-auto" type='submit'>Submit</Button>
       </Form>
       <p className="text-center">
         Don't have an account? <Link to="/users/register">Create an Account</Link>

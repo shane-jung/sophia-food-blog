@@ -87,7 +87,7 @@ export default function TagEditor({ tags }: any) {
                   {/* // placeholder= "This category's description will show up on the category page." */}
               {/* <input type="color" /> */}
               {/* <button>Delete</button> */}
-              <Button variant="success" onClick = {saveTag}>Save Changes</Button>
+              <Button variant="primary" onClick = {saveTag}>Save Changes</Button>
           </Form>
         </Col>
       </Row>
