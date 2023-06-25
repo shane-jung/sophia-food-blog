@@ -18,7 +18,6 @@ export default function CommentsList({setCommentsLength } : any){
   useEffect(() => {
     // console.log(data);
     setComments(data);
-    console.log(data);
     setCommentsLength(data.length);
   }, [data]);
 
@@ -36,7 +35,6 @@ export default function CommentsList({setCommentsLength } : any){
 }
 
 async function retrieveComments({ queryKey }: any) {
-  console.log(queryKey);
   if(queryKey[1] === '') return [];
   const recipeId = queryKey[1];
   const response = await axios.get(`/recipes/${recipeId}/comments`);

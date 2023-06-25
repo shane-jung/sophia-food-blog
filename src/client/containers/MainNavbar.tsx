@@ -4,14 +4,17 @@ import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import SearchBar from "../components/other/SearchBar";
 import LinkContainer from "react-router-bootstrap/LinkContainer";
+import { NavbarBrand } from "react-bootstrap";
+import LoginButton from "../components/UserManagement/LoginButton";
 
 export default function MainNavbar() {
   return (
-    <Navbar bg="primary" className="mb-4">
+    <Navbar bg="primary" sticky="top" className="mb-4">
       <Container>
           <Nav 
-            className="me-auto my-1 my-lg-0"
-          >
+            className="me-auto my-1 my-lg-0" 
+          > 
+            <NavbarBrand className = "nav-link" href = "/">Once Upon A Thyme</NavbarBrand>
             <LinkContainer to = '/'>
               <Nav.Link className = "nav-link" >Home</Nav.Link>
             </LinkContainer>
@@ -24,8 +27,10 @@ export default function MainNavbar() {
             <LinkContainer to="/about">
               <Nav.Link className= "nav-link">About</Nav.Link>
             </LinkContainer>
+
           </Nav>
-          <SearchBar />
+          <SearchBar/>
+          <LoginButton />
           
       </Container>
          

@@ -52,3 +52,15 @@ $forms: (
   '[type=color], [type=date], [type=datetime], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=url], [type=week], [type=time], select, textarea'
 );
 
+
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'accent': #e5d5dd,
+    'light' : #ffffff
+  ),
+  $theme-colors
+);

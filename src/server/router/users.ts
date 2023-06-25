@@ -13,14 +13,13 @@ router.route("/create").post(hashPassword, userController.createUser);
 
 router.route("/:id").get(userController.getUser);
 
-router.route("/").post(userController.findUser);
+router.route("/").post(userController.findUser).get(userController.getAllUsers);
 
 async function hashPassword(req: Request, res: Response, next: any) {
   let password = req.body["password"]!;
 
   hashedPassword(password)
     .then((hash) => {
-      console.log("HASHED PASSWORD: ", hash);
       let data = { ...req.body, "date-created": new Date().toISOString() };
       data["password"] = hash;
       res.locals.user = data;

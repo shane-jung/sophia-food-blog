@@ -4,9 +4,34 @@ import connectToDatabase from "../database/mongodb";
 
 const recipeController = {
   getAllRecipes: async (req: Request, res: Response) => {
+    const { sort, filters } = req.query;
+    const sortVar = sort?.toString() || "dateCreated";
+    const filtersJSON = filters ? JSON.parse(filters as string) : {};
+    const filtersObjectIds = Object.keys(filtersJSON).reduce(
+      (acc: any, category: any) => {
+        if (filtersJSON[category].length > 0)
+          return {
+            ...acc,
+            [category]: {
+              $all: filtersJSON[category].map((el: string) => new ObjectId(el)),
+            },
+          };
+        console.log(acc);
+        return acc;
+      },
+      {}
+    );
+    console.log("FILTERS", filtersJSON);
+
     try {
       const db = await connectToDatabase();
-      const recipes = await db.collection("Recipes").find().toArray();
+      const recipes = await db
+        .collection("Recipes")
+        .find({ ...filtersObjectIds })
+        .project({ title: 1, titleId: 1, imageUrl: 1, _id: 1 })
+        .sort({ [sortVar]: -1 })
+        .toArray();
+      // console.log(recipes);
       return res.status(200).json(recipes);
     } catch (error) {
       console.error(`Error fetching recipes in getAllRecipes: ${error}`);
@@ -50,7 +75,7 @@ const recipeController = {
     try {
       const db = await connectToDatabase();
       let recipe;
-      if (shortened == "true"){
+      if (shortened == "true") {
         recipe = await db
           .collection("Recipes")
           .findOne(
@@ -66,7 +91,7 @@ const recipeController = {
       // if (!recipe) {
       //   return res.status(500).json({ message: "Internal server error" });
       // }
-      console.log(recipe);
+      // console.log(recipe);
       return res.status(200).json(recipe);
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
@@ -83,31 +108,46 @@ const recipeController = {
         return res.status(500).json({ message: "Internal server error" });
       }
 
-      return res.status(200).json({ recipe: recipe });
+      return res.status(200).json(recipe);
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
 
   createRecipe: async (req: Request, res: Response) => {
-    const recipe = req.body;
-    const tags = req.body.tags.split(",").map((tag: any) => new ObjectId(tag));
+    const tags = req.body.tags?.map((tag: any) => new ObjectId(tag)) || [];
+    const recipe = {
+      ...req.body,
+      tags: tags,
+      body: req.body.body.map((step: any) => JSON.parse(step)),
+      featured: -1,
+    };
+
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
-          { ...recipe, tags, comments: [], ratings: [] },
+          { ...recipe, comments: [], ratings: [] },
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
-      if(result && result.value){
-         await db
-          .collection("Tags")
-          .updateOne({_id: new ObjectId('64921eb1bd1b50d757f00170')}, {$push: {recipes: { $each: [new ObjectId(result?.value?._id)], $position: 0}}})
+      if (result && result.value) {
+        await db.collection("Tags").updateOne(
+          { _id: new ObjectId("64921eb1bd1b50d757f00170") },
+          {
+            $push: {
+              recipes: {
+                $each: [new ObjectId(result?.value?._id)],
+                $position: 0,
+              },
+            },
+          }
+        );
       }
-      
-      return res.status(200).json({ recipe: result.value });
+
+      console.log(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.error(`Error creating recipe in createRecipe: ${error}`);
       throw error;
@@ -116,17 +156,54 @@ const recipeController = {
   },
   updateRecipe: async (req: Request, res: Response) => {
     const recipeId = req.params.recipeId;
-    const tags =
-      req.body.tags != undefined
-        ? JSON.parse(req.body.tags).map((tag: any) => new ObjectId(tag))
-        : [];
+    var {
+      prepTimeHours,
+      prepTimeMinutes,
+      cookTimeHours,
+      cookTimeMinutes,
+      totalTimeMinutes,
+      totalTimeHours,
+      servingsQty,
+      servingsUnit,
+      datePublished,
+      ...recipe
+    } = req.body;
+
+    if (recipe.body)
+      recipe = {
+        ...recipe,
+        body: req.body.body?.map((step: any) => JSON.parse(step)),
+      };
+
+    if (recipe.cuisines)
+      recipe = {
+        ...recipe,
+        cuisines: JSON.parse(req.body.cuisines)?.map(
+          (cuisine: any) => new ObjectId(cuisine)
+        ),
+      };
+
+    if (recipe.ingredients)
+      recipe = {
+        ...recipe,
+        ingredients: JSON.parse(req.body.ingredients).map(
+          (ingredient: any) => new ObjectId(ingredient)
+        ),
+      };
+    if (recipe.meals)
+      recipe = {
+        ...recipe,
+        meals: JSON.parse(req.body.meals).map(
+          (meal: any) => new ObjectId(meal)
+        ),
+      };
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
           { _id: new ObjectId(recipeId) },
-          { $set: { ...req.body, tags: tags } },
+          { $set: { ...recipe } },
           { returnDocument: "after" }
         );
       // console.log(result);
@@ -143,12 +220,15 @@ const recipeController = {
         .collection("Recipes")
         .deleteOne({ _id: new ObjectId(req.params.recipeId) });
 
-      if(result){
-          await db
-           .collection("Tags")
-           .updateOne({_id: new ObjectId('64921eb1bd1b50d757f00170')}, {$pull: {recipes: new ObjectId(req.params.recipeId)}})
-       }
-       
+      if (result) {
+        await db
+          .collection("Tags")
+          .updateOne(
+            { _id: new ObjectId("64921eb1bd1b50d757f00170") },
+            { $pull: { recipes: new ObjectId(req.params.recipeId) } }
+          );
+      }
+
       return res.status(200).json({ message: "Recipe deleted successfully" });
     } catch (error) {
       console.error(`Error fetching recipe in deleteRecipe: ${error}`);
@@ -297,7 +377,7 @@ const recipeController = {
   },
 
   async searchRecipes(req: Request, res: Response) {
-    console.log(req.query);
+    // console.log(req.query);
     try {
       const db = await connectToDatabase();
       // const result = await db
@@ -305,44 +385,42 @@ const recipeController = {
       //   .find({"title": {$regex : regex, $options: 'i'}}, { projection: { title: 1, titleId: 1, description: 1, imageUrl: 1} }).toArray();
       const result = await db
         .collection("Recipes")
-        .aggregate(
-          [
-            { 
-              $search: {
-                'index': 'default',
-                'autocomplete' : {
-                  'query': req.query.query,
-                  'path' : 'title', 
-                  'fuzzy': {
-                    'maxEdits': 1,
-                    'prefixLength': 3
-                  }
+        .aggregate([
+          {
+            $search: {
+              index: "default",
+              autocomplete: {
+                query: req.query.query,
+                path: "title",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 3,
                 },
-                // "highlight": {  
-                //   "path": "title",
-                //   "maxNumPassages": 1,
-                //   "maxCharsToExamine": 100,
-                // }
-              }
+              },
+              // "highlight": {
+              //   "path": "title",
+              //   "maxNumPassages": 1,
+              //   "maxCharsToExamine": 100,
+              // }
             },
-            {
-              $project: {
-                "title": 1,
-                "titleId": 1,
-                "description": 1,
-                "imageUrl": 1,
-                "highlights"  : { $meta: "searchHighlights" },
-              }
-            }
-          ]
-        ).toArray();
+          },
+          {
+            $project: {
+              title: 1,
+              titleId: 1,
+              description: 1,
+              imageUrl: 1,
+              highlights: { $meta: "searchHighlights" },
+            },
+          },
+        ])
+        .toArray();
       // console.log(result);
       return res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
     }
-    catch(err){
-      console.log(err)
-    }
-  }
+  },
 };
 
 export default recipeController;

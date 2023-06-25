@@ -12,7 +12,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 
 export default function LoginButton() {
   const { auth, setAuth } = useAuth();
@@ -23,9 +23,6 @@ export default function LoginButton() {
     (state: any) => state.user.username,
     shallowEqual
   );
-  useEffect(() => {
-    // console.log("USERNAME CHANGED: ", username)
-  }, [username]);
   const dispatch = useDispatch();
 
   async function logout() {
@@ -48,14 +45,14 @@ export default function LoginButton() {
   }
   return auth.isAuthenticated ? (
       <Dropdown>
-        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+        <Dropdown.Toggle className="d-flex justify-content-between align-items-center gap-2" variant="outline-success" id="dropdown-basic">
           <span>Welcome, {username}!</span>
-          <FontAwesomeIcon icon= {faUser} className="ml-5 " />
+          <FontAwesomeIcon icon= {faUser} className=" " />
         </Dropdown.Toggle>
-
         <Dropdown.Menu>
-          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-          <Dropdown.Item href="#/action-2" >Another action</Dropdown.Item>
+          { auth?.user?.roles?.includes(8012) &&
+            <Dropdown.Item href="/admin" >Manage Site</Dropdown.Item>
+          }
           <Dropdown.Divider />
           <Dropdown.Item onClick={logout} className="font-weight-bold danger">Logout</Dropdown.Item>
         </Dropdown.Menu>

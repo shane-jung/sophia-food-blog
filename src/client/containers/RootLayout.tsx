@@ -1,25 +1,12 @@
 import MainNavbar from "@/client/containers/MainNavbar";
-import Logo from "../components/other/Logo";
 import { Outlet } from "react-router";
-import LoginButton from "../components/UserManagement/LoginButton";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 export default function RootLayout() {
   return (
-    <Container fluid>
-      <Container>
-        <Row className="align-items-center justify-content-between">
-          <Col xs="auto">
-            <Logo />
-          </Col>
-          <Col xs="auto" >
-            <LoginButton />
-
-          </Col>
-        </Row>
-      </Container>
+    <Container fluid> 
       <MainNavbar />
       <Container>
         <Row>
@@ -44,6 +31,10 @@ export default function RootLayout() {
 
         </Row>
       </Container>
+
+      <Container className="text-center" style={{height:"150px"}}>
+      </Container>
+
 
     </Container>
   );

@@ -1,12 +1,7 @@
-import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
-import { Link } from "react-router-dom";
+import RecipeThumbnail from "@/client/components/Recipe/RecipeThumbnail";
 import { useQuery } from "react-query";
-import axios from "../api/axios";
-import { useEffect, useState } from "react";
-
-import Container from "react-bootstrap/Container";
+import axios from "@/client/api/axios";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 
 export function RecipesCategoryBlock({ tag }: { tag: any }) {

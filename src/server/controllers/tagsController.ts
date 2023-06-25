@@ -6,13 +6,16 @@ import { CommentType } from "../../client/types";
 
 const tagsController = {
     createTag: async (req: Request, res: Response) => {
-        const { tag } = req.body;
+      console.log(req.body);
+      const {category, tag} = req.body;
+      
         try {
           const db = await connectToDatabase();
-          const highestVal = (await db.collection('Tags').find().sort({order: -1}).limit(1).toArray())[0].order;
+          const highestVal = (await db.collection("Tags").find({category: category}).sort({order: -1}).limit(1).toArray())[0]?.order;
           const response = await db
             .collection("Tags")
-            .insertOne({ value: tag.toLowerCase(), description: "", recipes: [] , order: highestVal + 1});
+            .insertOne({ value: tag.toLowerCase(), label:tag,  category, description: "", recipes: [] , order: highestVal + 1});
+            console.log(response);
           return res.json(response.insertedId);
         } catch (error) {
           console.error(`Error creating tag in createTag: ${error}`);
@@ -28,7 +31,7 @@ const tagsController = {
           const test = await db
             .collection("Recipes")
             .updateMany({}, { $pull: { tags : new ObjectId(req.params.tagId)}  }, {multi: true});
-          console.log(test);
+          // console.log(test);
           return res.json(response);
         } catch (error) {
           console.error(`Error deleting tag in deleteTag: ${error}`);
@@ -37,10 +40,12 @@ const tagsController = {
       },
       updateTag: async (req: Request, res: Response) => { 
         delete req.body._id;
+        console.log(req.body);
         try{
           const db = await connectToDatabase(); 
-          const response = await db.collection("Tags").updateOne({_id: new ObjectId(req.params.tagId)}, {$set: req.body});
+          const response = await db.collection("Tags").updateOne({_id: new ObjectId(req.params.tagId)}, {$set: {...req.body, recipes: req.body.recipes?.map((recipe: any) => new ObjectId(recipe))}});
           console.log(response);
+          return res.json(response);
         } catch (err) {
           console.error(`Error updating tag in updateTag: ${err}`);
           throw err;
@@ -89,7 +94,7 @@ const tagsController = {
               { _id: { $in: tagIdsObjectIds} },
               { $addToSet: { recipes: new ObjectId(recipeId) } }
             );
-          console.log(response);
+          // console.log(response);
           return res.json(response);
         } catch (error) {
           console.error(`Error adding recipe to tags in addRecipeToTags: ${error}`);
@@ -100,7 +105,6 @@ const tagsController = {
       removeRecipeFromTags: async (req: Request, res: Response) => {
         const { recipeId, tags } = req.body;
         const tagIdsObjectIds = tags.map((tag: any) => new ObjectId(tag));
-        console.log(recipeId, tagIdsObjectIds)
         try {
           const db = await connectToDatabase();
           const response = await db
@@ -109,7 +113,7 @@ const tagsController = {
               { _id: { $in: tagIdsObjectIds} },
               { $pull: { recipes: new ObjectId(recipeId)} }
             );
-          console.log(response);
+          // console.log(response);
           return res.json(response);
         } catch (error) {
           console.error(`Error adding recipe to tags in addRecipeToTags: ${error}`);
@@ -119,7 +123,6 @@ const tagsController = {
 
 
       setTagOrder: async (req: Request, res: Response) => {
-        console.log(req.body);
         const { newOrder } = req.body;
         try{
           const db = await connectToDatabase();

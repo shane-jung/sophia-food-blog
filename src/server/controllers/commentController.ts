@@ -2,18 +2,16 @@ import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import connectToDatabase from "../database/mongodb";
 
-import { CommentType } from "../../client/types";
+import { CommentType } from "@/client/types";
 
 const commentController = {
   getAllCommentsForRecipe: async (req: Request, res: Response) => {
-    console.log(req.params);
     try {
       const db = await connectToDatabase();
       const comments = await db
         .collection("Comments")
         .find({ recipeId: new ObjectId(req.params.recipeId), hidden: false })
         .toArray();
-      console.log(comments);
       return res.json(comments);
     } catch (error) {
       console.error(
