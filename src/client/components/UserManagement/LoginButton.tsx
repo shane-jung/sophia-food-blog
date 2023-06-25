@@ -23,9 +23,6 @@ export default function LoginButton() {
     (state: any) => state.user.username,
     shallowEqual
   );
-  useEffect(() => {
-    console.log(auth);
-  }, [username]);
   const dispatch = useDispatch();
 
   async function logout() {

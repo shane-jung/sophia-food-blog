@@ -63,7 +63,7 @@ export default function RichTextInput({
 
   return (
     <>
-      <Form.Group className="rich-text-input">
+      <Form.Group className="rich-text-input my-4">
         <FloatingLabel label="Section Name" className="text-capitalize">
           <Form.Control
             type="text"

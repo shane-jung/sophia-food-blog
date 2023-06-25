@@ -20,7 +20,6 @@ export default function ImageUpload({
   setBody?: any;
   index: number;
 }) {
-  console.log("ImageUpload", initialUrl)
   const viewMode = useSelector((state: any) => state.user.viewMode);
   const [image, setImage] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>(initialUrl || "");
@@ -53,7 +52,7 @@ export default function ImageUpload({
       console.log(err);
     }
     console.log("SETTING RECIPE");
-    dispatch(setRecipe({ type: "set-recipe", recipe: { imageUrl: url } }));
+    if(index==-1) dispatch(setRecipe({ type: "set-recipe", recipe: { imageUrl: url } }));
     setImage(imagePreview);
     console.log("SETTING IMAGE URL" + url);
     setImageUrl(url);
@@ -68,7 +67,7 @@ export default function ImageUpload({
   };
 
   return (
-    <div className="text-center" style={{ position: "relative" }}>
+    <div className="text-center my-4" style={{ position: "relative" }}>
       {viewMode != "VIEWING" && (
         <Button
           onClick={handleShow}

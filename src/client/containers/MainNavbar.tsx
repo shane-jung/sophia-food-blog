@@ -12,7 +12,7 @@ export default function MainNavbar() {
     <Navbar bg="primary-subtle" sticky="top" className="mb-3">
       <Container>
           <Nav 
-            className="me-auto my-1 my-lg-0"
+            className="me-auto my-1 my-lg-0" 
           > 
             <NavbarBrand className = "nav-link" href = "/">Once Upon A Thyme</NavbarBrand>
             <LinkContainer to = '/'>

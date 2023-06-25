@@ -9,7 +9,6 @@ const recipeController = {
     try {
       const db = await connectToDatabase();
       const recipes = await db.collection("Recipes").find().sort({[sortVar] : -1}).toArray();
-      console.log(recipes.map((recipe) => recipe.featured));
       return res.status(200).json(recipes);
     } catch (error) {
       console.error(`Error fetching recipes in getAllRecipes: ${error}`);
@@ -69,7 +68,7 @@ const recipeController = {
       // if (!recipe) {
       //   return res.status(500).json({ message: "Internal server error" });
       // }
-      console.log(recipe);
+      // console.log(recipe);
       return res.status(200).json(recipe);
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
@@ -95,7 +94,7 @@ const recipeController = {
   createRecipe: async (req: Request, res: Response) => {
  
     const tags = req.body.tags?.map((tag: any) => new ObjectId(tag)) || [];
-    const recipe = {...req.body, tags: tags, body: req.body.body.map((step: any) => JSON.parse(step))};
+    const recipe = {...req.body, tags: tags, body: req.body.body.map((step: any) => JSON.parse(step)), featured: -1};
 
     try {
       const db = await connectToDatabase();
@@ -121,7 +120,7 @@ const recipeController = {
     return;
   },
   updateRecipe: async (req: Request, res: Response) => {
-    console.log(req.body);
+    // console.log(req.body);
     const recipeId = req.params.recipeId;
 
     var recipe = req.body
@@ -139,7 +138,7 @@ const recipeController = {
           { $set: { ...recipe} },
           { returnDocument: "after" }
         );
-      console.log(result);
+      // console.log(result);
       return res.status(200).json(result);
     } catch (error) {
       console.error(`Error fetching recipe in updateRecipe: ${error}`);
@@ -307,7 +306,7 @@ const recipeController = {
   },
 
   async searchRecipes(req: Request, res: Response) {
-    console.log(req.query);
+    // console.log(req.query);
     try {
       const db = await connectToDatabase();
       // const result = await db

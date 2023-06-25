@@ -13,7 +13,7 @@ $font-family-base: 'Quicksand', sans-serif;
 // $primary: #fe63b9;
 // $primary-light: lighten($primary, 10%);
 // $primary-dark: darken($primary, 10%);
-$accent: #4fa4ff;
+$accent: #094c94;
 $primary: #63c964;
 // $success: rgb(113, 154, 0);
 $secondary: #f082bf;
@@ -37,3 +37,15 @@ $forms: (
   '[type=color], [type=date], [type=datetime], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=url], [type=week], [type=time], select, textarea'
 );
 
+
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'accent': #e5d5dd,
+    'light' : #ffffff
+  ),
+  $theme-colors
+);

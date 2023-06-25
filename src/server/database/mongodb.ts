@@ -5,7 +5,7 @@ let cachedDb: Db;
 
 export default async function connectToDatabase(): Promise<Db> {
   if (cachedDb) {
-    console.log("Using cached DB Connection!")
+    // console.log("Using cached DB Connection!")
     return cachedDb;
   }
   client = await MongoClient.connect(process.env.MONGODB_URI as string);

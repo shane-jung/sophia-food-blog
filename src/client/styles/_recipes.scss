@@ -222,3 +222,49 @@
 .dragover, .tag-list-item:has(.dragover){
     background-color: lighten($primary, 20%);
 }
+
+
+.tooltip-inner{
+    max-width: 300px;
+   padding:1em;
+}
+
+
+.recipe-body-dropdown{
+    margin: 2em 0;
+    height:6px;
+    width:100%;
+    border-radius:10px;
+    display:block;
+    transition: background .15s ease-in-out;
+    background: lighten($primary, 25%);
+    &:has(button:hover){
+            background: $primary !important;
+    }
+    button{
+        mix-blend-mode:darken;
+        border-radius:100%;
+        background: lighten($primary, 25%) !important;
+        &:hover{
+            background: $primary !important;
+
+        }
+        border:none;
+        color:black;
+        background:none;
+        position:absolute;
+        left:50%;
+        top:50%;
+        transform:translate(-50%, -50%);
+        height:25px;
+        svg{
+            position:absolute;
+            transform:translate(-50%, -50%);
+            top:50%;
+            left:50%;
+        }
+    }
+    .dropdown-toggle::after{
+        display:none;
+    }
+}

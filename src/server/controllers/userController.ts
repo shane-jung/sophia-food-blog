@@ -90,14 +90,14 @@ const userController = {
 
   createUser: async (req: Request, res: Response) => {
     const user = res.locals.user;
-    console.log(req.body, res.locals.user);
+    // console.log(req.body, res.locals.user);
     try {
       const db = await connectToDatabase();
       const DBuser = { ...EmptyProfile, roles: [1000], ...user };
       const result = await db
         .collection("Profiles")
         .insertOne({ ...DBuser, _id: new ObjectId() });
-      console.log(result);
+      // console.log(result);
       return res.json({ user: { ...DBuser, _id: result.insertedId } });
     } catch (error) {
       console.error(`Error creating user in createUser: ${error}`);
@@ -105,7 +105,7 @@ const userController = {
     }
   },
   getUser: async (req: Request, res: Response) => {
-    console.log("in get users ");
+    // console.log("in get users ");
     const id = req.params.id;
     try {
       const db = await connectToDatabase();
@@ -132,7 +132,7 @@ const userController = {
     try {
       const db = await connectToDatabase();
       const users = await db.collection("Profiles").find().toArray();
-      console.log(users);
+      // console.log(users);
       return res.json(users);
     } catch (error) {
       console.error(`Error getting users in getAllUsers: ${error}`);

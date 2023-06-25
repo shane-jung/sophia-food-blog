@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 export default function RecipesDashboard() {
   const recipes = useGetAllRecipes();
-  console.log(recipes[9].ratings);
   return (
     <Container>
       <h1>Recipes Dashboard</h1>

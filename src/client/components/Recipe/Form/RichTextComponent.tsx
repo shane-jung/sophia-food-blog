@@ -10,10 +10,10 @@ export default function RichTextComponent({
   name,
 }: RichTextComponentProps) {
   return (
-    <div>
+    <div className="my-5">
       {value && <h3 className= "text-center text-capitalize">{name}</h3> }
       <div
-        className={"fw-normal text-body-primary lh-lg fs-5"}
+        className={"fw-normal text-body-primary lh-lg fs-5 "}
         dangerouslySetInnerHTML={{ __html: value || "" }}
       />
     </div>

@@ -8,9 +8,11 @@ import * as emoji from "node-emoji";
 export default function Select({
   selected: initialSelected,
   setSelected,
+  category,
 }: {
   selected?: string[];
   setSelected: any;
+  category:string;
 }) {
   const allTags = useQuery({
     queryKey: ["tags"],
@@ -22,12 +24,11 @@ export default function Select({
       return { value: tag._id, label: tag.value, _id: tag._id };
     })
   );
-  console.log(initialSelected);
 
   async function createOption(option: string) {
     try {
-      const response = await axios.post("/tags/create", {
-        tag: option,
+      const response = await axios.post(`/tags/create`, {
+            option, category
       });
       options.push({ value: option, label: option, _id: response.data });
     } catch (err) {
@@ -39,6 +40,7 @@ export default function Select({
     <div className="mb-4" style={{ zIndex: "200", position: "relative" }}>
       <Form.Label>Tags</Form.Label>
       <CreatableSelect
+        name= {category}
         closeMenuOnSelect={false}
         isMulti
         options={options}

@@ -7,17 +7,6 @@ import Col from "react-bootstrap/Col";
 export default function RootLayout() {
   return (
     <Container fluid> 
-      <Container >
-        <Row className="align-items-center justify-content-between">
-          <Col xs="auto">
-            {/* <Logo /> */}
-          </Col>
-          <Col xs="auto" >
-            {/*  */}
-
-          </Col>
-        </Row>
-      </Container>
       <MainNavbar />
       <Container>
         <Row>

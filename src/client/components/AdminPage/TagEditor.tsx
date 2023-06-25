@@ -9,7 +9,8 @@ import * as emoji from 'node-emoji';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Button, Form, ListGroup } from "react-bootstrap";
+import { Button, Form, InputGroup, ListGroup, Spinner } from "react-bootstrap";
+import InputTooltip from "../Recipe/Form/InputTooltip";
 
 export default function TagEditor({ tags }: any) { 
     const [selectedTagIndex, setSelectedTagIndex] = useState(0);
@@ -17,14 +18,12 @@ export default function TagEditor({ tags }: any) {
     const tagsMutation = useMutation({
         mutationFn: ()=> updateTag({tag: selectedTag}),
         onSuccess: (data) => {
-            // queryClient.invalidateQueries("tags", selectedTag._id);
+           queryClient.invalidateQueries("tags", selectedTag._id);
         }
     })
+
     useEffect(()=>{
         setSelectedTag(tags[Number(selectedTagIndex)]);
-        // const newTag :HTMLElement= document.getElementsByClassName("tag-list-itemz")[selectedTagIndex] as HTMLElement;
-        // console.log(newTag);
-        // newTag.click();
     }, [selectedTagIndex])
   
     function saveTag(e: any){
@@ -55,10 +54,11 @@ export default function TagEditor({ tags }: any) {
                     Label
                 </Form.Label> 
                 <Col sm="10">
+                  <InputGroup>
                     <Form.Control value={selectedTag.label || ""} onChange =  {(e)=> setSelectedTag({...selectedTag, label: e.target.value})} />
-                    
+                    <InputTooltip text = {`The label appears on the actual rectangular tags you see on a recipe. `} />
+                    </InputGroup>
                 </Col>
-                <Form.Control.Feedback tooltip>Good work</Form.Control.Feedback>
             </Form.Group>
              
                   {/* placeholder = "The label is the text that appears on the actual recipe tag icon. It should be short and descriptive (1-2 words). Defaults to the category name." */}
@@ -67,7 +67,10 @@ export default function TagEditor({ tags }: any) {
                     Category Page Heading
                 </Form.Label> 
                 <Col sm="10">
-                    <Form.Control value={selectedTag.heading || ""} onChange =  {(e)=> setSelectedTag({...selectedTag, heading: e.target.value})} />
+                    <InputGroup>
+                      <Form.Control value={selectedTag.heading || ""} onChange =  {(e)=> setSelectedTag({...selectedTag, heading: e.target.value})} />
+                      <InputTooltip text = {`The category page heading will appear at the top of the dedicated page for the category and it's recipes. `} />
+                    </InputGroup>
                 </Col>
             </Form.Group>
               
@@ -80,10 +83,11 @@ export default function TagEditor({ tags }: any) {
                     <Form.Control as ="textarea"  rows ={8} value={selectedTag.description || ""} onChange =  {(e)=> setSelectedTag({...selectedTag, description: e.target.value})} />
                 </Col>
             </Form.Group>
-                  {/* // placeholder= "This category's description will show up on the category page." */}
-              {/* <input type="color" /> */}
-              {/* <button>Delete</button> */}
-              <Button variant="success" onClick = {saveTag}>Save Changes</Button>
+    
+            <Button variant="primary" className= "text-light" onClick = {saveTag}>Save Changes</Button>
+            {tagsMutation.isLoading && <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>}
           </Form>
         </Col>
       </Row>
@@ -96,8 +100,8 @@ export default function TagEditor({ tags }: any) {
 }
 
 async function updateTag({tag}: any){
-    console.log(tag);
     const {data} = await axios.put(`/tags/${tag._id}`, {...tag, label: emoji.unemojify(tag.label) || ""});
+    console.log(data);
     return data;
 }
 

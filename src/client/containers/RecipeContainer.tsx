@@ -17,6 +17,7 @@ import { setRecipe } from "../slices/recipe";
 import axios from "../api/axios";
 import RecipeToolbar from "../components/Recipe/Form/RecipeToolbar";
 import { Recipe } from "../types";
+import Comments from "../components/Recipe/Comments/Comments";
 
 export default function RecipeContainer() {
   const location = useLocation();
@@ -25,7 +26,6 @@ export default function RecipeContainer() {
   const recipe: Recipe = useQuery(["recipe", titleId], () =>
     loadRecipe(titleId)
   ).data;
-  console.log(recipe);
   useEffect(() => {
     dispatch(setViewMode("viewing-recipe"));
   }, [recipe]);
@@ -67,6 +67,7 @@ export default function RecipeContainer() {
         </Link>
       </Container>
       <RecipeBody body={recipe.body} />
+      <Comments />
     </Container>
   );
 }
