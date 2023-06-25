@@ -26,7 +26,7 @@ export function RecipesCategoryBlock({ tag }: { tag: any }) {
       </Row>
       
        <Button 
-          variant="outline-secondary"
+          variant="primary"
           href={`/category/${tag.value.replace(" ", "-")}`}
           className="text-capitalize text-center text-decoration-none fs-5 mx-auto d-block"
           style= {{width: "fit-content"}}

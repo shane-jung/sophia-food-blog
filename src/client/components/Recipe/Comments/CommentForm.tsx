@@ -130,7 +130,7 @@ export default function CommentForm({
         </>
       )}
 
-      <Button variant="outline-success" type="submit">
+      <Button variant="secondary" type="submit">
         Submit
       </Button>
     </Form>

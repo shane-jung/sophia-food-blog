@@ -211,7 +211,7 @@ export default function RegisterPage() {
             : ""}
         </p>
         <Button
-          variant = "success"
+          variant = "secondary"
         //   className={
             
         //     // validUsername &&

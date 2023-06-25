@@ -121,7 +121,7 @@ export default function ImageUpload() {
             Upload a file
           </Form.Label>
           <Form.Control type="file" onChange={ (event:any) => setImagePreview(event?.target.files[0])}/>
-          <Button variant="success" onClick={uploadToS3} className="mt-3">
+          <Button variant="primary" onClick={uploadToS3} className="mt-3">
               Upload Photo <FontAwesomeIcon icon={faCheck} />
           </Button>
         </Modal.Body>

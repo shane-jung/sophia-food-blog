@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
 
-$font-family-base: 'Quicksand', sans-serif;
+$font-family-base: 'Lora', serif;
 
 // $theme-colors: (
 //   "primary": #f082bf,
@@ -13,10 +13,25 @@ $font-family-base: 'Quicksand', sans-serif;
 // $primary: #fe63b9;
 // $primary-light: lighten($primary, 10%);
 // $primary-dark: darken($primary, 10%);
-$accent: #4fa4ff;
-$primary: #63c964;
+$accent: #e5d5dd;
+$primary: #093824;
 // $success: rgb(113, 154, 0);
-$secondary: #f082bf;
+$secondary: #51344D;
+$secondary-light: lighten($secondary, 30%);
+$light: white;
+$body-color: $primary;
+
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'accent': $accent,
+    'light' : $light
+  ),
+  $theme-colors
+);
 
 
 // $accent-light: lighten($accent, 10%); 

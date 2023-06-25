@@ -7,7 +7,7 @@ import LinkContainer from "react-router-bootstrap/LinkContainer";
 
 export default function MainNavbar() {
   return (
-    <Navbar bg="primary-subtle" className="mb-4">
+    <Navbar bg="primary" className="mb-4">
       <Container>
           <Nav 
             className="me-auto my-1 my-lg-0"
