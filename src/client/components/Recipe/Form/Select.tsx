@@ -1,66 +1,55 @@
-import { useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import axios from "@/client/api/axios";
-
-import { useQuery } from "react-query";
 import Form from "react-bootstrap/Form";
-import * as emoji from "node-emoji";
+import { useState } from "react";
+import { useQuery } from "react-query";
 export default function Select({
-  selected: initialSelected,
-  setSelected,
+  selectedIds = [], 
   category,
 }: {
-  selected?: string[];
-  setSelected: any;
+  selectedIds: string[];
   category:string;
 }) {
-  const allTags = useQuery({
+  
+  const tags = useQuery({
     queryKey: ["tags"],
     queryFn: getAllTags,
   }).data;
 
-  const [options, setOptions] = useState<any>(
-    allTags.map((tag: any) => {
-      return { value: tag._id, label: tag.value, _id: tag._id };
-    })
-  );
+
+  const [options, setOptions] = useState(tags.filter((tag: any) => tag.category === category).map((tag: any) => ({ value: tag._id, label: tag.label })));
+  const [selected, setSelected] = useState(selectedIds.map((id: string) => tags.find((tag: any) => tag._id === id)).map((tag: any) => ({ value: tag._id, label: tag.label })));
 
   async function createOption(option: string) {
     try {
       const response = await axios.post(`/tags/create`, {
-            option, category
+            tag:option, category
       });
-      options.push({ value: option, label: option, _id: response.data });
+      setOptions([...options, { value: response.data, label: option }] );
+      
     } catch (err) {
       console.log(err);
     }
   }
-
   return (
-    <div className="mb-4" style={{ zIndex: "200", position: "relative" }}>
-      <Form.Label>Tags</Form.Label>
+    <div className="mb-4" style={{ position: "relative" }}>
+      <Form.Label>{category}</Form.Label>
       <CreatableSelect
         name= {category}
         closeMenuOnSelect={false}
         isMulti
+        required = {false}
         options={options}
         onCreateOption={createOption}
-        defaultValue={initialSelected?.map((tag: any) => {
-          return {
-            value: tag,
-            label: emoji.emojify(
-              allTags[allTags.map((tag: any) => tag._id).indexOf(tag)].label
-            ),
-            _id: tag,
-          };
-        })}
+        defaultValue={selected} 
         onChange={(selected: any) => {
-          setSelected(selected.map((tag: any) => tag._id));
+          setSelected(selected);
         }}
       />
     </div>
   );
 }
+
 
 async function getAllTags() {
   const { data } = await axios.get(`/tags`);

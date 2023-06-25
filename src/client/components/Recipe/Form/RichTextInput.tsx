@@ -53,6 +53,14 @@ export default function RichTextInput({
             return newBody;
         });
     }   
+    function onLabelChange(e:any){
+      setBody((prev:any) => {
+          
+          var newBody = [...prev];
+          newBody[index].name = e.target.value;
+          return newBody;
+      })
+    }
     const [props, setProps] = useState({
         defaultValue: value,
         theme: "snow",
@@ -69,7 +77,8 @@ export default function RichTextInput({
             type="text"
             className="section-title-input"
             placeholder="Section title"
-            defaultValue={label}
+            value={label}
+            onChange= {onLabelChange}
           ></Form.Control>
         </FloatingLabel>
 

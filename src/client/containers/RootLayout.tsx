@@ -32,6 +32,10 @@ export default function RootLayout() {
         </Row>
       </Container>
 
+      <Container className="text-center" style={{height:"150px"}}>
+      </Container>
+
+
     </Container>
   );
 }

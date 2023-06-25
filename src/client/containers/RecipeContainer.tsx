@@ -58,7 +58,20 @@ export default function RecipeContainer() {
       </Row>
       <ImageUpload imageUrl={recipe.imageUrl as string} index={-1} />
       <Container>
-        <Tags tagIds = {recipe.tags} />
+        <Row>
+          <Col>
+            <Tags tagIds = {recipe.cuisines} category={"Cuisine"} />
+
+          </Col>
+          <Col>
+          <Tags tagIds = {recipe.meals} category = {"Meal"} />
+          </Col>
+          <Col>
+
+          <Tags tagIds = {recipe.ingredients} category = {"Ingredients"}/>
+          </Col>
+        </Row>
+         
         <Link className="btn btn-primary mx-1 text-light" to="#comments">
           {recipe.comments?.length || 0} comments
         </Link>

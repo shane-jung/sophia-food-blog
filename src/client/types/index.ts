@@ -8,8 +8,11 @@ export type Recipe = {
     dateCreated: string;
     dateEdited: string;
     author: any;
-    cardTitle: string;
+    // cardTitle: string;
     // ingredients : Ingredient[];
+    cuisines?: string[];
+    meals?: string[];
+    ingredients?: string[];
     imageUrl?: string;
     comments: string[];
     tags? : string [];

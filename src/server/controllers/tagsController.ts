@@ -9,13 +9,13 @@ const tagsController = {
       console.log(req.body);
       const {category, tag} = req.body;
       
-        return;
         try {
           const db = await connectToDatabase();
-          const highestVal = (await db.collection("Tags").find({category: category}).sort({order: -1}).limit(1).toArray())[0].order;
+          const highestVal = (await db.collection("Tags").find({category: category}).sort({order: -1}).limit(1).toArray())[0]?.order;
           const response = await db
             .collection("Tags")
-            .insertOne({ value: tag.toLowerCase(), category, description: "", recipes: [] , order: highestVal + 1});
+            .insertOne({ value: tag.toLowerCase(), label:tag,  category, description: "", recipes: [] , order: highestVal + 1});
+            console.log(response);
           return res.json(response.insertedId);
         } catch (error) {
           console.error(`Error creating tag in createTag: ${error}`);
