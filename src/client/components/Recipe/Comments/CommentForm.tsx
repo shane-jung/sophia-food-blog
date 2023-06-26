@@ -5,29 +5,29 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InteractiveRatingBar } from "../RatingBar";
 
-import { useMutation } from "react-query";
-import queryClient from "@/client/utils/queryClient";
+import { useMutation, useQueryClient } from "react-query";
 
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";  
 
 export default function CommentForm({
-  recipeId,
   replyToCommentId,
   setReplying,
   setRepliesVisible,
 }: {
-  recipeId: string;
   replyToCommentId?: string;
   setReplying?: any;
   setRepliesVisible?: any;
 }) {
   const { auth } = useAuth();
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
+  const queryClient = useQueryClient();
+
+  const recipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
 
 
   const postCommentMutation = useMutation({
@@ -50,16 +50,13 @@ export default function CommentForm({
 
   async function handleSubmit(event: any) {
     event.preventDefault();
+    console.log(event.currentTarget.rating?.value)
+    // return;
     setContent("");
     if (replyToCommentId) {
       setReplying(false);
       setRepliesVisible(true);
     }
-    // window.scrollBy({
-    //     top: 100,
-    //     behavior: 'smooth'
-    // });
-
     const data1 = {
       comment: {
         profileId: auth?.user?._id || "",
@@ -80,13 +77,11 @@ export default function CommentForm({
 
   return (
     <Form
-      className={"comment-form " + (replyToCommentId ? "reply" : "")}
+      className={"position-relative comment-form " + (replyToCommentId ? "reply" : "")}
       onSubmit={handleSubmit}
       method="POST"
     >
-      {auth?.user ? (
-        <></>
-      ) : (
+      {!auth?.user && (
         <>
           <FloatingLabel label="Your name">
             <Form.Control
@@ -98,7 +93,7 @@ export default function CommentForm({
               value={name}
             />
           </FloatingLabel>
-          
+
           <FloatingLabel label="email">
             <Form.Control
               id="email"
@@ -112,7 +107,9 @@ export default function CommentForm({
         </>
       )}
 
-      <Form.Control as="textarea" rows={3}
+      <Form.Control
+        as="textarea"
+        rows={3}
         name="content"
         placeholder={
           replyToCommentId ? "Reply to this comment..." : "Add a comment..."
@@ -122,13 +119,13 @@ export default function CommentForm({
       />
 
       {!replyToCommentId && (
-        <>
+        <Container>
           <Form.Text>Did you make this recipe? Give it a rating!</Form.Text>
           <InteractiveRatingBar />
-        </>
+        </Container>
       )}
 
-      <Button variant="secondary" type="submit">
+<Button variant="secondary" type="submit" className="mt-2">
         Submit
       </Button>
     </Form>

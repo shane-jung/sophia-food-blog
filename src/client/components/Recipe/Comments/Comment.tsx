@@ -13,8 +13,10 @@ import { setLikedComment } from "@/client/slices/user";
 import queryClient from "@/client/utils/queryClient";
 import { useMutation } from "react-query";
 
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+
 interface CommentProps {
-  recipeId: string;
   comment: CommentType;
   index: number;
   reply: boolean;
@@ -22,7 +24,6 @@ interface CommentProps {
 }
 
 export default function Comment({
-  recipeId,
   comment,
   index,
   reply,
@@ -30,6 +31,9 @@ export default function Comment({
 }: CommentProps) {
   const { auth } = useAuth();
   const dispatch = useDispatch();
+  const recipeId = useSelector(
+    (state: RootState) => state.recipe.activeRecipeId
+  );
 
   const likedComments = useSelector((state: any) =>
     state.user.likedComments
@@ -37,7 +41,6 @@ export default function Comment({
       ?.comments.includes(comment._id)
   );
 
-  const comments = useSelector((state: RootState) => state.recipe.comments);
   const [commentId, setCommentId] = useState(comment._id);
 
   const [liked, setLiked] = useState();
@@ -140,14 +143,16 @@ export default function Comment({
   }
 
   return (
-    <div className="comment">
-      <span>
-        <span className="comment-user">{comment.username}</span> &#x2022;
-        <span className="comment-date">{dateString}</span>
-      </span>
-      {/* <h1>{comment._id}</h1> */}
-      <p className="comment-content">{comment.content}</p>
-      <div className="comment-toolbar">
+    <Container className="comment border border-2">
+      <Container className="d-flex gap-1">
+        <span className="text-secondary">{comment.username}</span>{" "}
+        <span> &#x2022; </span>
+        <span>{dateString}</span>
+      </Container>
+      <Container>
+        <p>{comment.content}</p>
+      </Container>
+      <Container className="d-flex gap-2 align-items-center">
         <FontAwesomeIcon
           onClick={handleLike}
           icon={faHeart}
@@ -156,61 +161,56 @@ export default function Comment({
           }
         />
 
-        <span className="comment-like-counter">
-          
-          {comment.likes + " likes"}
-        </span>
+        <span className="comment-like-counter">{comment.likes + " likes"}</span>
 
         {!reply && (
           <>
             <span> &#x2022; </span>
-            <button
-              type="button"
-              className="comment-reply-button simple-button"
+            <Button
+              variant="primary px-2"
               onClick={handleReply}
             >
               {replyText}
-            </button>
+            </Button>
           </>
         )}
 
-        {replies != undefined && repliesFiltered?.length > 0 ? (
-          <button
-            onClick={() => setRepliesVisible(!repliesVisible)}
-            className="simple-button"
-          >
-            &#x2022;
-            {!reply && repliesVisible ? "Hide Replies" : "Show Replies"}
-          </button>
-        ) : (
-          <></>
+        {replies != undefined && repliesFiltered?.length > 0 && (
+          <>
+            <span>&#x2022;</span>
+            <Button
+              variant="primary px-2"
+              onClick={() => setRepliesVisible(!repliesVisible)}
+            >
+              {!reply && repliesVisible ? "Hide Replies" : "Show Replies"}
+            </Button>
+          </>
         )}
 
-        { ( comment.profileId == auth?.user?._id ||
+        {(comment.profileId == auth?.user?._id ||
           auth?.user?.roles?.includes(8012)) && (
           <>
             <span> &#x2022; </span>
-            <button
-              className="comment-delete-button simple-button"
+            <Button
+              variant = "danger px-2"
               onClick={handleDelete}
             >
               Delete
-            </button>
+            </Button>
           </>
         )}
-      </div>
+      </Container>
 
       {replying && (
         <CommentForm
           replyToCommentId={comment._id}
-          recipeId={recipeId}
           setReplying={setReplying}
           setRepliesVisible={setRepliesVisible}
         />
       )}
 
       {
-        <div className="replies">
+        <Container className="replies">
           {repliesVisible &&
             repliesFiltered?.map((reply: any, replyIndex: number) => {
               return (
@@ -220,13 +220,12 @@ export default function Comment({
                   comment={reply}
                   index={index}
                   parentId={commentId}
-                  recipeId={recipeId}
                 />
               );
             })}
-        </div>
+        </Container>
       }
-    </div>
+    </Container>
   );
 }
 

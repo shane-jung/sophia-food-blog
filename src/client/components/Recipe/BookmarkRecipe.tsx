@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import Col from "react-bootstrap/Col";
 
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,19 +28,37 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
   const userMutation = useMutation(
     ["user", "saveRecipe", auth.user?._id],
     () => {
-      
       return axios.post(`/users/${auth.user?._id}/saveRecipe`, {
         recipeId,
         push: !saved,
-      })},
+      });
+    },
     {
       onSuccess: (response) => {
-        queryClient.invalidateQueries(["user", auth.user._id]);
+        console.log(response);
+        // queryClient.invalidateQueries(["user", "saveRecipe", auth.user._id]);
+        if (!saved)
+          queryClient.setQueryData(["user"], (oldData: any) => {
+            console.log(saved);
+            if (saved) {
+              return {
+                ...user,
+                savedRecipes: user.savedRecipes.filter(
+                  (id: string) => id !== recipeId
+                ),
+              };
+            } else
+              return {
+                ...user,
+                savedRecipes: [recipeId, ...user.savedRecipes],
+              };
+          });
       },
     }
   );
 
   const saveRecipe = () => {
+    console.log(saved, auth, user);
     if (!auth?.isAuthenticated) return setShowModal(true);
     setSaved(!saved);
     if (!saved) setShowSaved(true);
@@ -70,17 +89,33 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Offcanvas show={showSaved} onHide={() => setShowSaved(false)}>
+      <Offcanvas show={showSaved} onHide={() => setShowSaved(false)} xs={5}>
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Your saved Recipes</Offcanvas.Title>
+          <Offcanvas.Title className="fs-2">Your Saved Recipes</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           {user?.savedRecipes
             ?.map((recipeId: string, index: number) => {
-              return <RecipeThumbnail key={index} recipeId={recipeId} />;
+              return (
+                <Col
+                  key={index}
+                  xs={11}
+                  sm={11}
+                  lg={11}
+                  xl={11}
+                  className="mx-auto"
+                >
+                  <RecipeThumbnail recipeId={recipeId} />;
+                </Col>
+              );
             })
             .slice(0, 4)}
-          <Button href={`/profile/${auth.user?._id}`}>View all</Button>
+          <Button
+            className="d-block mx-auto text-center w-auto"
+            href={`/profile/${auth.user?._id}`}
+          >
+            View all
+          </Button>
         </Offcanvas.Body>
       </Offcanvas>
     </>

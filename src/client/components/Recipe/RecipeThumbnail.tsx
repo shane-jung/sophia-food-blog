@@ -22,7 +22,6 @@ export default function RecipeThumbnail({recipeId} : {recipeId: string}) {
   }, [fetchedRecipe])
 
   return (
-    <Col xs={12} sm ={6} lg = {4} xl = {3}>
     <Container className="recipe-thumbnail"> 
       <Link 
         to={`/recipes/${recipe?.titleId}`}
@@ -32,7 +31,6 @@ export default function RecipeThumbnail({recipeId} : {recipeId: string}) {
           <div className="text-center">{recipe?.title}</div>
       </Link>
     </Container>
-    </Col>
   );
 }
 

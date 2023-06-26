@@ -13,8 +13,9 @@ import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
 export default function AllRecipes() {
   const tags = useQuery(["tags"], getAllTags).data;
   const [filters, setFilters] = useState<any>({});
-  const recipes = useQuery(["recipes", filters], ()=> { return getRecipes({filters}) }).data;
-
+  const recipes = useQuery(["recipes", filters], () => {
+    return getRecipes({ filters });
+  }).data;
 
   const [tagsSorted, setTagsSorted] = useState(
     tags.reduce((acc: any, tag: any) => {
@@ -31,8 +32,13 @@ export default function AllRecipes() {
       <Row>
         <Col xs={3}>
           <Form>
-            {Object.keys(tagsSorted).map((category: string, index:number) => (
-              <RecipeFilters key={index} category={category} tags={tagsSorted[category] }setFilters= {setFilters} />
+            {Object.keys(tagsSorted).map((category: string, index: number) => (
+              <RecipeFilters
+                key={index}
+                category={category}
+                tags={tagsSorted[category]}
+                setFilters={setFilters}
+              />
             ))}
           </Form>
         </Col>
@@ -40,14 +46,12 @@ export default function AllRecipes() {
           <h1 className="text-center">All Recipes</h1>
           <Suspense fallback={<Loading />}>
             <Row>
-
-            {recipes.map((recipe: any, index:number) => (
-                <RecipeThumbnail key={index} recipeId={recipe._id} />
-                  ))
-              }
+              {recipes.map((recipe: any, index: number) => (
+                <Col  key={index}  xs={12} sm={6} lg={4} xl={3}>
+                  <RecipeThumbnail recipeId={recipe._id} />;
+                </Col>
+              ))}
             </Row>
-             
-
           </Suspense>
         </Col>
       </Row>
@@ -55,28 +59,45 @@ export default function AllRecipes() {
   );
 }
 
-function RecipeFilters({ category, tags, setFilters }: { category: string; tags: any, setFilters:any }) {
+function RecipeFilters({
+  category,
+  tags,
+  setFilters,
+}: {
+  category: string;
+  tags: any;
+  setFilters: any;
+}) {
   const [length, setLength] = useState(Math.min(5, tags.length));
   return (
     <Form.Group>
       <Form.Label className="text-capitalize">{category}</Form.Label>
       {tags
         .map((tag: any) => (
-         
           <Form.Check
             key={tag._id}
             value={tag._id}
             label={tag.value}
             className="text-capitalize"
             onChange={(e: any) => {
-              setFilters((filters:any)=>{
+              setFilters((filters: any) => {
                 if (e.target.checked) {
-                  return { ...filters, [category]: [...filters?.[category] || [], e.target.value] };
+                  return {
+                    ...filters,
+                    [category]: [
+                      ...(filters?.[category] || []),
+                      e.target.value,
+                    ],
+                  };
                 } else {
-                  return { ...filters, [category]: filters?.[category]?.filter((filter: any) => filter !== e.target.value) };
-                } 
-              })
-             
+                  return {
+                    ...filters,
+                    [category]: filters?.[category]?.filter(
+                      (filter: any) => filter !== e.target.value
+                    ),
+                  };
+                }
+              });
             }}
           />
         ))
@@ -89,10 +110,11 @@ function RecipeFilters({ category, tags, setFilters }: { category: string; tags:
           Show More ({tags.length - length})
         </Button>
       ) : (
-        
-        length > 5 && <Button variant="link" onClick={() => setLength(5)}>
-          Show Less
-        </Button>
+        length > 5 && (
+          <Button variant="link" onClick={() => setLength(5)}>
+            Show Less
+          </Button>
+        )
       )}
     </Form.Group>
   );
@@ -103,9 +125,10 @@ async function getAllTags() {
   return data;
 }
 
-
-  async function getRecipes({filters}:any){
-    console.log("FILTERS IN GET RECIPES", filters)
-  const {data} = await axios.get(`/recipes/?filters=${JSON.stringify(filters)}` );
+async function getRecipes({ filters }: any) {
+  console.log("FILTERS IN GET RECIPES", filters);
+  const { data } = await axios.get(
+    `/recipes/?filters=${JSON.stringify(filters)}`
+  );
   return data;
 }

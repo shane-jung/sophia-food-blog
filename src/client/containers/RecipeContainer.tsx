@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery } from "react-query";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
 import { setViewMode } from "../slices/user";
@@ -24,6 +24,7 @@ import Image from "react-bootstrap/Image";
 
 import { Recipe } from "../types";
 import useAuth from "../utils/useAuth";
+import { setRecipe } from "../slices/recipe";
 
 export default function RecipeContainer() {
   const {auth} = useAuth();
@@ -33,12 +34,13 @@ export default function RecipeContainer() {
   const recipe: Recipe = useQuery(["recipe", titleId], () =>
     loadRecipe(titleId)
   ).data;
-  useEffect(() => {
-    dispatch(setViewMode("viewing-recipe"));
-  }, [recipe]);
+  const activeRecipeId = useSelector((state: any) => state.recipe.activeRecipeId);
+
 
   useEffect(() => {
     document.title = recipe.title + " - Once Upon a Thyme";
+    dispatch(setViewMode("viewing-recipe"));
+    dispatch(setRecipe({activeRecipeId: recipe._id}))
   }, [recipe]);
 
   return (
@@ -60,7 +62,7 @@ export default function RecipeContainer() {
           <AuthorSnippet author={recipe.author} />
         </Col>
         <Col xs={3} className="d-flex flex-column justify-content-center ">
-          <StaticRatingBar />
+          {/* <StaticRatingBar /> */}
 
           <Link className="btn btn-secondary mx-1 mt-1" to="#comments">
             {recipe.comments?.length || 0} comments
@@ -86,7 +88,7 @@ export default function RecipeContainer() {
         </Row>
       </Container>
       <RecipeBody body={recipe.body} />
-      <Comments recipeId={recipe._id}/>
+      <Comments/>
     </Container>
   );
 }

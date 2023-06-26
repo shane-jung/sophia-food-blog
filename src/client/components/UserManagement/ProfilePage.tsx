@@ -5,6 +5,7 @@ import RecipeThumbnail from "../Recipe/RecipeThumbnail";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 
 export default function ProfilePage() {
@@ -18,7 +19,9 @@ export default function ProfilePage() {
       <h1>Your saved Recipes</h1>
       <Row>
         {user.savedRecipes.map((recipe: any, index:number) => {
-          return <RecipeThumbnail key= {index} recipeId={recipe} />;
+          return <Col  key={index} xs={12} sm={6} lg={4} xl={3}>
+          <RecipeThumbnail recipeId={recipe} />;
+        </Col>
         })}
       </Row>
      

@@ -5,26 +5,28 @@ import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment";
 import { useQuery } from "react-query";
 
-export default function CommentsList({setCommentsLength, recipeId } : {setCommentsLength: any, recipeId: string}){
-  const { data, status } = useQuery({
+export default function CommentsList({setCommentsLength } : {setCommentsLength: any}){
+  const recipeId = useSelector((state: any) => state.recipe.activeRecipeId);
+
+
+  const fetchedComments = useQuery({
     queryKey:  ["comments", recipeId],
     queryFn: retrieveComments,
-  });
+  }).data;
 
   const [comments, setComments] = useState<any>([]);
   const [commentsRender, setCommentsRender] = useState<any>([]);
 
   useEffect(() => {
-    // console.log(data);
-    setComments(data);
-    setCommentsLength(data.length);
-  }, [data]);
+    setComments(fetchedComments);
+    setCommentsLength(fetchedComments.length);
+  }, [fetchedComments]);
 
   useEffect(() => {
     setCommentsRender(
       comments?.map((comment: any, index: number) => {
         return (
-          <Comment reply={false} key={index} comment={comment} index={index} recipeId={recipeId} />
+          <Comment reply={false} key={index} comment={comment} index={index}  />
         );
       })
     );
