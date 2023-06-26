@@ -4,6 +4,7 @@ import {
   RouterProvider,
   Route,
   Routes,
+  useLocation,
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import "@/client/styles/index.scss";
@@ -15,7 +16,7 @@ import RegisterPage from "../components/UserManagement/RegisterPage";
 import AuthenticatedRoute from "../components/UserManagement/AuthenticatedRoute";
 import PersistLogin from "../utils/PersistLogin";
 import Loading from "../components/other/Loading";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import CreateRecipePage from "./CreateRecipePage";
 import RecipesByTag from "./RecipesByTag";
 import RecipeCategories from "./RecipeCategories";
@@ -24,6 +25,7 @@ import RecipeContainer from "./RecipeContainer";
 
 import "react-quill/dist/quill.snow.css";
 import EditRecipePage from "./EditRecipePage";
+import ProfilePage from "../components/UserManagement/ProfilePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -95,7 +97,7 @@ const router = createBrowserRouter(
             </Route>
           </Route>
           <Route path= "admin" element = {<Suspense fallback={<Loading />}> <AdminPage /> </Suspense>} />
-
+          <Route path= "profile/:id" element = {<Suspense fallback={<Loading />}> <ProfilePage /> </Suspense>} />
         </Route>
 
         <Route path="users">
@@ -108,6 +110,7 @@ const router = createBrowserRouter(
 );
 
 export const App: React.FC = () => {
+
   return (
     <HelmetProvider>
       <Helmet>

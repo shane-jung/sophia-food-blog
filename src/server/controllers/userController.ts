@@ -15,14 +15,14 @@ const userController = {
     else return res.sendStatus(200);
   },
   handleLogin: async (req: Request, res: Response, next: any) => {
-    console.log(req.cookies);
     const user = req.body;
     const db = await connectToDatabase();
     const DBUser = await db
       .collection("Profiles")
       .findOne({ email: user.email });
-    if (!DBUser) return res.sendStatus(401);
+    if (!DBUser) return res.status(401).json({errMessage: "No user associated with that email address"});
     const match = await bcrypt.compare(user.password, DBUser.password);
+    console.log(match);
     if (match) {
       console.log("\nLogging in User. Generating Access and Refresh Token\n");
       const accessToken = jwt.sign(
@@ -31,6 +31,7 @@ const userController = {
             roles: DBUser.roles,
             _id: DBUser._id,
             username: DBUser.username,
+
           },
         },
         process.env.ACCESS_TOKEN_SECRET!,
@@ -56,13 +57,11 @@ const userController = {
         maxAge: 24 * 60 * 60 * 1000,
       });
       DBUser["refresh-token"] = refreshToken;
-      // console.log(refreshToken);
       req.headers["Authorization"] = `Bearer ${accessToken}`;
       saveUser(DBUser);
       res.json({ isAuthenticated: true, user: DBUser });
-      // console.log(DBUser);
     } else {
-      res.status(401);
+      return res.status(401).json({errMessage: "Incorrect username or password."});
     }
   },
   handleLogout: async (req: Request, res: Response) => {
@@ -89,14 +88,14 @@ const userController = {
   },
 
   createUser: async (req: Request, res: Response) => {
-    const user = res.locals.user;
-    // console.log(req.body, res.locals.user);
+    // const user = res.locals.user;
+    const {values: user} = req.body;
     try {
       const db = await connectToDatabase();
       const DBuser = { ...EmptyProfile, roles: [1000], ...user };
       const result = await db
         .collection("Profiles")
-        .insertOne({ ...DBuser, _id: new ObjectId() });
+        .insertOne(DBuser);
       // console.log(result);
       return res.json({ user: { ...DBuser, _id: result.insertedId } });
     } catch (error) {
@@ -115,13 +114,14 @@ const userController = {
       // console.log(user);
       if (user)
         return res.json({
-          user: {
             _id: user._id,
             username: user.username,
             email: user.email,
             likedComments: user.likedComments,
+            savedRecipes: user.savedRecipes,
+            comments: user.comments,
           },
-        });
+        );
       else return res.sendStatus(404);
     } catch (error) {
       console.error(`Error getting user in getUser: ${error}`);
@@ -138,7 +138,26 @@ const userController = {
       console.error(`Error getting users in getAllUsers: ${error}`);
       throw error;
     }
-  }
+  },
+  saveRecipe: async (req: Request, res: Response) => {
+    const {push, recipeId} = req.body;
+    const id = req.params.id as string;
+    console.log(req.body, id)
+    try {
+      const db = await connectToDatabase();
+      const update = push ? {$push: {savedRecipes: new ObjectId(recipeId)}} : {$pull: {savedRecipes: new ObjectId(recipeId)}};
+      const result = await db
+        .collection("Profiles")
+        .updateOne({ _id: new ObjectId(id) }, update);
+        console.log(result);
+      return res.sendStatus(200);
+    } catch (error) {
+      console.error(`Error saving recipe in saveRecipe: ${error}`);
+      throw error;
+    }
+
+
+  },
 };
 async function saveUser(user: any) {
   try {

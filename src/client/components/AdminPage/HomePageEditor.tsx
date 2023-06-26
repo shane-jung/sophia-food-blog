@@ -1,7 +1,11 @@
 import { getAllRecipes } from "@/client/queries";
 import useAxiosPrivate from "@/client/utils/useAxiosPrivate";
 import { useState } from "react";
-import { Button, Container, ListGroup, Spinner } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import ListGroup from "react-bootstrap/ListGroup";
+import Spinner from "react-bootstrap/Spinner";
+
 import { useMutation, useQuery } from "react-query";
 import AsyncSelect from "react-select/async";
 

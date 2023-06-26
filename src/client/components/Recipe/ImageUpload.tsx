@@ -3,11 +3,13 @@ import { faImage } from "@fortawesome/free-regular-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { Button, Container, Image } from "react-bootstrap";
+
+import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
-import { shallowEqual, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import axios, { axiosPrivate } from "../../api/axios";
+import axios from "../../api/axios";
 
 import Form from "react-bootstrap/Form";
 

@@ -16,115 +16,146 @@ import { handleLogin } from "../../slices/user";
 
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { Button, Container } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+
+import * as formik from "formik";
+import * as yup from "yup";
+
+type fieldKey = "email" | "password";
+const fields: fieldKey[] = ["email", "password"];
+
+const autocomplete = {  email: "email", password: "current-password" }; 
+const type = { email: "email", password: "password" };
 
 export default function LoginPage() {
+  const { Formik } = formik;
+
+  const schema = yup.object().shape({
+    email: yup.string().required(),
+    password: yup.string().required(),
+  });
+
+  const [validated, setValidated] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const { auth, setAuth } = useAuth();
-
-  const emailRef = useRef<HTMLInputElement>(null);
-  const errRef = useRef<HTMLParagraphElement>(null);
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errMessage, setErrMessage] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/";
 
   const dispatch = useDispatch();
-  const likedComments = useSelector((state: any) => state.user.likedComments);
 
   useEffect(() => {
     if (auth.accessToken) navigate(from, { replace: true });
-    emailRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    setErrMessage("");
-  }, [email, password]);
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "/users/login",
-        JSON.stringify({ email, password }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      console.log("logging in ");
-      dispatch(handleLogin(response.data));
-      setAuth({ user: response.data.user, isAuthenticated: true });
-
-      setPassword("");
-      setEmail("");
-      navigate(from, { replace: true });
-    } catch (err: any) {
-      if (!err?.response) {
-        setErrMessage("No Server Response");
-      } else if (err?.response?.status === 401) {
-        setErrMessage("Incorrect Username or Password");
-      } else {
-        setErrMessage(err.response);
-      }
-
-      errRef.current?.focus();
-    }
-  };
+  
   return (
     <Container>
-      <Logo />
-      <Form className="user-form" onSubmit={handleSubmit}>
-        <Form.Text
-          ref={errRef}
-          id="error-message"
-          className={errMessage ? "error-message" : "offscreen"}
-          aria-live="assertive"
-        >
-          {errMessage}
-        </Form.Text>
-        <h1>Login</h1>
-        <FloatingLabel 
-          className="pb-3"
-          label = "Email Address" 
-          controlId="email">
-          <Form.Control
-            type="email"
-            id="email"
-            ref={emailRef}
-            name="email"
-            placeholder="Email Address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="username"
-            required
-          />
-        </FloatingLabel>
-        
-        <FloatingLabel 
-          label = "Password" 
-          controlId="password"
-          className="pb-3"
-        >
-          <Form.Control
-            name="password"
-            id="password"
-            placeholder="Password"
-            type="password"
-            minLength={8}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-          />
-        </FloatingLabel>
-        <Button variant= "secondary" className="mx-auto" type='submit'>Submit</Button>
-      </Form>
-      <p className="text-center">
-        Don't have an account? <Link to="/users/register">Create an Account</Link>
-      </p>
+      <Row>
+        <Col xs={8} lg={6} xl={4} className="mx-auto text-center">
+          <Logo />
+
+          <Formik
+            validationSchema={schema}
+            initialValues={{
+              username: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+            }}
+            validate={(values) => {
+              const errors: any = {};
+
+              if (!values.password) {
+                errors.password = "Please enter your password";
+              }
+
+              if (errors.email || errors.password) setValidated(false);
+              else setValidated(true);
+
+              return errors;
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              setSubmitting(true);
+              try {
+                const loginResult = await axios.post("/users/login", {
+                  email: values.email,
+                  password: values.password,
+                });
+                console.log(loginResult);
+                dispatch(handleLogin(loginResult.data));
+                setAuth({ user: loginResult.data.user, isAuthenticated: true });
+                navigate(from, { replace: true });
+              } catch (err: any) {
+                setErrorMessage(err.response.data.errMessage);
+                if (err.response.status === 409) {
+                  return;
+                }
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              touched,
+              errors,
+              isSubmitting,
+            }) => (
+              <Form
+                method="POST"
+                className="user-form"
+                onSubmit={handleSubmit}
+                noValidate
+                validated={validated}
+              >
+                {fields.map((field: fieldKey, index: number) => (
+                  <Form.Group className="mb-3" key={field}>
+                    <FloatingLabel label={field}>
+                      <Form.Control
+                        type= {type[field]}
+                        id={field}
+                        name={field}
+                        required
+                        value={values[field]}
+                        onChange={handleChange}
+                        isInvalid={touched[field] && !!errors[field]}
+                        autoComplete={autocomplete[field]}
+                      />
+                    </FloatingLabel>
+
+                    <Form.Control.Feedback type="invalid" className="d-block">
+                      {errors[field]}
+                    </Form.Control.Feedback>  
+                  </Form.Group>
+                ))}
+          <div className="text-danger">{errorMessage}</div>
+
+                <Button
+                  variant="secondary"
+                  className="my-2 text-center"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  Submit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+          
+          <p className="text-center">
+            Don't have an account?{" "}
+            <Link to="/users/register">Create an Account</Link>
+          </p>
+        </Col>
+      </Row>
     </Container>
   );
 }

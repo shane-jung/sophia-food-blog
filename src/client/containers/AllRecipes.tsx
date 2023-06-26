@@ -1,22 +1,20 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import axios from "@/client/api/axios";
 import Loading from "../components/other/Loading";
 import { useQuery, useQueryClient } from "react-query";
-import { Link } from "react-router-dom";
-import { RecipesCategoryBlock } from "./RecipesCategoryBlock";
+
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
-
-import { LinkContainer } from "react-router-bootstrap";
-import { Form, Nav, Row } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
 import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
 
 export default function AllRecipes() {
   const tags = useQuery(["tags"], getAllTags).data;
-  const queryClient = useQueryClient();
   const [filters, setFilters] = useState<any>({});
   const recipes = useQuery(["recipes", filters], ()=> { return getRecipes({filters}) }).data;
+
 
   const [tagsSorted, setTagsSorted] = useState(
     tags.reduce((acc: any, tag: any) => {
@@ -33,8 +31,8 @@ export default function AllRecipes() {
       <Row>
         <Col xs={3}>
           <Form>
-            {Object.keys(tagsSorted).map((category: string) => (
-              <RecipeFilters category={category} tags={tagsSorted[category] }setFilters= {setFilters} />
+            {Object.keys(tagsSorted).map((category: string, index:number) => (
+              <RecipeFilters key={index} category={category} tags={tagsSorted[category] }setFilters= {setFilters} />
             ))}
           </Form>
         </Col>
@@ -43,8 +41,8 @@ export default function AllRecipes() {
           <Suspense fallback={<Loading />}>
             <Row>
 
-            {recipes.map((recipe: any) => (
-                <RecipeThumbnail recipeId={recipe._id} />
+            {recipes.map((recipe: any, index:number) => (
+                <RecipeThumbnail key={index} recipeId={recipe._id} />
                   ))
               }
             </Row>

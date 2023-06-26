@@ -1,22 +1,21 @@
 import CommentForm from "./CommentForm";
 
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import Loading from "../../other/Loading";
-import { useSelector } from "react-redux";
-import { Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
 
 const CommentsList = lazy(() => import("./CommentsList"));
 
-export default function Comments() {
+export default function Comments({recipeId}: {recipeId:string}) {
   const [commentsLength, setCommentsLength] = useState(0);
   return (
     <section id="comments" className="border-4 border-top pt-3">
       <h5>Recipe Comments ({commentsLength})</h5>
-      <CommentForm index={-1} />
+      <CommentForm  recipeId={recipeId}/>
       <Container className="comments-toolbar" />
 
       <Suspense fallback={<Loading />}>
-        <CommentsList setCommentsLength = {(n:number)=>setCommentsLength(n)} />
+        <CommentsList setCommentsLength = {(n:number)=>setCommentsLength(n)} recipeId={recipeId} />
       </Suspense>
     </section>
   );

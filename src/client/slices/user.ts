@@ -7,6 +7,8 @@ interface UserState {
     email: string;
     username: string;
     viewMode: string;
+    savedRecipes: string[];
+    comments: string[];
 }
 
 const initialState : UserState = {
@@ -14,7 +16,9 @@ const initialState : UserState = {
     likedComments: [],
     email: "",
     username: "",
-    viewMode: "VIEWING"
+    viewMode: "VIEWING",
+    savedRecipes: [],
+    comments: []
 }
 
 
@@ -73,7 +77,7 @@ export const userSlice = createSlice({
       } 
     },
     handleLogin (state = initialState, action:PayloadAction<any>)  {
-      const {_id, email, likedComments, username} = action.payload.user;
+      const {_id, email, likedComments, username, savedRecipes, comments} = action.payload;
       // console.log(action.payload.user);
       return {
         ...state, 
@@ -81,7 +85,9 @@ export const userSlice = createSlice({
         email,
         username,
         likedComments,
-        viewMode: state.viewMode || "VIEWING"
+        viewMode: state.viewMode || "VIEWING",
+        savedRecipes, 
+        comments,
       }
     },
     handleLogout (state = initialState){

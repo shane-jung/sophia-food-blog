@@ -9,14 +9,14 @@ import * as emoji from "node-emoji";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import {
-  Button,
-  Form,
-  InputGroup,
-  ListGroup,
-  Nav,
-  Spinner,
-} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import ListGroup from "react-bootstrap/ListGroup";
+import Nav from "react-bootstrap/Nav";
+import Spinner from "react-bootstrap/Spinner";
+
+
 import InputTooltip from "../Recipe/Form/InputTooltip";
 
 export default function TagEditor({ tags }: any) {

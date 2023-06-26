@@ -1,8 +1,12 @@
 import axios from "@/client/api/axios";
 import { Recipe } from "@/client/types";
 import { useEffect, useState } from "react";
-import { Col, Container, Image } from "react-bootstrap";
+
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
 import { useQuery } from "react-query";
+
 import { Link } from "react-router-dom";
 
 export default function RecipeThumbnail({recipeId} : {recipeId: string}) {
@@ -24,7 +28,7 @@ export default function RecipeThumbnail({recipeId} : {recipeId: string}) {
         to={`/recipes/${recipe?.titleId}`}
         className= "text-decoration-none text-center"
       >
-          <Image src={recipe?.imageUrl} alt=""  thumbnail/>
+          <Image src={recipe?.imageUrl} alt=""  />
           <div className="text-center">{recipe?.title}</div>
       </Link>
     </Container>

@@ -1,10 +1,9 @@
-import axios, { axiosPrivate } from "@/client/api/axios";
+import axios from "@/client/api/axios";
 import { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
-import {
-  ListGroup,
-} from "react-bootstrap";
+
+import Form from "react-bootstrap/Form";
+import ListGroup from "react-bootstrap/ListGroup";
 
 let timer: NodeJS.Timeout | null = null;
 

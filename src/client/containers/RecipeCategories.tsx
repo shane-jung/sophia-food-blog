@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { Breadcrumb, Col, Container, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
+
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+
 
 
 export default function RecipeCategories(){

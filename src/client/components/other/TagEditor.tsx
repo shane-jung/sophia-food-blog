@@ -1,8 +1,6 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "@/client/api/axios";
-import { set } from "mongoose";
-import React from "react";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import queryClient from "@/client/utils/queryClient";
@@ -10,8 +8,11 @@ import * as emoji from 'node-emoji';
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import { Button, Form, ListGroup } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup";
+
 
 export default function TagEditor({ tags }: any) { 
     const [selectedTagIndex, setSelectedTagIndex] = useState(0);

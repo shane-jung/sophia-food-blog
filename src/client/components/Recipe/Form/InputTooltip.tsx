@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/Button";
-import { Tooltip } from "react-bootstrap";
+import Tooltip from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

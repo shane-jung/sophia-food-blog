@@ -7,7 +7,7 @@ import Tab from "react-bootstrap/Tab";
 import { getAllRecipes, getAllTags } from "@/client/queries";
 import HomePageEditor from "./HomePageEditor";
 import UsersEditor from "./UsersEditors";
-import { Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
 import RecipesDashboard from "./RecipesDashboard";
 
 export default function AdminPage() {

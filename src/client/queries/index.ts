@@ -42,3 +42,9 @@ export const useGetAllUsers = () => {
     });
     return res.data;
 }
+
+export async function getUser(id:string) {
+    if(!id) return {};
+    const { data } = await axios.get(`/users/${id}`);
+    return data;
+}

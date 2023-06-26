@@ -10,16 +10,15 @@ import queryClient from "@/client/utils/queryClient";
 
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Container from "react-bootstrap/Container";
-import { Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
 export default function CommentForm({
-  index,
+  recipeId,
   replyToCommentId,
   setReplying,
   setRepliesVisible,
 }: {
-  index: number;
+  recipeId: string;
   replyToCommentId?: string;
   setReplying?: any;
   setRepliesVisible?: any;
@@ -30,7 +29,6 @@ export default function CommentForm({
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
 
-  const recipeId = useSelector((state: RootState) => state.recipe._id);
 
   const postCommentMutation = useMutation({
     mutationFn: postComment,

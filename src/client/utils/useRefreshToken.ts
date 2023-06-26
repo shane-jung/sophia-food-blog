@@ -17,6 +17,7 @@ const useRefreshToken = () => {
         // console.log(JSON.stringify(response.data));
         // console.log("Setting auth context with new Access Token")
         // console.log(response.data);
+        // console.log(response.data.user);
         return { ...prev, isAuthenticated: true, user: response.data.user };
       });
       return response.data.accessToken;

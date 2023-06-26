@@ -1,28 +1,33 @@
-import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import { useMutation, useQuery } from "react-query";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useMutation } from "react-query";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import RecipeToolbar, {
-  CreateRecipeToolbar,
-} from "../components/Recipe/Form/RecipeToolbar";
-import SimpleTextInput from "../components/Recipe/Form/SimpleTextInput";
-import ImageUpload from "../components/Recipe/ImageUpload";
-import RecipeBodyElement from "../components/Recipe/Form/RecipeBodyElement";
+
 import { setViewMode } from "../slices/user";
 import queryClient from "../utils/queryClient";
 import useAxiosPrivate from "../utils/useAxiosPrivate";
 import * as uuid from "uuid";
-import Select from "@/client/components/Recipe/Form/Select";
-import Dropdown from "react-bootstrap/Dropdown";
-import Tooltip from "react-bootstrap/Tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
+
+import { CreateRecipeToolbar } from "../components/Recipe/Form/RecipeToolbar";
+import Select from "../components/Recipe/Form/Select";
 import TitleId from "../components/Recipe/Form/TitleID";
+import SimpleTextInput from "../components/Recipe/Form/SimpleTextInput";
+import ImageUpload from "../components/Recipe/ImageUpload";
+import RecipeBodyElement from "../components/Recipe/Form/RecipeBodyElement";
+
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
-import { Col, InputGroup, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
+import InputGroup from "react-bootstrap/InputGroup";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
+
 
 const defaultRecipeBody = [
   {
@@ -101,7 +106,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
       navigate(`/recipes/${response.data.value.titleId}`, { replace: true });
     },
   });
-  
+
   const tagsMutation = useMutation({
     mutationFn: async (payload: any) =>
       await axiosPrivate.post("/tags/addRecipeToTags", payload, {

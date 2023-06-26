@@ -1,24 +1,27 @@
-import { Carousel } from "react-bootstrap";
+
 import { useQuery } from "react-query";
 import { NavLink } from "react-router-dom";
-import axios from "../api/axios";
-import useAuth from "../utils/useAuth";
-import Image from "react-bootstrap/Image";
-import { RecipesCategoryBlock } from "./RecipesCategoryBlock";
-import Container from "react-bootstrap/Container";
 import { getAllRecipes } from "../queries";
+import useAuth from "../utils/useAuth";
 
+import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
+import Carousel from "react-bootstrap/Carousel";
+
+import { RecipesCategoryBlock } from "./RecipesCategoryBlock";
 import { HomepageToolbar } from "../components/Recipe/Form/RecipeToolbar";
 import SearchBar from "../components/other/SearchBar";
 export default function HomePage() {
+  const {auth } = useAuth();
+
   const { data: fetchedRecipes } = useQuery({
     queryKey: ["recipes", "featured"],
-    queryFn: () => getAllRecipes({ sort: "featured" }),
+    queryFn: () => getAllRecipes({ sort: "featured" }), 
   });
 
   return (
     <Container>
-      <HomepageToolbar />
+      {auth?.user?.roles?.includes(8012) && <HomepageToolbar />}
       <Container className={"landing-block mb-3"}>
         <h1 className="text-center">Welcome to Once Upon A Thyme....</h1>
         <h3 className="text-center"></h3>

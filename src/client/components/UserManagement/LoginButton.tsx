@@ -4,15 +4,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { handleLogout } from "../../slices/user";
-import { useEffect } from "react";
 
-import Col from "react-bootstrap/Col";
-import Button  from "react-bootstrap/Button";
-import Navbar from "react-bootstrap/Navbar";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { Container, Row } from "react-bootstrap";
 
 export default function LoginButton() {
   const { auth, setAuth } = useAuth();
@@ -50,6 +45,7 @@ export default function LoginButton() {
           <FontAwesomeIcon icon= {faUser} className=" " />
         </Dropdown.Toggle>
         <Dropdown.Menu>
+          <Dropdown.Item href={`/profile/${auth.user._id}`} >Saved Recipes</Dropdown.Item>
           { auth?.user?.roles?.includes(8012) &&
             <Dropdown.Item href="/admin" >Manage Site</Dropdown.Item>
           }

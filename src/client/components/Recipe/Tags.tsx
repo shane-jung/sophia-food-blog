@@ -5,7 +5,6 @@ import { useQuery } from "react-query";
 import axios from "@/client/api/axios";
 
 export default function Tags({ tagIds, category}: { tagIds?: string[], category:string }) {
-  console.log(tagIds);
   return (
     <div>
       <h4>{category}</h4>

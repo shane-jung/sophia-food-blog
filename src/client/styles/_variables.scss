@@ -20,6 +20,7 @@ $secondary: #51344D;
 $secondary-light: lighten($secondary, 30%);
 $light: white;
 $body-color: $primary;
+$danger: #dc3545;
 
 
 $theme-colors: () !default;
@@ -28,7 +29,8 @@ $theme-colors: map-merge(
     'primary': $primary,
     'secondary': $secondary,
     'accent': $accent,
-    'light' : $light
+    'light' : $light,
+    'danger' : $danger
   ),
   $theme-colors
 );

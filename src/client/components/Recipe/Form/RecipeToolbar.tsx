@@ -2,27 +2,19 @@ import useAxiosPrivate from "../../../utils/useAxiosPrivate";
 import { useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCancel,
   faCog,
   faEdit,
   faPlus,
   faSave,
-  faTrash,
   faTrashAlt,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setViewMode } from "@/client/slices/user";
 import { useMutation } from "react-query";
 import queryClient from "@/client/utils/queryClient";
-import { Button, Container, OverlayTrigger, Tooltip } from "react-bootstrap";
-
-// export function CreateRecipeToolbar(){
-//   return (<div className="recipe-toolbar">
-//       <SaveButton />
-//     </div>)
-// }
+import Button from "react-bootstrap/Button";  
+import Tooltip from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 
 export default function EditRecipeToolbar() {
@@ -68,23 +60,12 @@ function AddRecipe(){
 
 
 function EditButton() {
-  const viewMode = useSelector((state: any) => state.user.viewMode);
-  const dispatch = useDispatch();
   const [buttonText, setButtonText] = useState('Edit Recipe');
   const [buttonIcon, setButtonIcon] = useState(faEdit);
   const navigate = useNavigate();
 
   const toggleViewMode = (e: any) => {
     e.preventDefault();
-    // if(viewMode == "VIEWING"){
-    //   setButtonText("Cancel");
-    //   setButtonIcon(faCancel);
-    // } else {
-    //   setButtonText("Edit Recipe");
-    //   setButtonIcon(faEdit);
-    // }
-    // const action = viewMode == "VIEWING" ? "editing-recipe" : "viewing-recipe";
-    // dispatch(setViewMode(action));
     navigate("edit");
   };
 

@@ -14,6 +14,7 @@ import queryClient from "@/client/utils/queryClient";
 import { useMutation } from "react-query";
 
 interface CommentProps {
+  recipeId: string;
   comment: CommentType;
   index: number;
   reply: boolean;
@@ -21,6 +22,7 @@ interface CommentProps {
 }
 
 export default function Comment({
+  recipeId,
   comment,
   index,
   reply,
@@ -29,7 +31,6 @@ export default function Comment({
   const { auth } = useAuth();
   const dispatch = useDispatch();
 
-  const recipeId = useSelector((state: RootState) => state.recipe._id);
   const likedComments = useSelector((state: any) =>
     state.user.likedComments
       .filter((comment: any) => comment.recipeId === recipeId)[0]
@@ -202,7 +203,7 @@ export default function Comment({
       {replying && (
         <CommentForm
           replyToCommentId={comment._id}
-          index={index}
+          recipeId={recipeId}
           setReplying={setReplying}
           setRepliesVisible={setRepliesVisible}
         />
@@ -219,6 +220,7 @@ export default function Comment({
                   comment={reply}
                   index={index}
                   parentId={commentId}
+                  recipeId={recipeId}
                 />
               );
             })}

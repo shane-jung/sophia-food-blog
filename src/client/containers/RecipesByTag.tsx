@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { Breadcrumb, Container, Row } from "react-bootstrap";
 import { useQuery } from "react-query";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
 import axios from "../api/axios";
+
 import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
+
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
 export default function RecipesByTag() {
   const [tag, setTag] = useState<any>();

@@ -42,7 +42,7 @@ const commentController = {
     const comment = req.body.comment;
     const reply = req.body.reply;
     const commentId = req.body.commentId;
-    console.log(req.body);
+    console.log("POSTING COMMENT", comment, reply, commentId);
     // console.log(req.body);
     // console.log("REPLYING TO COMMENT ? ", reply);
     try {

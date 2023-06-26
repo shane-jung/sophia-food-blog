@@ -1,11 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 
 import ReactQuill from "react-quill";
-import { _viewMode } from "@/client/enums";
-import { useSelector } from "react-redux";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { Col, FormControl, Row } from "react-bootstrap";
+import FormControl from "react-bootstrap/FormControl";
 
 const modules = {
   toolbar: [

@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment";
 import { useQuery } from "react-query";
 
-export default function CommentsList({setCommentsLength } : any){
-  const recipeId = useSelector((state: any) => state.recipe._id);
+export default function CommentsList({setCommentsLength, recipeId } : {setCommentsLength: any, recipeId: string}){
   const { data, status } = useQuery({
     queryKey:  ["comments", recipeId],
     queryFn: retrieveComments,
@@ -25,7 +24,7 @@ export default function CommentsList({setCommentsLength } : any){
     setCommentsRender(
       comments?.map((comment: any, index: number) => {
         return (
-          <Comment reply={false} key={index} comment={comment} index={index} />
+          <Comment reply={false} key={index} comment={comment} index={index} recipeId={recipeId} />
         );
       })
     );

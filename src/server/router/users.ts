@@ -11,18 +11,18 @@ router.route("/logout").post(userController.handleLogout);
 
 router.route("/create").post(hashPassword, userController.createUser);
 
+router.route("/:id/saveRecipe").post(userController.saveRecipe);
 router.route("/:id").get(userController.getUser);
 
 router.route("/").post(userController.findUser).get(userController.getAllUsers);
 
 async function hashPassword(req: Request, res: Response, next: any) {
-  let password = req.body["password"]!;
-
+  let password = req.body.values.password;
   hashedPassword(password)
     .then((hash) => {
-      let data = { ...req.body, "date-created": new Date().toISOString() };
-      data["password"] = hash;
-      res.locals.user = data;
+      req.body.values["dateCreated"] = new Date().toISOString();
+      req.body.values.password = hash;
+      delete req.body.values.confirmPassword;
       next();
     })
     .catch((err) => {
@@ -33,7 +33,7 @@ async function hashPassword(req: Request, res: Response, next: any) {
 
 async function hashedPassword(password: string) {
   const saltRounds = 10;
-  console.log("PASSWORD: ", password);
+  // console.log("PASSWORD: ", password);
 
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, function (err, hash) {

@@ -1,5 +1,8 @@
 import { useGetAllRecipes } from "@/client/queries";
-import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import ListGroup from "react-bootstrap/ListGroup";  
+import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 
 export default function RecipesDashboard() {

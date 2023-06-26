@@ -1,11 +1,12 @@
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { NavLink } from "react-router-dom";
-import SearchBar from "../components/other/SearchBar";
+import NavbarBrand from "react-bootstrap/NavbarBrand";
 import LinkContainer from "react-router-bootstrap/LinkContainer";
-import { NavbarBrand } from "react-bootstrap";
+
+import SearchBar from "../components/other/SearchBar";
 import LoginButton from "../components/UserManagement/LoginButton";
+
 
 export default function MainNavbar() {
   return (
