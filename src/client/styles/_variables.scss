@@ -21,7 +21,7 @@ $secondary-light: lighten($secondary, 30%);
 $light: white;
 $body-color: $primary;
 $danger: #dc3545;
-
+$success: #188f33;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -30,7 +30,8 @@ $theme-colors: map-merge(
     'secondary': $secondary,
     'accent': $accent,
     'light' : $light,
-    'danger' : $danger
+    'danger' : $danger,
+    'success' : $success,
   ),
   $theme-colors
 );
@@ -47,12 +48,6 @@ $theme-colors: map-merge(
 // $accent-lightgray: lighten($accent-gray, 12%);
 // $dimmer-background: rgba(0, 0, 0, 0.6);
 // $error: #f2777a;
-
-
-$buttons: ('.button, a.button, button, [type=submit], [type=reset], [type=button]');
-$forms: (
-  '[type=color], [type=date], [type=datetime], [type=datetime-local], [type=email], [type=month], [type=number], [type=password], [type=search], [type=tel], [type=text], [type=url], [type=week], [type=time], select, textarea'
-);
 
 
 

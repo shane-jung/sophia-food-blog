@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { _viewMode } from '../enums';
 
 interface UserState {
     _id : string;

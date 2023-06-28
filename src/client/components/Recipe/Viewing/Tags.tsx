@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 
-import * as emoji from "node-emoji";
 import { useQuery } from "react-query";
 import axios from "@/client/api/axios";
 
 export default function Tags({ tagIds, category}: { tagIds?: string[], category:string }) {
   return (
     <div>
-      <h4>{category}</h4>
+      <span>{category}: </span>
       {tagIds?.map((tagId: string, index: number) => (
         <Tag key={index} tagId={tagId} />
       ))}
@@ -25,9 +24,9 @@ function Tag({ tagId }: { tagId: string }) {
   return (
     <Link
       to={`/category/${tag?.data?.label?.toLowerCase().replace(" ", "-")}`}
-      className="btn btn-secondary mx-1 text-capitalize text-light"
+      className= "btn btn-primary tag"
     >
-      {emoji.emojify(tag?.data?.label)}
+      {tag?.data?.label}
     </Link>
   );
 }

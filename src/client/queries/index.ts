@@ -16,7 +16,6 @@ export const useGetAllRecipes = () => {
         queryKey: ["recipes"],
         queryFn: async ()=> {
             const res = await axiosPrivate.get("/recipes");
-            console.log(res);
             return res.data;
         }
     });

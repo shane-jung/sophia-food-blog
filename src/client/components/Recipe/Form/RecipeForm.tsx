@@ -3,26 +3,27 @@ import { useMutation } from "react-query";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 
-import { setViewMode } from "../slices/user";
-import queryClient from "../utils/queryClient";
-import useAxiosPrivate from "../utils/useAxiosPrivate";
+import { setViewMode } from "@/client/slices/user";
+import queryClient from "@/client/utils/queryClient";
+import useAxiosPrivate from "@/client/utils/useAxiosPrivate";
 import * as uuid from "uuid";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import { CreateRecipeToolbar } from "../components/Recipe/Form/RecipeToolbar";
-import Select from "../components/Recipe/Form/Select";
-import TitleId from "../components/Recipe/Form/TitleID";
-import SimpleTextInput from "../components/Recipe/Form/SimpleTextInput";
-import ImageUpload from "../components/Recipe/ImageUpload";
-import RecipeBodyElement from "../components/Recipe/Form/RecipeBodyElement";
+import { CreateRecipeToolbar } from "./RecipeToolbar";
+import Select from "./Select";
+import TitleId from "./TitleID";
+import SimpleTextInput from "./SimpleTextInput";
+import ImageUpload from "./ImageUpload";
+import RecipeBodyElement from "./RecipeBodyElement";
+import AddToBody from "./AddToBody";
+import DurationInput from "./DurationInput";
 
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Dropdown from "react-bootstrap/Dropdown";
 import InputGroup from "react-bootstrap/InputGroup";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -247,7 +248,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
               type="number"
               min={0}
               max={100}
-              defaultValue={0}
+              defaultValue={recipe?.servings ? recipe.servings.split(" ")[0] : 0} 
             />
             <Form.Control
               name="servingsUnit"
@@ -263,6 +264,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
       <Select selectedIds={recipe?.meals} category="meals" />
 
       <Select selectedIds={recipe?.ingredients} category="ingredients" />
+
 
       <Form.Label>Recipe Body</Form.Label>
 
@@ -295,73 +297,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
         </div>
       ))}
     </form>
-  );
+  )
 }
 
-function DurationInput({
-  name,
-  label,
-  value,
-}: {
-  name: string;
-  label: string;
-  value: any;
-}) {
-  const [hours, setHours] = useState(value?.match(/(?<=PT)(.*?)(?=H)/));
-  const [minutes, setMinutes] = useState(value?.match(/(?<=H)(.*?)(?=M)/));
-  return (
-    <Form.Group as={Col} sm={6} xl={6} className="mb-3  ">
-      <Form.Label className="d-block text-center">{label}</Form.Label>
-      <InputGroup>
-        <Form.Control
-          name={name + "Hours"}
-          type="number"
-          min={0}
-          max={24}
-          defaultValue={hours}
-        />
-        <InputGroup.Text>Hours</InputGroup.Text>
-        <Form.Control
-          name={name + "Minutes"}
-          type="number"
-          min={0}
-          max={59}
-          defaultValue={minutes}
-        />
-        <InputGroup.Text>Minutes</InputGroup.Text>
-      </InputGroup>
-    </Form.Group>
-  );
-}
 
-function AddToBody({
-  index,
-  setBody,
-  addSection,
-}: {
-  index: number;
-  setBody: any;
-  addSection: any;
-}) {
-  return (
-    <>
-      <Dropdown as={"span"} className="my-2 recipe-body-dropdown">
-        <Dropdown.Toggle variant="primary">
-          <FontAwesomeIcon icon={faPlus} />
-        </Dropdown.Toggle>
-        <Dropdown.Menu style={{ width: "min-content" }}>
-          <Dropdown.Header>Add Section</Dropdown.Header>
-          <Dropdown.Item onClick={() => addSection(index, "rich")}>
-            Text
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => addSection(index, "image")}>
-            Image
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => addSection(index, "double-image")}>
-            Double Image
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    </>
-  );
-}

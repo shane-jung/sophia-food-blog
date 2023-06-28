@@ -1,5 +1,3 @@
-import { _viewMode } from "@/client/enums";
-import { useState } from "react";
 
 const dictionary: { [key: string]: string } = {
   title: "display-3 ",

@@ -78,7 +78,6 @@ export default function Comment({
   });
 
   useEffect(() => {
-    // console.log(likedComments);
     setUserLiked(likedComments);
   }, [likedComments, comment._id]);
 
@@ -95,9 +94,7 @@ export default function Comment({
 
   function handleLike() {
     async function updateDB() {
-      // console.log("UPDATING DB RECIPE: ", recipeId)
       try {
-        // console.log(increment);
         const result = await axios.post(`/comments/${commentId}/like`, {
           inc: increment,
           commentId,
@@ -105,16 +102,11 @@ export default function Comment({
           profileId: auth?.user?._id || "64782f70a4a50f0efa0de498",
           commentIndex: index,
         });
-        // setLikes(result.data.value.likes);
       } catch (err) {
         console.log(err);
       }
     }
     updateDB();
-    console.log(
-      "Updating comment...",
-      userLiked ? "Removing like" : "Adding like"
-    );
     dispatch(
       setLikedComment({
         recipeId,
@@ -143,9 +135,9 @@ export default function Comment({
   }
 
   return (
-    <Container className="comment border border-2">
+    <Container className= {"comment border border-2 mb-2 p-2 " + (comment.profileId == auth?.user?._id ? "me" : "") }>
       <Container className="d-flex gap-1">
-        <span className="text-secondary">{comment.username}</span>{" "}
+        <span className="text-secondary username">{comment.username}</span>{" "}
         <span> &#x2022; </span>
         <span>{dateString}</span>
       </Container>
@@ -166,10 +158,7 @@ export default function Comment({
         {!reply && (
           <>
             <span> &#x2022; </span>
-            <Button
-              variant="primary px-2"
-              onClick={handleReply}
-            >
+            <Button variant="primary px-2" onClick={handleReply}>
               {replyText}
             </Button>
           </>
@@ -191,10 +180,7 @@ export default function Comment({
           auth?.user?.roles?.includes(8012)) && (
           <>
             <span> &#x2022; </span>
-            <Button
-              variant = "danger px-2"
-              onClick={handleDelete}
-            >
+            <Button variant="danger px-2" onClick={handleDelete}>
               Delete
             </Button>
           </>

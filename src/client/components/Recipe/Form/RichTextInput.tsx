@@ -70,11 +70,12 @@ export default function RichTextInput({
   return (
     <>
       <Form.Group className="rich-text-input my-4">
-        <FloatingLabel label="Section Name" className="text-capitalize">
+        <FloatingLabel label="Section Name" className="text-capitalize"  controlId="floatingInput"
+        
+        >
           <Form.Control
             type="text"
             className="section-title-input"
-            placeholder="Section title"
             value={label}
             onChange= {onLabelChange}
           ></Form.Control>
@@ -83,5 +84,5 @@ export default function RichTextInput({
         <FormControl as={ReactQuill} {...props}></FormControl>
       </Form.Group>
     </>
-  );
+  )
 }

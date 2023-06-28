@@ -37,7 +37,7 @@
   object-fit: cover;
 }
 .rating-bar {
-  font-size: 2em;
+  font-size: 1.5em;
   display: inline;
 }
 
@@ -114,6 +114,9 @@
   a {
     text-align: left;
   }
+  &:hover{
+    background: $accent;
+  }
 }
 
 .dropdown-menu {
@@ -175,7 +178,7 @@
 }
 
 .image-carousel {
-  height: 400px;
+  height: 500px;
   width: 100%;
   object-fit: cover;
 }
@@ -256,6 +259,11 @@
 }
 
 .bookmark-button {
+  span{
+    font-size:.5em;
+    color:black;
+    filter:none !important;
+  }
   position: absolute;
   top: 0;
   right: 0;
@@ -265,10 +273,10 @@
   width: auto;
   color: white;
   font-size:2em;
-  filter: drop-shadow(0 0 2px rgb(129, 129, 129));
+  filter: drop-shadow(0 0 2px rgb(161, 161, 161));
   &:hover {
     background: none !important;
-  filter: drop-shadow(0 0 2px rgb(56, 56, 56));
+  filter: drop-shadow(0 0 2px rgb(88, 88, 88));
 
   }
 
@@ -282,4 +290,11 @@
     color: $primary;
     transform: scaleY(1.65) scaleX(1.15);
   }
+}
+
+
+.tag{
+  margin: .25em .25em;
+  padding: .5em;
+  font-size:.625em;
 }

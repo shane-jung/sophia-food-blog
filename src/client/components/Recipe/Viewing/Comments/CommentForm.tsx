@@ -1,6 +1,6 @@
 import { RootState } from "@/client/slices/store";
 import useAuth from "@/client/utils/useAuth";
-import axios from "../../../api/axios";
+import axios from "../../../../api/axios";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { InteractiveRatingBar } from "../RatingBar";
@@ -10,7 +10,9 @@ import { useMutation, useQueryClient } from "react-query";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";  
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row"
 
 export default function CommentForm({
   replyToCommentId,
@@ -27,8 +29,9 @@ export default function CommentForm({
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
 
-  const recipeId = useSelector((state: RootState) => state.recipe.activeRecipeId);
-
+  const recipeId = useSelector(
+    (state: RootState) => state.recipe.activeRecipeId
+  );
 
   const postCommentMutation = useMutation({
     mutationFn: postComment,
@@ -50,7 +53,7 @@ export default function CommentForm({
 
   async function handleSubmit(event: any) {
     event.preventDefault();
-    console.log(event.currentTarget.rating?.value)
+    console.log(event.currentTarget.rating?.value);
     // return;
     setContent("");
     if (replyToCommentId) {
@@ -77,45 +80,52 @@ export default function CommentForm({
 
   return (
     <Form
-      className={"position-relative comment-form " + (replyToCommentId ? "reply" : "")}
+      className={
+        "position-relative comment-form " + (replyToCommentId ? "reply" : "")
+      }
       onSubmit={handleSubmit}
       method="POST"
     >
       {!auth?.user && (
-        <>
-          <FloatingLabel label="Your name">
-            <Form.Control
-              id="name"
-              name="name"
-              placeholder="Name"
-              ref={nameRef}
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-          </FloatingLabel>
-
-          <FloatingLabel label="email">
+        <Form.Group as ={Row}> 
+          <Col xs={5} className="pe-0">
+            <FloatingLabel label="Your Name">
+              <Form.Control
+                name="name"
+                className="mb-2"
+                placeholder = "name"
+                ref={nameRef}
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
+            </FloatingLabel>
+          </Col>
+          <Col className= "ps-1"> <FloatingLabel label="Email">
             <Form.Control
               id="email"
               name="email"
+              className="mb-2"
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               required
             />
           </FloatingLabel>
-        </>
+          </Col>
+        </Form.Group>
       )}
 
       <Form.Control
         as="textarea"
         rows={3}
         name="content"
+        className="mb-2"
         placeholder={
           replyToCommentId ? "Reply to this comment..." : "Add a comment..."
         }
         onChange={(e) => setContent(e.target.value)}
         value={content}
+        required
       />
 
       {!replyToCommentId && (
@@ -125,7 +135,7 @@ export default function CommentForm({
         </Container>
       )}
 
-<Button variant="secondary" type="submit" className="mt-2">
+      <Button variant="secondary" type="submit" className="mt-2">
         Submit
       </Button>
     </Form>

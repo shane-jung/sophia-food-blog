@@ -9,7 +9,7 @@ export default function AuthenticatedRoute({
 }: AuthenticatedRouteProps) {
   const { auth } = useAuth();
   const location = useLocation();
-  return auth?.user.roles?.find((role: any) => allowedRoles?.includes(role)) ? (
+  return auth?.user?.roles?.find((role: any) => allowedRoles?.includes(role)) ? (
     <Outlet />
   ) : (
     <Navigate to="/users/login" state={{ from: location }} replace />

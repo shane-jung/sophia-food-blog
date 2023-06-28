@@ -1,7 +1,7 @@
 import { getUser } from "@/client/queries";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router";
-import RecipeThumbnail from "../Recipe/RecipeThumbnail";
+import RecipeThumbnail from "../Browse/RecipeThumbnail";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";

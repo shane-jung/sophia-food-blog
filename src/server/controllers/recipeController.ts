@@ -28,7 +28,16 @@ const recipeController = {
       const recipes = await db
         .collection("Recipes")
         .find({ ...filtersObjectIds })
-        .project({ title: 1, titleId: 1, imageUrl: 1, _id: 1 })
+        .project({
+          title: 1,
+          subtitle: 1,
+          titleId: 1,
+          imageUrl: 1,
+          _id: 1,
+          saves: 1,
+          averageRating: 1,
+          ratings: 1,
+        })
         .sort({ [sortVar]: -1 })
         .toArray();
       // console.log(recipes);
@@ -236,23 +245,42 @@ const recipeController = {
     }
   },
   rateRecipe: async (req: Request, res: Response) => {
-    // console.log(req.body);
+    console.log(req.body);
     const { userId, recipeId, rating, date } = req.body;
     try {
       const db = await connectToDatabase();
-      const result = await db.collection("Recipes").updateOne(
-        { _id: new ObjectId(recipeId) },
-        {
-          $set: {
-            "ratings.$[element]": {
-              rating,
-              userId: new ObjectId(userId),
-              date,
+      const result = await db
+        .collection("Recipes")
+        .updateOne({ _id: new ObjectId(recipeId) }, [
+          {
+            $set: {
+              ratings: {
+                $map: {
+                  input: "$ratings",
+                  in: {
+                    $cond: {
+                      if: { $eq: ["$$this.userId", new ObjectId(userId)] },
+                      then: {
+                        rating,
+                        userId: new ObjectId(userId),
+                        date: new Date(date),
+                      },
+                      else: "$$this",
+                    },
+                  },
+                },
+              },
             },
           },
-        },
-        { arrayFilters: [{ "element.userId": new ObjectId(userId) }] }
-      );
+          {
+            $set: {
+              averageRating: {
+                $avg: "$ratings.rating",
+              },
+            },
+          },
+        ]);
+      console.log(result);
       const result2 = await db.collection("Profiles").updateOne(
         { _id: new ObjectId(userId) },
         {
@@ -272,7 +300,15 @@ const recipeController = {
           { _id: new ObjectId(recipeId) },
           {
             $push: {
-              ratings: { rating, userId: new ObjectId(userId), date },
+              ratings: {
+                rating,
+                userId: new ObjectId(userId),
+                date: new Date(date),
+              },
+            },
+
+            $set: {
+              averageRating: { $avg: "ratings.rating" },
             },
           }
         );
@@ -280,7 +316,11 @@ const recipeController = {
           { _id: new ObjectId(userId) },
           {
             $push: {
-              ratings: { rating, recipeId: new ObjectId(recipeId), date },
+              ratings: {
+                rating,
+                recipeId: new ObjectId(recipeId),
+                date: new Date(date),
+              },
             },
           }
         );

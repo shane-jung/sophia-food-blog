@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import axios from "@/client/api/axios";
 
-import RecipeThumbnail from "@/client/components/Recipe/RecipeThumbnail";
+import RecipeThumbnail from "@/client/components/Browse/RecipeThumbnail";
 
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";

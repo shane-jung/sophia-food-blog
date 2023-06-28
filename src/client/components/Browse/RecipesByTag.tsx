@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 
-import axios from "../api/axios";
+import axios from "../../api/axios";
 
-import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
+import RecipeThumbnail from "./RecipeThumbnail";
 
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Container from "react-bootstrap/Container";

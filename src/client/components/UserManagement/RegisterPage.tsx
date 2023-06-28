@@ -173,7 +173,7 @@ export default function RegisterPage() {
             )}
           </Formik>
           <p className="text-center">
-            Already have an account?
+            Already have an account? &nbsp;
             <Link to="/users/login">Login</Link>
           </p>
         </Col>

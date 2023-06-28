@@ -1,6 +1,6 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import axios from "@/client/api/axios";
-import Loading from "../components/other/Loading";
+import Loading from "../other/Loading";
 import { useQuery, useQueryClient } from "react-query";
 
 import Container from "react-bootstrap/Container";
@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import RecipeThumbnail from "../components/Recipe/RecipeThumbnail";
+import RecipeThumbnail from "./RecipeThumbnail";
 
 export default function AllRecipes() {
   const tags = useQuery(["tags"], getAllTags).data;
@@ -16,6 +16,10 @@ export default function AllRecipes() {
   const recipes = useQuery(["recipes", filters], () => {
     return getRecipes({ filters });
   }).data;
+
+  useEffect(() => {
+    document.title = "All Recipes | Once Upon A Time";
+  }, []);
 
   const [tagsSorted, setTagsSorted] = useState(
     tags.reduce((acc: any, tag: any) => {
@@ -31,7 +35,9 @@ export default function AllRecipes() {
     <Container>
       <Row>
         <Col xs={3}>
-          <Form>
+          <Form className="mt-3">
+            <h4>Filters</h4>
+            <Button onClick = {()=>setFilters({})}>Clear Filters</Button>
             {Object.keys(tagsSorted).map((category: string, index: number) => (
               <RecipeFilters
                 key={index}
@@ -48,7 +54,7 @@ export default function AllRecipes() {
             <Row>
               {recipes.map((recipe: any, index: number) => (
                 <Col  key={index}  xs={12} sm={6} lg={4} xl={3}>
-                  <RecipeThumbnail recipeId={recipe._id} />;
+                  <RecipeThumbnail recipeId={recipe._id} />
                 </Col>
               ))}
             </Row>

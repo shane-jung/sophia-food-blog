@@ -28,17 +28,7 @@ export default function RecipesDashboard() {
                 <Link to={"/recipes/" + recipe.titleId}>{recipe.title}</Link>
               </Col>
               <Col>
-                {recipe.ratings && recipe.ratings.length
-                  ? (
-                      recipe.ratings.reduce(
-                        (acc: number, rating: any) => rating.rating + acc,
-                        0
-                      ) / recipe.ratings.length
-                    ).toFixed(2) +
-                    " based on " +
-                    recipe.ratings.length +
-                    " ratings"
-                  : "No ratings yet!"}
+                {recipe.averageRating?.toFixed(2) + " (" + recipe.ratings.length + ")" }
               </Col>
               <Col>{recipe.comments?.length}</Col>
               <Col>{recipe.saves}</Col>

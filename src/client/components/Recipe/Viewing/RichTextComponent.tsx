@@ -10,7 +10,7 @@ export default function RichTextComponent({
   name,
 }: RichTextComponentProps) {
   return (
-    <div className="my-5">
+    <div className="mb-3">
       {value && <h3 className= "text-center text-capitalize">{name}</h3> }
       <div
         className={"fw-normal text-body-primary lh-lg fs-5 "}

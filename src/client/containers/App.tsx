@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import "@/client/styles/index.scss";
-import AllRecipes from "./AllRecipes";
+import AllRecipes from "../components/Browse/AllRecipes";
 import LoginPage from "@/client/components/UserManagement/LoginPage";
 import HomePage from "./HomePage";
 import RootLayout from "@/client/containers/RootLayout";
@@ -17,14 +17,14 @@ import AuthenticatedRoute from "../components/UserManagement/AuthenticatedRoute"
 import PersistLogin from "../utils/PersistLogin";
 import Loading from "../components/other/Loading";
 import { Suspense, useEffect } from "react";
-import CreateRecipePage from "./CreateRecipePage";
-import RecipesByTag from "./RecipesByTag";
-import RecipeCategories from "./RecipeCategories";
+import CreateRecipePage from "../components/Recipe/Form/CreateRecipePage";
+import RecipesByTag from "../components/Browse/RecipesByTag";
+import RecipeCategories from "../components/Browse/RecipeCategories";
 import AdminPage from "../components/AdminPage/AdminPage";
-import RecipeContainer from "./RecipeContainer";
+import RecipeContainer from "../components/Recipe/Viewing/RecipeContainer";
 
 import "react-quill/dist/quill.snow.css";
-import EditRecipePage from "./EditRecipePage";
+import EditRecipePage from "../components/Recipe/Form/EditRecipePage";
 import ProfilePage from "../components/UserManagement/ProfilePage";
 
 const router = createBrowserRouter(

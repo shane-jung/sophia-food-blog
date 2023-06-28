@@ -19,7 +19,7 @@ export default function CommentsList({setCommentsLength } : {setCommentsLength: 
 
   useEffect(() => {
     setComments(fetchedComments);
-    setCommentsLength(fetchedComments.length);
+    setCommentsLength(fetchedComments?.length);
   }, [fetchedComments]);
 
   useEffect(() => {

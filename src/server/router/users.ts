@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import userController from "../controllers/userController";
 import bcrypt from "bcryptjs";
 import checkAuth from "../middleware/checkAuth";
+import recipeController from "../controllers/recipeController";
 
 const router = express.Router();
 

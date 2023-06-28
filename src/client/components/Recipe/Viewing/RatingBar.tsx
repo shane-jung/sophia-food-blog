@@ -1,4 +1,4 @@
-import { _viewMode } from "@/client/enums";
+
 import { useEffect, useState } from "react";
 
 import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,7 @@ import axios from "@/client/api/axios";
 
 import { Rating } from "@/client/types";
 import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
 
 interface RatingStarInterface {
   index: number;
@@ -25,7 +26,7 @@ export default function RatingBar({
   const [activeRating, setActiveRating] = useState(-1);
   const [tempActiveRating, setTempActiveRating] = useState(-1);
   const [isEditable, setIsEditable] = useState(initialRating == undefined);
-  const recipeId = useSelector((state: any) => state.recipe._id);
+  const recipeId = useSelector((state: any) => state.recipe.activeRecipeId);
   const userId = useSelector((state: any) => state.user._id);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function RatingBar({
 
     return isEditable ? (
       <>
-        <input
+        <Form.Control
           type="radio"
           name="rating"
           value={index}
@@ -86,29 +87,27 @@ export default function RatingBar({
       />
     );
   });
-  return <Container className="text-center"> {stars} </Container>;
+  return <Container className="text-center rating-bar"> {stars} </Container>;
 }
 
-export function StaticRatingBar() {
+export function StaticRatingBar({averageRating, ratings} : {averageRating:number, ratings: Rating[]}) {
+  if(!ratings) return (<></>);
   const [numberOfRatings, setNumberOfRatings] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
 
-  const ratings = useSelector((state: any) => state.recipe.ratings);
+  // const ratings = useSelector((state: any) => state.recipe.ratings);
 
   useEffect(() => {
     // console.log(ratings);
     setNumberOfRatings(ratings.length);
-    setAverageRating(
-      ratings.length===0 ? 0 : ratings.reduce((a: number, b: Rating) => a + b.rating, 0) / ratings.length
-    );
+  
   }, [ratings]);
 
   return (
     <>
       <RatingBar initialRating={Math.round(averageRating)} />
-      <div className="text-center">
+      <Container className="text-center">
         ({averageRating.toFixed(2)} from {numberOfRatings} ratings)
-      </div>
+      </Container>
     </>
   );
 }

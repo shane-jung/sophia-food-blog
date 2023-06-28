@@ -1,4 +1,4 @@
-import ImageUpload from "../ImageUpload";
+import ImageUpload from "./ImageUpload";
 import RichTextInput from "./RichTextInput";
 
 export default function RecipeBodyElement({

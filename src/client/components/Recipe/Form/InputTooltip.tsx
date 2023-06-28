@@ -10,7 +10,7 @@ export default function InputTooltip({text}: {text: string}){
         <OverlayTrigger
               placement={"top"}
               overlay={
-                <Tooltip>
+                <Tooltip style={{maxWidth: "400px"}}>
                   {text}
                 </Tooltip>
               }

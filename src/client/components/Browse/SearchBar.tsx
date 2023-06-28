@@ -77,7 +77,7 @@ function LinkedSearchResults({
   setQuery: Function;
 }) {
   return (
-    <ListGroup className="search-results px-2">
+    <ListGroup className="search-results">
       {recipes.map((recipe: any) => {
         {
           console.log("here");

@@ -1,9 +1,9 @@
-import axios from "../api/axios";
+import axios from "../../../api/axios";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { setViewMode } from "../slices/user";
+import { setViewMode } from "../../../slices/user";
 import RecipeForm from "./RecipeForm";
 
 export default function EditRecipePage() {
@@ -14,12 +14,13 @@ export default function EditRecipePage() {
     
     useEffect(() => {
       dispatch(setViewMode("editing-recipe"));
+      window.scrollTo(0, 0);
     }, []);
 
     return ( 
         <>
             <h1 className="mb-3">Edit Recipe</h1>
-            <RecipeForm recipe = {recipe} />;
+            <RecipeForm recipe = {recipe} />
 
         </>
     )

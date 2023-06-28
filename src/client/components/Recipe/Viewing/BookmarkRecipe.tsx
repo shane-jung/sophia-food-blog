@@ -3,22 +3,21 @@ import useAuth from "@/client/utils/useAuth";
 import axios from "@/client/api/axios";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useNavigate } from "react-router";
 
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Col from "react-bootstrap/Col";
 
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import RecipeThumbnail from "./RecipeThumbnail";
+import RecipeThumbnail from "../../Browse/RecipeThumbnail";
 
 export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
   const { auth } = useAuth();
-
+  const navigate = useNavigate();
   const user = useQuery(["user"], () => getUser(auth?.user?._id))?.data;
 
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(
     user?.savedRecipes?.includes(recipeId)
   );
@@ -35,18 +34,14 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
     },
     {
       onSuccess: (response) => {
-        console.log(response);
-        // queryClient.invalidateQueries(["user", "saveRecipe", auth.user._id]);
-        if (!saved)
           queryClient.setQueryData(["user"], (oldData: any) => {
-            console.log(saved);
             if (saved) {
-              return {
-                ...user,
+             return(
+                { ...user,
                 savedRecipes: user.savedRecipes.filter(
                   (id: string) => id !== recipeId
                 ),
-              };
+              });
             } else
               return {
                 ...user,
@@ -58,8 +53,8 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
   );
 
   const saveRecipe = () => {
-    console.log(saved, auth, user);
-    if (!auth?.isAuthenticated) return setShowModal(true);
+    // console.log(saved, auth, user);
+    if (!auth?.isAuthenticated) return navigate(`/users/login`);
     setSaved(!saved);
     if (!saved) setShowSaved(true);
     userMutation.mutate();
@@ -67,28 +62,16 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
 
   return (
     <>
-      <Button className="bookmark-button">
+      
+      <Button className="bookmark-button d-flex align-items-center gap-2">
+        <span>Save Recipe</span>
         <FontAwesomeIcon
           icon={faBookmark}
           onClick={saveRecipe}
           className={saved ? "active" : ""}
         />
       </Button>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title className="text-center">
-            Sign in to save this recipe.
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>All we'll need </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      
       <Offcanvas show={showSaved} onHide={() => setShowSaved(false)} xs={5}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title className="fs-2">Your Saved Recipes</Offcanvas.Title>

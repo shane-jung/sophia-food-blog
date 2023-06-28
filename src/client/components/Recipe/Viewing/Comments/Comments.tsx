@@ -1,7 +1,7 @@
 import CommentForm from "./CommentForm";
 
 import { lazy, Suspense, useState } from "react";
-import Loading from "../../other/Loading";
+import Loading from "../../../other/Loading";
 import Container from "react-bootstrap/Container";
 import { useSelector } from "react-redux";
 

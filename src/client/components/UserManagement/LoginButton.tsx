@@ -6,6 +6,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { handleLogout } from "../../slices/user";
 
 import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
@@ -36,13 +37,13 @@ export default function LoginButton() {
     } catch (error) {
       console.log(error);
     }
-    navigate(from, { replace: true });
+    navigate(from, {});
   }
   return auth.isAuthenticated ? (
       <Dropdown>
-        <Dropdown.Toggle className="d-flex justify-content-between align-items-center gap-2" variant="outline-success" id="dropdown-basic">
-          <span>Welcome, {username}!</span>
-          <FontAwesomeIcon icon= {faUser} className=" " />
+        <Dropdown.Toggle className="d-flex justify-content-between align-items-center gap-2 ms-2 " variant="primary">
+          <span>Hi, {username}!</span>
+          <FontAwesomeIcon icon= {faUser}  />
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item href={`/profile/${auth.user._id}`} >Saved Recipes</Dropdown.Item>
@@ -56,12 +57,14 @@ export default function LoginButton() {
       </Dropdown>
 
   ) : (
-    <Link
-      to="/users/login"
-      className="simple-button login-button"
-      state={{ from: window.location.pathname }}
+
+    <Button variant="primary"
+      href="/users/login"
+      className="ms-2"
+      // className="login-button"
+      // state={{ from: window.location.pathname }}
     >
       Login
-    </Link>
+    </Button>
   );
 }

@@ -9,7 +9,7 @@ import Image from "react-bootstrap/Image";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import axios from "../../api/axios";
+import axios from "../../../api/axios";
 
 import Form from "react-bootstrap/Form";
 

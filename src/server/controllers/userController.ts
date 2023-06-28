@@ -146,17 +146,26 @@ const userController = {
     console.log(req.body, id);
     try {
       const db = await connectToDatabase();
-      const update = push
-        ? {
-            $push: {
-              savedRecipes: { $each: [new ObjectId(recipeId)], $position: 0 },
-            },
-          }
-        : { $pull: { savedRecipes: new ObjectId(recipeId) } };
-      const result = await db
+      let userUpdate, recipeUpdate;
+      if (push) {
+        userUpdate = {
+          $push: {
+            savedRecipes: { $each: [new ObjectId(recipeId)], $position: 0 },
+          },
+        };
+        recipeUpdate = { $inc: { saves: 1 } };
+      } else {
+        userUpdate = { $pull: { savedRecipes: new ObjectId(recipeId) } };
+        recipeUpdate = { $inc: { saves: -1 } };
+      }
+      const userResult = await db
         .collection("Profiles")
-        .updateOne({ _id: new ObjectId(id) }, update);
-      console.log(result);
+        .updateOne({ _id: new ObjectId(id) }, userUpdate);
+      const recipeResult = await db
+        .collection("Recipes")
+        .updateOne({ _id: new ObjectId(recipeId) }, recipeUpdate);
+
+      console.log(userResult);
       return res.sendStatus(200);
     } catch (error) {
       console.error(`Error saving recipe in saveRecipe: ${error}`);

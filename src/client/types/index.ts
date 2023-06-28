@@ -19,9 +19,11 @@ export type Recipe = {
     ingredientTags? : string[];
     prepTime? : string;
     cookTime? : string; 
-    ratings? : Rating [];
+    ratings : Rating [];
     notes? : string [];
     body : any[];
+    averageRating : number;
+    servings: string;
 
 }
 

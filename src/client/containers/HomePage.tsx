@@ -1,6 +1,6 @@
 
 import { useQuery } from "react-query";
-import { NavLink } from "react-router-dom";
+import { NavLink, useFetcher } from "react-router-dom";
 import { getAllRecipes } from "../queries";
 import useAuth from "../utils/useAuth";
 
@@ -8,9 +8,10 @@ import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
 import Carousel from "react-bootstrap/Carousel";
 
-import { RecipesCategoryBlock } from "./RecipesCategoryBlock";
+import { RecipesCategoryBlock } from "../components/Browse/RecipesCategoryBlock";
 import { HomepageToolbar } from "../components/Recipe/Form/RecipeToolbar";
-import SearchBar from "../components/other/SearchBar";
+import SearchBar from "../components/Browse/SearchBar";
+import { useEffect } from "react";
 export default function HomePage() {
   const {auth } = useAuth();
 
@@ -19,6 +20,11 @@ export default function HomePage() {
     queryFn: () => getAllRecipes({ sort: "featured" }), 
   });
 
+
+  useEffect(() => {
+    document.title = "Home | Once Upon A Thyme";
+    window.scrollTo(0, 0);
+  }, [])
   return (
     <Container>
       {auth?.user?.roles?.includes(8012) && <HomepageToolbar />}

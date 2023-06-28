@@ -4,7 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import NavbarBrand from "react-bootstrap/NavbarBrand";
 import LinkContainer from "react-router-bootstrap/LinkContainer";
 
-import SearchBar from "../components/other/SearchBar";
+import SearchBar from "../components/Browse/SearchBar";
 import LoginButton from "../components/UserManagement/LoginButton";
 
 
