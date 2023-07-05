@@ -57,27 +57,27 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [body, setBody] = useState(recipe ? recipe.body : defaultRecipeBody);
-
+console.log(viewMode);
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) => {
       if (viewMode == "CREATING")
         return await axiosPrivate.post("/recipes", payload, {
           withCredentials: true,
         });
-      else
+      else if (viewMode == "EDITING")
         return await axiosPrivate.put(`/recipes/${recipe._id}`, payload, {
           withCredentials: true,
         });
     },
     onSuccess: (response) => {
       dispatch(setViewMode("viewing-recipe"));
-
       tagsMutation.mutate({
-        recipeId: response.data.value._id,
+        recipeId: response.data.value?._id, 
         tagIds: [
           ...response.data.value.cuisines,
           ...response.data.value.ingredients,
           ...response.data.value.meals,
+          ...response.data.value.diets,
         ],
       });
 
@@ -93,7 +93,6 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
           return response.data.value;
         }
       );
-
       queryClient.invalidateQueries({
         queryKey: ["recipes"],
         exact: true,
@@ -116,6 +115,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    
     data.set(
       "ingredients",
       JSON.stringify(
@@ -127,6 +127,18 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
         "ingredients",
         JSON.stringify([event.currentTarget.ingredients.value])
       );
+
+      data.set(
+        "diets",
+        JSON.stringify(
+          Array.from(event.currentTarget.diets)?.map((el: any) => el.value)
+        )
+      );
+      if (data.get("diets") === "[]")
+        data.set(
+          "diets",
+          JSON.stringify([event.currentTarget.diets.value])
+        );
 
     data.set(
       "meals",
@@ -258,6 +270,9 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
       <Select selectedIds={recipe?.meals} category="meals" />
 
       <Select selectedIds={recipe?.ingredients} category="ingredients" />
+
+      <Select selectedIds={recipe?.diets} category="diets" />
+
 
       <Form.Label>Recipe Body</Form.Label>
 

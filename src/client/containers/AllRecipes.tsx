@@ -33,8 +33,8 @@ export default function AllRecipes() {
       <Row>
         <Col xs={3}>
           <Form>
-            {Object.keys(tagsSorted).map((category: string) => (
-              <RecipeFilters category={category} tags={tagsSorted[category] }setFilters= {setFilters} />
+            {Object.keys(tagsSorted).map((category: string, index:number) => (
+              <RecipeFilters key={index} category={category} tags={tagsSorted[category] }setFilters= {setFilters} />
             ))}
           </Form>
         </Col>
@@ -43,8 +43,8 @@ export default function AllRecipes() {
           <Suspense fallback={<Loading />}>
             <Row>
 
-            {recipes.map((recipe: any) => (
-                <RecipeThumbnail recipeId={recipe._id} />
+            {recipes.map((recipe: any, index:number) => (
+                <RecipeThumbnail recipeId={recipe._id} key={index} />
                   ))
               }
             </Row>

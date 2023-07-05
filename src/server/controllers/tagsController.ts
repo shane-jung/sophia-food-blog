@@ -86,6 +86,8 @@ const tagsController = {
       addRecipeToTags: async (req: Request, res: Response) => {
         const { recipeId, tagIds } = req.body;
         const tagIdsObjectIds = tagIds.map((tagId: string) => new ObjectId(tagId));
+        console.log(tagIdsObjectIds)
+        return res.status(200);
         try {
           const db = await connectToDatabase();
           const response = await db
