@@ -196,43 +196,27 @@ const recipeController = {
       datePublished,
       ...recipe
     } = req.body;
-
+    console.log(req.body);
     if (recipe.body)
       recipe = {
         ...recipe,
         body: req.body.body?.map((step: any) => JSON.parse(step)),
       };
 
-    if (recipe.cuisines)
-      recipe = {
-        ...recipe,
-        cuisines: JSON.parse(req.body.cuisines)?.map(
-          (cuisine: any) => new ObjectId(cuisine)
-        ),
-      };
+    recipe = {
+      ...recipe,
+      cuisines: JSON.parse(req.body.cuisines)?.map(
+        (cuisine: any) => new ObjectId(cuisine)
+      ),
+      ingredients: JSON.parse(req.body.ingredients).map(
+        (ingredient: any) => new ObjectId(ingredient)
+      ),
+      meals: JSON.parse(req.body.meals).map((meal: any) => new ObjectId(meal)),
+      diets: JSON.parse(req.body.diets).map((diet: any) => new ObjectId(diet)),
+    };
 
-    if (recipe.ingredients)
-      recipe = {
-        ...recipe,
-        ingredients: JSON.parse(req.body.ingredients).map(
-          (ingredient: any) => new ObjectId(ingredient)
-        ),
-      };
-    if (recipe.meals)
-      recipe = {
-        ...recipe,
-        meals: JSON.parse(req.body.meals).map(
-          (meal: any) => new ObjectId(meal)
-        ),
-      };
-    if (recipe.diets)
-      recipe = {
-        ...recipe,
-        diets: JSON.parse(req.body.diets).map(
-          (diet: any) => new ObjectId(diet)
-        ),
-      };
-
+    console.log(recipe);
+    return res.status(200);
     try {
       const db = await connectToDatabase();
       const result = await db
