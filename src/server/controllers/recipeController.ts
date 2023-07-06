@@ -215,8 +215,6 @@ const recipeController = {
       diets: JSON.parse(req.body.diets).map((diet: any) => new ObjectId(diet)),
     };
 
-    console.log(recipe);
-    return res.status(200);
     try {
       const db = await connectToDatabase();
       const result = await db
