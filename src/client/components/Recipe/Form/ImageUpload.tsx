@@ -53,10 +53,9 @@ export default function ImageUpload({
     } catch (err) {
       console.log(err);
     }
-    console.log("SETTING RECIPE");
-    if(index==-1) dispatch(setRecipe({ type: "set-recipe", recipe: { imageUrl: url } }));
+
+    if(index==-1) dispatch(setRecipe({ type: "set-recipe",  imageUrl: url }));
     setImage(imagePreview);
-    console.log("SETTING IMAGE URL" + url);
     setImageUrl(url);
     handleClose();
     if (index != -1) {

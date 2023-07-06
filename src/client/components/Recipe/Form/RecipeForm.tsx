@@ -58,12 +58,13 @@ const defaultRecipeBody = [
 ];
 
 export default function RecipeForm({ recipe }: { recipe?: any }) {
+  const imageUrl = useSelector((state: any) => state.recipe.imageUrl);
   const viewMode = useSelector((state: any) => state.user.viewMode);
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [body, setBody] = useState(recipe ? recipe.body : defaultRecipeBody);
-  console.log(viewMode);
+  // console.log(viewMode);
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) => {
       if (viewMode == "CREATING")
@@ -133,8 +134,9 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
     data.set("dateCreated", new Date().toISOString());
     ["prepTime", "cookTime", "totalTime"].forEach((el) =>
       data.set(el, "PT" + event.currentTarget[`${el}Hours`].value + "H" + event.currentTarget[`${el}Minutes`].value + "M")
-    );
+    ); 
 
+    data.set("imageUrl", imageUrl);
     data.set(
       "servings",
       event.currentTarget.servingsQty.value +
