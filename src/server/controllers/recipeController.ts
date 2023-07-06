@@ -166,7 +166,7 @@ const recipeController = {
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
-          { ...recipe, comments: [], ratings: [] },
+          { ...recipe, comments: [], ratings: [], averageRating:0 },
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
