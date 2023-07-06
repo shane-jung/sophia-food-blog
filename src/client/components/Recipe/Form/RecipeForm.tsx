@@ -63,27 +63,28 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [body, setBody] = useState(recipe ? recipe.body : defaultRecipeBody);
-
+  console.log(viewMode);
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) => {
       if (viewMode == "CREATING")
         return await axiosPrivate.post("/recipes", payload, {
           withCredentials: true,
         });
-      else
+      else if (viewMode == "EDITING")
         return await axiosPrivate.put(`/recipes/${recipe._id}`, payload, {
           withCredentials: true,
         });
     },
     onSuccess: (response) => {
       dispatch(setViewMode("viewing-recipe"));
-
+      if(!response) return;
       tagsMutation.mutate({
-        recipeId: response.data.value._id,
+        recipeId: response.data.value?._id,
         tagIds: [
           ...response.data.value.cuisines,
           ...response.data.value.ingredients,
           ...response.data.value.meals,
+          ...response.data.value.diets,
         ],
       });
 
@@ -99,7 +100,6 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
           return response.data.value;
         }
       );
-
       queryClient.invalidateQueries({
         queryKey: ["recipes"],
         exact: true,
@@ -122,68 +122,19 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    data.set(
-      "ingredients",
-      JSON.stringify(
-        Array.from(event.currentTarget.ingredients)?.map((el: any) => el.value)
-      )
+    ["ingredients", "cuisines", "diets", "meals"].forEach((el) =>
+      data.set(el, JSON.stringify(Array.from(event.currentTarget[el])?.map((el: any) => el.value)))
     );
-    if (data.get("ingredients") === "[]")
-      data.set(
-        "ingredients",
-        JSON.stringify([event.currentTarget.ingredients.value])
-      );
-
-    data.set(
-      "meals",
-      JSON.stringify(
-        Array.from(event.currentTarget.meals)?.map((el: any) => el.value)
-      )
-    );
-    if (data.get("meals") === "[]")
-      data.set("meals", JSON.stringify([event.currentTarget.meals.value]));
-
-    data.set(
-      "cuisines",
-      JSON.stringify(
-        Array.from(event.currentTarget.cuisines)?.map((el: any) => el.value)
-      )
-    );
-    if (data.get("cuisines") === "[]")
-      data.set(
-        "cuisines",
-        JSON.stringify([event.currentTarget.cuisines.value])
-      );
 
     body.forEach((el: any, index: number) =>
       data.append("body[]", JSON.stringify(el))
     );
     data.set("dateEdited", new Date().toISOString());
     data.set("dateCreated", new Date().toISOString());
-    data.set(
-      "prepTime",
-      "PT" +
-        event.currentTarget.prepTimeHours.value +
-        "H" +
-        event.currentTarget.prepTimeMinutes.value +
-        "M"
+    ["prepTime", "cookTime", "totalTime"].forEach((el) =>
+      data.set(el, "PT" + event.currentTarget[`${el}Hours`].value + "H" + event.currentTarget[`${el}Minutes`].value + "M")
     );
-    data.set(
-      "cookTime",
-      "PT" +
-        event.currentTarget.cookTimeHours.value +
-        "H" +
-        event.currentTarget.cookTimeMinutes.value +
-        "M"
-    );
-    data.set(
-      "totalTime",
-      "PT" +
-        event.currentTarget.totalTimeHours.value +
-        "H" +
-        event.currentTarget.totalTimeMinutes.value +
-        "M"
-    );
+
     data.set(
       "servings",
       event.currentTarget.servingsQty.value +
@@ -265,6 +216,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
 
       <Select selectedIds={recipe?.ingredients} category="ingredients" />
 
+      <Select selectedIds={recipe?.diets} category="diets" />
 
       <Form.Label>Recipe Body</Form.Label>
 

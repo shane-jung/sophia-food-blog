@@ -125,12 +125,41 @@ const recipeController = {
 
   createRecipe: async (req: Request, res: Response) => {
     const tags = req.body.tags?.map((tag: any) => new ObjectId(tag)) || [];
-    const recipe = {
+    let recipe = {
       ...req.body,
       tags: tags,
       body: req.body.body.map((step: any) => JSON.parse(step)),
       featured: -1,
     };
+    if (recipe.cuisines)
+      recipe = {
+        ...recipe,
+        cuisines: JSON.parse(req.body.cuisines)?.map(
+          (cuisine: any) => new ObjectId(cuisine)
+        ),
+      };
+
+    if (recipe.ingredients)
+      recipe = {
+        ...recipe,
+        ingredients: JSON.parse(req.body.ingredients).map(
+          (ingredient: any) => new ObjectId(ingredient)
+        ),
+      };
+    if (recipe.meals)
+      recipe = {
+        ...recipe,
+        meals: JSON.parse(req.body.meals).map(
+          (meal: any) => new ObjectId(meal)
+        ),
+      };
+    if (recipe.diets)
+      recipe = {
+        ...recipe,
+        diets: JSON.parse(req.body.diets).map(
+          (diet: any) => new ObjectId(diet)
+        ),
+      };
 
     try {
       const db = await connectToDatabase();
@@ -161,7 +190,6 @@ const recipeController = {
       console.error(`Error creating recipe in createRecipe: ${error}`);
       throw error;
     }
-    return;
   },
   updateRecipe: async (req: Request, res: Response) => {
     const recipeId = req.params.recipeId;
@@ -177,35 +205,25 @@ const recipeController = {
       datePublished,
       ...recipe
     } = req.body;
-
+    console.log(req.body);
     if (recipe.body)
       recipe = {
         ...recipe,
         body: req.body.body?.map((step: any) => JSON.parse(step)),
       };
 
-    if (recipe.cuisines)
-      recipe = {
-        ...recipe,
-        cuisines: JSON.parse(req.body.cuisines)?.map(
-          (cuisine: any) => new ObjectId(cuisine)
-        ),
-      };
+    recipe = {
+      ...recipe,
+      cuisines: JSON.parse(req.body.cuisines)?.map(
+        (cuisine: any) => new ObjectId(cuisine)
+      ),
+      ingredients: JSON.parse(req.body.ingredients).map(
+        (ingredient: any) => new ObjectId(ingredient)
+      ),
+      meals: JSON.parse(req.body.meals).map((meal: any) => new ObjectId(meal)),
+      diets: JSON.parse(req.body.diets).map((diet: any) => new ObjectId(diet)),
+    };
 
-    if (recipe.ingredients)
-      recipe = {
-        ...recipe,
-        ingredients: JSON.parse(req.body.ingredients).map(
-          (ingredient: any) => new ObjectId(ingredient)
-        ),
-      };
-    if (recipe.meals)
-      recipe = {
-        ...recipe,
-        meals: JSON.parse(req.body.meals).map(
-          (meal: any) => new ObjectId(meal)
-        ),
-      };
     try {
       const db = await connectToDatabase();
       const result = await db
@@ -223,6 +241,7 @@ const recipeController = {
     }
   },
   deleteRecipe: async (req: Request, res: Response) => {
+    console.log(req);
     try {
       const db = await connectToDatabase();
       const result = await db
