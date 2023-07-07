@@ -22,6 +22,7 @@ $light: white;
 $body-color: $primary;
 $danger: #dc3545;
 $success: #188f33;
+$info: #9ca94b;
 
 $theme-colors: () !default;
 $theme-colors: map-merge(
@@ -32,6 +33,7 @@ $theme-colors: map-merge(
     'light' : $light,
     'danger' : $danger,
     'success' : $success,
+    'info' : $info
   ),
   $theme-colors
 );

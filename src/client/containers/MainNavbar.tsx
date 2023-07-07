@@ -11,28 +11,28 @@ import LoginButton from "../components/UserManagement/LoginButton";
 export default function MainNavbar() {
   return (
     <Navbar bg="primary" sticky="top" className="mb-4">
-      <Container>
+      <Container fluid className="mx-0">
+        <img src="https://recipe-blog-nonfood-images.s3.amazonaws.com/Thymeleafsmaller.PNG" width="8%" height="3%"></img>
           <Nav 
-            className="me-auto my-1 my-lg-0" 
-          > 
-            <NavbarBrand className = "nav-link" href = "/">Once Upon A Thyme</NavbarBrand>
-            <LinkContainer to = '/'>
-              <Nav.Link className = "nav-link" >Home</Nav.Link>
-            </LinkContainer>
+          >
+            <NavbarBrand className = "nav-link bg-info text-primary border-light" href = "/">Once Upon A Thyme</NavbarBrand>
             <LinkContainer to = "/recipes">
-              <Nav.Link className= "nav-link">All Recipes</Nav.Link>
+              <Nav.Link className= "nav-link me-1">All Recipes</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/category/">
-              <Nav.Link className= "nav-link">Categories</Nav.Link>
+            <LinkContainer to="/category">
+              <Nav.Link className= "nav-link me-1">Categories</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to = '/blog'>
+              <Nav.Link className = "nav-link me-1" >Blog</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/about">
-              <Nav.Link className= "nav-link">About</Nav.Link>
+              <Nav.Link className= "nav-link me-1">About</Nav.Link>
             </LinkContainer>
 
           </Nav>
           <SearchBar/>
           <LoginButton />
-          
+          <img src="https://recipe-blog-nonfood-images.s3.amazonaws.com/Thymeleafsmaller.PNG" width="8%" height="3%"></img>
       </Container>
          
     </Navbar>
