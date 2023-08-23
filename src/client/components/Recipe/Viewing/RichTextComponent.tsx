@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useState } from "react";
 
 interface RichTextComponentProps {
   value: string;
@@ -10,10 +10,10 @@ export default function RichTextComponent({
   name,
 }: RichTextComponentProps) {
   return (
-    <div className="mb-3">
-      {value && <h3 className= "text-center text-capitalize">{name}</h3> }
+    <div className="mb-4  ">
+      {value && <h3 className="text-center text-capitalize mb-1">{name}</h3>}
       <div
-        className={"fw-normal text-body-primary lh-lg fs-5 "}
+        className={"fw-normal text-body-primary lh-lg fs-6 "}
         dangerouslySetInnerHTML={{ __html: value || "" }}
       />
     </div>

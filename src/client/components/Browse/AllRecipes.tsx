@@ -36,24 +36,31 @@ export default function AllRecipes() {
       <Row>
         <Col xs={3}>
           <Form className="mt-3">
-            <h4>Filters</h4>
-            <Button onClick = {()=>setFilters({})}>Clear Filters</Button>
-            {Object.keys(tagsSorted).map((category: string, index: number) => (
-              <RecipeFilters
-                key={index}
-                category={category}
-                tags={tagsSorted[category]}
-                setFilters={setFilters}
-              />
-            ))}
+            <Container className="flex mb-2">
+              <h4>Filters</h4>
+              <Button className="btn-sm block" onClick={() => setFilters({})}>
+                Clear Filters
+              </Button>
+            </Container>
+            {Object.keys(tagsSorted).map(
+              (category: string, index: number) =>
+                category != "undefined" && (
+                  <RecipeFilters
+                    key={index}
+                    category={category}
+                    tags={tagsSorted[category]}
+                    setFilters={setFilters}
+                  />
+                )
+            )}
           </Form>
         </Col>
         <Col>
-          <h1 className="text-center">All Recipes</h1>
+          <h1 className="text-center mb-4">All Recipes</h1>
           <Suspense fallback={<Loading />}>
             <Row>
               {recipes.map((recipe: any, index: number) => (
-                <Col  key={index}  xs={12} sm={6} lg={4} xl={3}>
+                <Col key={index} xs={12} sm={6} lg={4} xl={3}>
                   <RecipeThumbnail recipeId={recipe._id} />
                 </Col>
               ))}
@@ -76,8 +83,8 @@ function RecipeFilters({
 }) {
   const [length, setLength] = useState(Math.min(5, tags.length));
   return (
-    <Form.Group>
-      <Form.Label className="text-capitalize">{category}</Form.Label>
+    <Form.Group className="mb-4">
+      <Form.Label className="text-capitalize fs-6">{category}</Form.Label>
       {tags
         .map((tag: any) => (
           <Form.Check
@@ -132,7 +139,6 @@ async function getAllTags() {
 }
 
 async function getRecipes({ filters }: any) {
-  console.log("FILTERS IN GET RECIPES", filters);
   const { data } = await axios.get(
     `/recipes/?filters=${JSON.stringify(filters)}`
   );

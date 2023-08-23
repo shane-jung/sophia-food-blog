@@ -1,7 +1,7 @@
 import { useGetAllRecipes } from "@/client/queries";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import ListGroup from "react-bootstrap/ListGroup";  
+import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 
@@ -28,7 +28,10 @@ export default function RecipesDashboard() {
                 <Link to={"/recipes/" + recipe.titleId}>{recipe.title}</Link>
               </Col>
               <Col>
-                {recipe.averageRating?.toFixed(2) + " (" + recipe.ratings.length + ")" }
+                {recipe.averageRating?.toFixed(2) +
+                  " (" +
+                  recipe.ratings.length +
+                  ")"}
               </Col>
               <Col>{recipe.comments?.length}</Col>
               <Col>{recipe.saves}</Col>

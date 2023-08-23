@@ -64,7 +64,6 @@ export default function Comment({
   const deleteCommentMutation = useMutation({
     mutationFn: deleteComment,
     onSuccess: ({ data }) => {
-      console.log(data);
       queryClient.setQueryData(["comments", recipeId], (oldComments: any) =>
         oldComments
           ? oldComments.filter((comment: any) => comment._id !== commentId)
@@ -128,14 +127,17 @@ export default function Comment({
 
   function handleDelete(e: any) {
     e.preventDefault();
-    console.log("here");
-    console.log(comment);
     if (!commentId) return;
     deleteCommentMutation.mutate({ commentId, parentId });
   }
 
   return (
-    <Container className= {"comment border border-2 mb-2 p-2 " + (comment.profileId == auth?.user?._id ? "me" : "") }>
+    <Container
+      className={
+        "comment border border-2 mb-2 p-2 " +
+        (comment.profileId == auth?.user?._id ? "me" : "")
+      }
+    >
       <Container className="d-flex gap-1">
         <span className="text-secondary username">{comment.username}</span>{" "}
         <span> &#x2022; </span>

@@ -16,7 +16,7 @@ export default function AdminPage() {
     <Container>
       <h1>Admin Panel</h1>
       <Tabs defaultActiveKey="home" className="mb-3">
-        <Tab eventKey="home" title="Home" >
+        <Tab eventKey="home" title="Home">
           <HomePageEditor />
         </Tab>
         <Tab eventKey="users" title="Users">
@@ -25,7 +25,7 @@ export default function AdminPage() {
         <Tab eventKey="recipes" title="Recipes">
           <RecipesDashboard />
         </Tab>
-        <Tab eventKey="profile" title="Comments"></Tab>
+        {/* <Tab eventKey="profile" title="Comments"></Tab> */}
         <Tab eventKey="contact" title="Tags">
           <TagEditor tags={tags} />
         </Tab>

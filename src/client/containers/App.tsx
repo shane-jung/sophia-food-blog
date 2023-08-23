@@ -23,7 +23,6 @@ import RecipeCategories from "../components/Browse/RecipeCategories";
 import AdminPage from "../components/AdminPage/AdminPage";
 import RecipeContainer from "../components/Recipe/Viewing/RecipeContainer";
 
-import "react-quill/dist/quill.snow.css";
 import EditRecipePage from "../components/Recipe/Form/EditRecipePage";
 import ProfilePage from "../components/UserManagement/ProfilePage";
 
@@ -96,8 +95,24 @@ const router = createBrowserRouter(
               />
             </Route>
           </Route>
-          <Route path= "admin" element = {<Suspense fallback={<Loading />}> <AdminPage /> </Suspense>} />
-          <Route path= "profile/:id" element = {<Suspense fallback={<Loading />}> <ProfilePage /> </Suspense>} />
+          <Route
+            path="admin"
+            element={
+              <Suspense fallback={<Loading />}>
+                {" "}
+                <AdminPage />{" "}
+              </Suspense>
+            }
+          />
+          <Route
+            path="profile/:id"
+            element={
+              <Suspense fallback={<Loading />}>
+                {" "}
+                <ProfilePage />{" "}
+              </Suspense>
+            }
+          />
         </Route>
 
         <Route path="users">
@@ -110,7 +125,6 @@ const router = createBrowserRouter(
 );
 
 export const App: React.FC = () => {
-
   return (
     <HelmetProvider>
       <Helmet>

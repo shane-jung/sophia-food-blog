@@ -12,7 +12,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row"
+import Row from "react-bootstrap/Row";
 
 export default function CommentForm({
   replyToCommentId,
@@ -53,8 +53,6 @@ export default function CommentForm({
 
   async function handleSubmit(event: any) {
     event.preventDefault();
-    console.log(event.currentTarget.rating?.value);
-    // return;
     setContent("");
     if (replyToCommentId) {
       setReplying(false);
@@ -87,30 +85,32 @@ export default function CommentForm({
       method="POST"
     >
       {!auth?.user && (
-        <Form.Group as ={Row}> 
+        <Form.Group as={Row}>
           <Col xs={5} className="pe-0">
             <FloatingLabel label="Your Name">
               <Form.Control
                 name="name"
                 className="mb-2"
-                placeholder = "name"
+                placeholder="name"
                 ref={nameRef}
                 onChange={(e) => setName(e.target.value)}
                 value={name}
               />
             </FloatingLabel>
           </Col>
-          <Col className= "ps-1"> <FloatingLabel label="Email">
-            <Form.Control
-              id="email"
-              name="email"
-              className="mb-2"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              required
-            />
-          </FloatingLabel>
+          <Col className="ps-1">
+            {" "}
+            <FloatingLabel label="Email">
+              <Form.Control
+                id="email"
+                name="email"
+                className="mb-2"
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required
+              />
+            </FloatingLabel>
           </Col>
         </Form.Group>
       )}

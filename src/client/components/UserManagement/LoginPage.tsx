@@ -27,7 +27,7 @@ import * as yup from "yup";
 type fieldKey = "email" | "password";
 const fields: fieldKey[] = ["email", "password"];
 
-const autocomplete = {  email: "email", password: "current-password" }; 
+const autocomplete = { email: "email", password: "current-password" };
 const type = { email: "email", password: "password" };
 
 export default function LoginPage() {
@@ -53,7 +53,6 @@ export default function LoginPage() {
     if (auth.accessToken) navigate(from, { replace: true });
   }, []);
 
-  
   return (
     <Container>
       <Row>
@@ -87,7 +86,6 @@ export default function LoginPage() {
                   email: values.email,
                   password: values.password,
                 });
-                console.log(loginResult);
                 dispatch(handleLogin(loginResult.data));
                 setAuth({ user: loginResult.data.user, isAuthenticated: true });
                 navigate(from, { replace: true });
@@ -120,7 +118,7 @@ export default function LoginPage() {
                   <Form.Group className="mb-3" key={field}>
                     <FloatingLabel label={field}>
                       <Form.Control
-                        type= {type[field]}
+                        type={type[field]}
                         id={field}
                         name={field}
                         required
@@ -133,10 +131,10 @@ export default function LoginPage() {
 
                     <Form.Control.Feedback type="invalid" className="d-block">
                       {errors[field]}
-                    </Form.Control.Feedback>  
+                    </Form.Control.Feedback>
                   </Form.Group>
                 ))}
-          <div className="text-danger">{errorMessage}</div>
+                <div className="text-danger">{errorMessage}</div>
 
                 <Button
                   variant="secondary"
@@ -149,7 +147,7 @@ export default function LoginPage() {
               </Form>
             )}
           </Formik>
-          
+
           <p className="text-center">
             Don't have an account?{" "}
             <Link to="/users/register">Create an Account</Link>

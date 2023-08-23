@@ -28,8 +28,6 @@ import InputGroup from "react-bootstrap/InputGroup";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-
-
 const defaultRecipeBody = [
   {
     _id: uuid.v4(),
@@ -64,7 +62,6 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [body, setBody] = useState(recipe ? recipe.body : defaultRecipeBody);
-  // console.log(viewMode);
   const recipeMutation = useMutation({
     mutationFn: async (payload: any) => {
       if (viewMode == "CREATING")
@@ -78,7 +75,7 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
     },
     onSuccess: (response) => {
       dispatch(setViewMode("viewing-recipe"));
-      if(!response) return;
+      if (!response) return;
       tagsMutation.mutate({
         recipeId: response.data.value?._id,
         tagIds: [
@@ -124,7 +121,12 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
     const data = new FormData(event.currentTarget);
 
     ["ingredients", "cuisines", "diets", "meals"].forEach((el) =>
-      data.set(el, JSON.stringify(Array.from(event.currentTarget[el])?.map((el: any) => el.value)))
+      data.set(
+        el,
+        JSON.stringify(
+          Array.from(event.currentTarget[el])?.map((el: any) => el.value)
+        )
+      )
     );
 
     body.forEach((el: any, index: number) =>
@@ -133,8 +135,15 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
     data.set("dateEdited", new Date().toISOString());
     data.set("dateCreated", new Date().toISOString());
     ["prepTime", "cookTime", "totalTime"].forEach((el) =>
-      data.set(el, "PT" + event.currentTarget[`${el}Hours`].value + "H" + event.currentTarget[`${el}Minutes`].value + "M")
-    ); 
+      data.set(
+        el,
+        "PT" +
+          event.currentTarget[`${el}Hours`].value +
+          "H" +
+          event.currentTarget[`${el}Minutes`].value +
+          "M"
+      )
+    );
 
     data.set("imageUrl", imageUrl);
     data.set(
@@ -201,7 +210,9 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
               type="number"
               min={0}
               max={100}
-              defaultValue={recipe?.servings ? recipe.servings.split(" ")[0] : 0} 
+              defaultValue={
+                recipe?.servings ? recipe.servings.split(" ")[0] : 0
+              }
             />
             <Form.Control
               name="servingsUnit"
@@ -251,7 +262,5 @@ export default function RecipeForm({ recipe }: { recipe?: any }) {
         </div>
       ))}
     </form>
-  )
+  );
 }
-
-

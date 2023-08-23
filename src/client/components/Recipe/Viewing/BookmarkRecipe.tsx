@@ -34,26 +34,25 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
     },
     {
       onSuccess: (response) => {
-          queryClient.setQueryData(["user"], (oldData: any) => {
-            if (saved) {
-             return(
-                { ...user,
-                savedRecipes: user.savedRecipes.filter(
-                  (id: string) => id !== recipeId
-                ),
-              });
-            } else
-              return {
-                ...user,
-                savedRecipes: [recipeId, ...user.savedRecipes],
-              };
-          });
+        queryClient.setQueryData(["user"], (oldData: any) => {
+          if (saved) {
+            return {
+              ...user,
+              savedRecipes: user.savedRecipes.filter(
+                (id: string) => id !== recipeId
+              ),
+            };
+          } else
+            return {
+              ...user,
+              savedRecipes: [recipeId, ...user.savedRecipes],
+            };
+        });
       },
     }
   );
 
   const saveRecipe = () => {
-    // console.log(saved, auth, user);
     if (!auth?.isAuthenticated) return navigate(`/users/login`);
     setSaved(!saved);
     if (!saved) setShowSaved(true);
@@ -62,7 +61,6 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
 
   return (
     <>
-      
       <Button className="bookmark-button d-flex align-items-center gap-2">
         <span>Save Recipe</span>
         <FontAwesomeIcon
@@ -71,7 +69,7 @@ export default function BookmarkRecipe({ recipeId }: { recipeId: string }) {
           className={saved ? "active" : ""}
         />
       </Button>
-      
+
       <Offcanvas show={showSaved} onHide={() => setShowSaved(false)} xs={5}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title className="fs-2">Your Saved Recipes</Offcanvas.Title>
