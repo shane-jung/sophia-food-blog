@@ -17,6 +17,7 @@ export type Recipe = {
   ingredientTags?: string[];
   prepTime?: string;
   cookTime?: string;
+  totalTime?: string;
   ratings: Rating[];
   notes?: string[];
   body: any[];

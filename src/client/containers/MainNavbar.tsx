@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavbarBrand from "react-bootstrap/NavbarBrand";
-import LinkContainer from "react-router-bootstrap/LinkContainer";
+import { LinkContainer } from "react-router-bootstrap";
 
 import SearchBar from "../components/Browse/SearchBar";
 import LoginButton from "../components/UserManagement/LoginButton";
