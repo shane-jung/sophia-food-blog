@@ -1,4 +1,3 @@
-
 const dictionary: { [key: string]: string } = {
   title: "display-3 ",
   cardTitle: "h2",

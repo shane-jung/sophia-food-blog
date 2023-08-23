@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { MongoClient, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 import connectToDatabase from "../database/mongodb";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -69,36 +69,28 @@ const userController = {
     }
   },
   handleLogout: async (req: Request, res: Response) => {
-    console.log(req.body);
     const cookies = req.cookies;
-    console.log(req.cookies);
     if (!cookies?.jwt) return res.sendStatus(204);
     const jwt = cookies.jwt;
     res.clearCookie("jwt", { httpOnly: true });
-    console.log(req.cookies);
 
     try {
       const db = await connectToDatabase();
       const result = await db
         .collection("Profiles")
         .updateOne({ "refresh-token": jwt }, { $set: { "refresh-token": "" } });
-      console.log(result);
       res.sendStatus(200);
     } catch (error) {
       console.log(error);
     }
-
-    // req.headers.authorization = "";
   },
 
   createUser: async (req: Request, res: Response) => {
-    // const user = res.locals.user;
     const { values: user } = req.body;
     try {
       const db = await connectToDatabase();
       const DBuser = { ...EmptyProfile, roles: [1000], ...user };
       const result = await db.collection("Profiles").insertOne(DBuser);
-      // console.log(result);
       return res.json({ user: { ...DBuser, _id: result.insertedId } });
     } catch (error) {
       console.error(`Error creating user in createUser: ${error}`);
@@ -106,14 +98,12 @@ const userController = {
     }
   },
   getUser: async (req: Request, res: Response) => {
-    // console.log("in get users ");
     const id = req.params.id;
     try {
       const db = await connectToDatabase();
       const user = await db
         .collection("Profiles")
         .findOne({ _id: new ObjectId(id) });
-      // console.log(user);
       if (user)
         return res.json({
           _id: user._id,

@@ -1,14 +1,10 @@
 import Container from "react-bootstrap/Container";
-import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Link } from "react-router-dom";
 
 import Tags from "./Tags";
 
 import { Recipe } from "@/client/types";
 export default function RecipeSidebar({ recipe }: { recipe: Recipe }) {
-  console.log(recipe.body);
   const ingredients = recipe.body.find(
     (component) => component.name === "Ingredients"
   )?.value;
@@ -20,19 +16,27 @@ export default function RecipeSidebar({ recipe }: { recipe: Recipe }) {
     >
       <h4>Recipe Details</h4>
       <div className="me-2">
-        <div><strong>Prep time: </strong>
-        <DurationFormatted duration={recipe.prepTime} /> </div>
-        <div> <strong>Cook time: </strong> <DurationFormatted duration={recipe.cookTime} /> </div>
-        <div> <strong>Total time:</strong> <DurationFormatted duration={recipe.totalTime} /> </div>
-        <div><strong>Serves: </strong>{recipe.servings}</div>
+        <div>
+          <strong>Prep time: </strong>
+          <DurationFormatted duration={recipe.prepTime!} />
+        </div>
+        <div>
+          <strong>Cook time: </strong>
+          <DurationFormatted duration={recipe.cookTime!} />
+        </div>
+        <div>
+          <strong>Total time:</strong>
+          <DurationFormatted duration={recipe.totalTime} />
+        </div>
+        <div>
+          <strong>Serves: </strong>
+          {recipe.servings}
+        </div>
       </div>
 
       <Tags tagIds={recipe.cuisines} category={"Cuisine"} />
 
       <Tags tagIds={recipe.meals} category={"Meal"} />
-      {/* <Col>
-                <Tags tagIds={recipe.ingredients} category={"Ingredients"} />
-              </Col> */}
       <Row>
         <h5>Ingredients</h5>
         <div dangerouslySetInnerHTML={{ __html: ingredients }}></div>

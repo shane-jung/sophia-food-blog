@@ -1,16 +1,7 @@
-.btn-outline-light{
-    border: 3px double;
-    border-radius: 0.375rem;
-    &:hover{
-        color: white;
-        border: 3px double $secondary-light;
-    }
-}
-
-.btn{
-    
-    &:hover{ 
-        background-color: $secondary-light;
-        border-color: $secondary-light;
-    }
+.btn-outline-light {
+  border: 3px double;
+  border-radius: 0.375rem;
+  &:hover {
+    color: white;
+  }
 }

@@ -17,8 +17,18 @@ import { Link } from "react-router-dom";
 
 type fieldKey = "username" | "email" | "password" | "confirmPassword";
 
-const autocomplete = {  email: "email", password: "new-password", confirmPassword: "new-password", username: "" }; 
-const type = { email: "email", password: "password", confirmPassword : "password", username: "text" };
+const autocomplete = {
+  email: "email",
+  password: "new-password",
+  confirmPassword: "new-password",
+  username: "",
+};
+const type = {
+  email: "email",
+  password: "password",
+  confirmPassword: "password",
+  username: "text",
+};
 
 export default function RegisterPage() {
   const { Formik } = formik;
@@ -79,11 +89,12 @@ export default function RegisterPage() {
                 errors.email = "Please enter a valid email address.";
               }
 
-
               if (!values.password) {
                 errors.password = "Required";
               } else if (
-                !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,24}$/i.test(values.password)
+                !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,24}$/i.test(
+                  values.password
+                )
               ) {
                 errors.password =
                   "Please enter a valid password between 8-24 characters with at least one uppercase letter, one lowercase letter, and one number.";
@@ -94,15 +105,18 @@ export default function RegisterPage() {
               } else if (values.password !== values.confirmPassword) {
                 errors.confirmPassword = "Passwords do not match.";
               }
-              if(errors.username || errors.email || errors.password || errors.confirmPassword)
+              if (
+                errors.username ||
+                errors.email ||
+                errors.password ||
+                errors.confirmPassword
+              )
                 setValidated(false);
-              else
-                setValidated(true);
+              else setValidated(true);
 
               return errors;
             }}
-            onSubmit={ async (values, { setSubmitting }) => {
-              // console.log("VALUES" , values);
+            onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
               try {
                 const response = await axios.post("/users", {
@@ -110,7 +124,7 @@ export default function RegisterPage() {
                 });
                 if (response.status == 200) {
                   const createResult = await axios.post("/users/create", {
-                    values
+                    values,
                   });
                   // console.log(createResult);
                   const loginResult = await axios.post("/users/login", {
@@ -126,14 +140,22 @@ export default function RegisterPage() {
                 }
               } catch (err: any) {
                 if (err.response.status === 409) {
-                  setErrorMessage("Email already in use. Try logging in.")
+                  setErrorMessage("Email already in use. Try logging in.");
                   return;
                 }
-              } finally { setSubmitting(false)} 
-
+              } finally {
+                setSubmitting(false);
+              }
             }}
           >
-            {({ handleSubmit, handleChange, values, touched, errors, isSubmitting}) => (
+            {({
+              handleSubmit,
+              handleChange,
+              values,
+              touched,
+              errors,
+              isSubmitting,
+            }) => (
               <Form
                 method="POST"
                 className="user-form"
@@ -142,10 +164,7 @@ export default function RegisterPage() {
                 validated={validated}
               >
                 {fields.map((field: fieldKey, index: number) => (
-                  <Form.Group
-                    className="mb-3"
-                    key={field}
-                  >
+                  <Form.Group className="mb-3" key={field}>
                     <FloatingLabel label={field}>
                       <Form.Control
                         id={field}
@@ -164,9 +183,13 @@ export default function RegisterPage() {
                     </Form.Control.Feedback>
                   </Form.Group>
                 ))}
-          <div className="text-danger">{errorMessage}</div>
+                <div className="text-danger">{errorMessage}</div>
 
-                <Button variant="secondary" type="submit" className="mx-auto d-block my-2">
+                <Button
+                  variant="secondary"
+                  type="submit"
+                  className="mx-auto d-block my-2"
+                >
                   Create an Account
                 </Button>
               </Form>

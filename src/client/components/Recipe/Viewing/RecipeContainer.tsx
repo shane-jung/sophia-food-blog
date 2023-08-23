@@ -47,20 +47,19 @@ export default function RecipeContainer() {
   return (
     <Container className="border-right border-2">
       {auth?.user?.roles?.includes(8012) && <RecipeToolbar />}
-          <Breadcrumb>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>
-              Home
-            </Breadcrumb.Item>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/recipes" }}>
-              Recipes
-            </Breadcrumb.Item>
-            <Breadcrumb.Item active>{recipe.title}</Breadcrumb.Item>
-          </Breadcrumb>
+      <Breadcrumb>
+        <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>
+          Home
+        </Breadcrumb.Item>
+        <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/recipes" }}>
+          Recipes
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>{recipe.title}</Breadcrumb.Item>
+      </Breadcrumb>
       <Row className="h-100 ">
-        <Col className="py-2 px-3 position-relative"> 
+        <Col className="py-2 px-3 position-relative">
           <BookmarkRecipe recipeId={recipe._id} />
 
-          
           <Row className="align-items-end justify-content-around my-4 position-relative">
             <Col xs={8}>
               <SimpleTextComponent name="title" value={recipe.title} />
@@ -98,11 +97,11 @@ export default function RecipeContainer() {
       </Row>
       <Row>
         <Col>
-          <Comments /></Col> 
-          <Col xs={3} className="position-relative">
+          <Comments />
+        </Col>
+        <Col xs={3} className="position-relative">
           <MoreRecipes recipe={recipe} />
         </Col>
-
       </Row>
     </Container>
   );
@@ -112,5 +111,3 @@ async function loadRecipe(titleId: string) {
   const { data } = await axios.get(`/recipes/titleId/${titleId}`);
   return data;
 }
-
-

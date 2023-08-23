@@ -4,10 +4,9 @@ import Container from "react-bootstrap/Container";
 
 export default function RootLayout() {
   return (
-    <Container fluid className = "bg-accent px-0">
+    <Container fluid className="px-0">
       <MainNavbar />
       <Outlet />
-
 
       <Container
         className="text-center"

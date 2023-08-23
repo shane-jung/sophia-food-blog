@@ -22,7 +22,6 @@ export default function LoginButton() {
   const dispatch = useDispatch();
 
   async function logout() {
-    console.log("logging out");
     setAuth({});
     dispatch(handleLogout());
     try {
@@ -33,37 +32,35 @@ export default function LoginButton() {
         },
         { withCredentials: true }
       );
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
     navigate(from, {});
   }
   return auth.isAuthenticated ? (
-      <Dropdown>
-        <Dropdown.Toggle className="d-flex justify-content-between align-items-center gap-2 ms-2 " variant="primary">
-          <span>Hi, {username}!</span>
-          <FontAwesomeIcon icon= {faUser}  />
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item href={`/profile/${auth.user._id}`} >Saved Recipes</Dropdown.Item>
-          { auth?.user?.roles?.includes(8012) &&
-            <Dropdown.Item href="/admin" >Manage Site</Dropdown.Item>
-          }
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={logout} className="font-weight-bold danger">Logout</Dropdown.Item>
-        </Dropdown.Menu>
-        
-      </Dropdown>
-
+    <Dropdown>
+      <Dropdown.Toggle
+        className="d-flex justify-content-between align-items-center gap-2 ms-2"
+        variant="outline-primary"
+      >
+        <span>Hi, {username}!</span>
+        <FontAwesomeIcon icon={faUser} />
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        <Dropdown.Item href={`/profile/${auth.user._id}`}>
+          Saved Recipes
+        </Dropdown.Item>
+        {auth?.user?.roles?.includes(8012) && (
+          <Dropdown.Item href="/admin">Manage Site</Dropdown.Item>
+        )}
+        <Dropdown.Divider />
+        <Dropdown.Item onClick={logout} className="font-weight-bold danger">
+          Logout
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
   ) : (
-
-    <Button variant="primary"
-      href="/users/login"
-      className="ms-2"
-      // className="login-button"
-      // state={{ from: window.location.pathname }}
-    >
+    <Button variant="outline-primary" href="/users/login" className="ms-2">
       Login
     </Button>
   );

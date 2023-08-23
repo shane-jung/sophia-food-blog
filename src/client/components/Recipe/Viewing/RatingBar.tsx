@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
@@ -90,16 +89,17 @@ export default function RatingBar({
   return <Container className="text-center rating-bar"> {stars} </Container>;
 }
 
-export function StaticRatingBar({averageRating, ratings} : {averageRating:number, ratings: Rating[]}) {
-  if(!ratings) return (<></>);
+export function StaticRatingBar({
+  averageRating,
+  ratings,
+}: {
+  averageRating: number;
+  ratings: Rating[];
+}) {
+  if (!ratings) return <></>;
   const [numberOfRatings, setNumberOfRatings] = useState(0);
-
-  // const ratings = useSelector((state: any) => state.recipe.ratings);
-
   useEffect(() => {
-    // console.log(ratings);
     setNumberOfRatings(ratings.length);
-  
   }, [ratings]);
 
   return (

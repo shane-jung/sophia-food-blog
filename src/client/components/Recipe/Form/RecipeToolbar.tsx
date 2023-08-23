@@ -12,10 +12,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "react-query";
 import queryClient from "@/client/utils/queryClient";
-import Button from "react-bootstrap/Button";  
+import Button from "react-bootstrap/Button";
 import Tooltip from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-
 
 export default function EditRecipeToolbar() {
   return (
@@ -36,7 +35,7 @@ export function HomepageToolbar() {
   );
 }
 
-export  function CreateRecipeToolbar() {
+export function CreateRecipeToolbar() {
   return (
     <div className="recipe-toolbar">
       <SaveButton />
@@ -44,23 +43,22 @@ export  function CreateRecipeToolbar() {
   );
 }
 
-function AddRecipe(){
+function AddRecipe() {
   const navigate = useNavigate();
-  function handleClick (){
-    navigate('/recipes/create');
+  function handleClick() {
+    navigate("/recipes/create");
   }
   return (
     <IconButton
       handleClick={handleClick}
-      name= {"Create New Recipe"}
-      faIcon = {faPlus}
+      name={"Create New Recipe"}
+      faIcon={faPlus}
     />
-  )
+  );
 }
 
-
 function EditButton() {
-  const [buttonText, setButtonText] = useState('Edit Recipe');
+  const [buttonText, setButtonText] = useState("Edit Recipe");
   const [buttonIcon, setButtonIcon] = useState(faEdit);
   const navigate = useNavigate();
 
@@ -70,7 +68,11 @@ function EditButton() {
   };
 
   return (
-    <IconButton handleClick={toggleViewMode} faIcon={buttonIcon} name={buttonText} />
+    <IconButton
+      handleClick={toggleViewMode}
+      faIcon={buttonIcon}
+      name={buttonText}
+    />
   );
 }
 
@@ -83,11 +85,13 @@ function SaveButton() {
     else setButtonText("Save");
   }, [viewMode]);
 
-  
-
   return (
-    <IconButton className= {viewMode == "VIEWING" ? "inactive" : "" } handleClick={null} faIcon={faSave} name={buttonText} />
-
+    <IconButton
+      className={viewMode == "VIEWING" ? "inactive" : ""}
+      handleClick={null}
+      faIcon={faSave}
+      name={buttonText}
+    />
   );
 }
 
@@ -98,27 +102,24 @@ function DeleteButton() {
   const mutation = useMutation({
     mutationFn: async () => await axiosPrivate.delete(`/recipes/${recipe._id}`),
     onSuccess: (response) => {
-      console.log(response);
-
-
       navigate("/recipes", { replace: true });
       queryClient.invalidateQueries(["recipes"]);
     },
   });
   const tagsMutation = useMutation({
-      mutationFn  : async () => await axiosPrivate.post(`/tags/removeRecipeFromTags`, {tags: recipe.tags, recipeId: recipe._id} ),
-      onSuccess: (response:any) => {  
-        // console.log(response);
-        mutation.mutate();
-
-        queryClient.invalidateQueries(["tags"]);
-      }
+    mutationFn: async () =>
+      await axiosPrivate.post(`/tags/removeRecipeFromTags`, {
+        tags: recipe.tags,
+        recipeId: recipe._id,
+      }),
+    onSuccess: (response: any) => {
+      mutation.mutate();
+      queryClient.invalidateQueries(["tags"]);
+    },
   });
 
-
-
   async function handleDelete() {
-    tagsMutation.mutate(); 
+    tagsMutation.mutate();
     // if (result.status === 200) navigate("/recipes", { replace: true });
   }
 
@@ -153,7 +154,12 @@ function Settings() {
 function IconButton({ handleClick, faIcon, name, className }: any) {
   return (
     <OverlayTrigger placement={"left"} overlay={<Tooltip>{name}</Tooltip>}>
-      <Button variant={"secondary"} className={"mt-2 icon-button round p-4 text-light " + className } onClick={handleClick} type ="submit">
+      <Button
+        variant={"secondary"}
+        className={"mt-2 icon-button round p-4 text-light " + className}
+        onClick={handleClick}
+        type="submit"
+      >
         <FontAwesomeIcon icon={faIcon} />
       </Button>
     </OverlayTrigger>

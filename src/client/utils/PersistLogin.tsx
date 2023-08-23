@@ -8,8 +8,6 @@ import axios from "../api/axios";
 import Loading from "../components/other/Loading";
 
 const PersistLogin = () => {
-
-  
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
   const { auth, setAuth } = useAuth();
@@ -33,9 +31,7 @@ const PersistLogin = () => {
   useMemo(() => {
     async function getUser() {
       const getUser = await axios.get(`/users/${auth.user._id}`);
-      // console.log(getUser.data)
       dispatch(handleLogin(getUser.data));
-      // console.log(getUser.data);
     }
     if (auth.user) getUser();
   }, [auth.user]);
