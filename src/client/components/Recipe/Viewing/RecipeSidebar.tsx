@@ -26,7 +26,7 @@ export default function RecipeSidebar({ recipe }: { recipe: Recipe }) {
         </div>
         <div>
           <strong>Total time:</strong>
-          <DurationFormatted duration={recipe.totalTime} />
+          <DurationFormatted duration={recipe.totalTime!} />
         </div>
         <div>
           <strong>Serves: </strong>
