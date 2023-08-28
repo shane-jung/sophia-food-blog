@@ -1,5 +1,5 @@
 import {
-  createBrowserRouter,
+  createHashRouter,
   createRoutesFromElements,
   RouterProvider,
   Route,
@@ -26,7 +26,7 @@ import RecipeContainer from "../components/Recipe/Viewing/RecipeContainer";
 import EditRecipePage from "../components/Recipe/Form/EditRecipePage";
 import ProfilePage from "../components/UserManagement/ProfilePage";
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <Route element={<PersistLogin />}>
       <Route path="/">
