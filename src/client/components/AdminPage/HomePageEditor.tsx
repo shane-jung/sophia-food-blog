@@ -13,7 +13,7 @@ function ChooseRecipe({ recipes }: { recipes: any }) {
   const axiosPrivate = useAxiosPrivate();
   const recipesMutation = useMutation(
     async ({ recipeId, featured }: { recipeId: string; featured: number }) => {
-      console.log(recipeId, featured);
+      // console.log(recipeId, featured);
       return await axiosPrivate.put(`/recipes/${recipeId}`, { featured });
     }
   );

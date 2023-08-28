@@ -20,7 +20,7 @@ export function RecipesCategoryBlock({ tag }: { tag: any }) {
           ?.slice(0, 8)
           .map((recipeId: string, index: any) => (
             <Col key={index} xs={12} sm={6} lg={4} xl={3}>
-              <RecipeThumbnail  recipeId={recipeId} />;
+              <RecipeThumbnail recipeId={recipeId} />;
             </Col>
           ))}
       </Row>

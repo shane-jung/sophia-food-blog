@@ -16,7 +16,6 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Nav from "react-bootstrap/Nav";
 import Spinner from "react-bootstrap/Spinner";
 
-
 import InputTooltip from "../Recipe/Form/InputTooltip";
 
 export default function TagEditor({ tags }: any) {
@@ -35,10 +34,6 @@ export default function TagEditor({ tags }: any) {
   const [category, setCategory] = useState("meals");
 
   const [selectedTag, setSelectedTag] = useState(tagsSorted["undefined"][0]);
-
-  useEffect(() => {
-    console.log("SELECTED TAG", selectedTag);
-  }, [selectedTag]);
 
   const tagsMutation = useMutation({
     mutationFn: () => updateTag({ tag: selectedTag }),
@@ -181,7 +176,6 @@ async function updateTag({ tag }: any) {
     ...tag,
     label: emoji.unemojify(tag.label) || "",
   });
-  console.log(data);
   return data;
 }
 

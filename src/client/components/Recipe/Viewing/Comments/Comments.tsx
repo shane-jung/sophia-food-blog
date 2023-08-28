@@ -13,11 +13,11 @@ export default function Comments() {
   return (
     <section id="comments" className="border-4 border-top pt-3">
       <h5>Recipe Comments ({commentsLength})</h5>
-      <CommentForm  />
+      <CommentForm />
       <Container className="comments-toolbar" />
 
       <Suspense fallback={<Loading />}>
-        <CommentsList setCommentsLength = {(n:number)=>setCommentsLength(n)} />
+        <CommentsList setCommentsLength={(n: number) => setCommentsLength(n)} />
       </Suspense>
     </section>
   );

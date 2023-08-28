@@ -1,131 +1,145 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-    _id : string;
-    likedComments: any;
-    email: string;
-    username: string;
-    viewMode: string;
-    savedRecipes: string[];
-    comments: string[];
+  _id: string;
+  likedComments: any;
+  email: string;
+  username: string;
+  viewMode: string;
+  savedRecipes: string[];
+  comments: string[];
 }
 
-const initialState : UserState = {
-    _id: "",
-    likedComments: [],
-    email: "",
-    username: "",
-    viewMode: "VIEWING",
-    savedRecipes: [],
-    comments: []
-}
-
+const initialState: UserState = {
+  _id: "",
+  likedComments: [],
+  email: "",
+  username: "",
+  viewMode: "VIEWING",
+  savedRecipes: [],
+  comments: [],
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: initialState,
   reducers: {
-    setLikedComments (state = initialState, action:PayloadAction<any>) {
+    setLikedComments(state = initialState, action: PayloadAction<any>) {
       return {
         ...state,
-        likedComments: [...new Set(action.payload)]
-      }
+        likedComments: [...new Set(action.payload)],
+      };
     },
-    setLikedComment (state = initialState, action:PayloadAction<any>)  {
+    setLikedComment(state = initialState, action: PayloadAction<any>) {
       const recipeId = action.payload.recipeId;
-      const index = state.likedComments.findIndex((comment:any) => comment.recipeId === recipeId);
-      switch(action.payload.type){  
+      const index = state.likedComments.findIndex(
+        (comment: any) => comment.recipeId === recipeId
+      );
+      switch (action.payload.type) {
         case "add":
-          if(index === -1)
+          if (index === -1)
             return {
-              ...state, 
+              ...state,
               likedComments: [
-                ...state.likedComments, { 
-                  recipeId: action.payload.recipeId, 
-                  comments: [
-                    action.payload.commentId
-                  ]
-                }
-              ]
-            }
+                ...state.likedComments,
+                {
+                  recipeId: action.payload.recipeId,
+                  comments: [action.payload.commentId],
+                },
+              ],
+            };
           else {
-            const commentsList = [...state.likedComments[index].comments, action.payload.commentId];
-            const commentsObject = { recipeId: action.payload.recipeId, comments: commentsList };
+            const commentsList = [
+              ...state.likedComments[index].comments,
+              action.payload.commentId,
+            ];
+            const commentsObject = {
+              recipeId: action.payload.recipeId,
+              comments: commentsList,
+            };
             const likedComments = [...state.likedComments];
             likedComments[index] = commentsObject;
             return {
               ...state,
-              likedComments
-            }
+              likedComments,
+            };
           }
-        break;
+          break;
         case "remove":
-          if(index!= -1){
+          if (index != -1) {
             const commentsList = state.likedComments[index].comments;
-            const commentsListFiltered = commentsList.filter((commentId:string) => commentId !== action.payload.commentId);
-            const commentsObject = { recipeId: action.payload.recipeId, comments: commentsListFiltered };
+            const commentsListFiltered = commentsList.filter(
+              (commentId: string) => commentId !== action.payload.commentId
+            );
+            const commentsObject = {
+              recipeId: action.payload.recipeId,
+              comments: commentsListFiltered,
+            };
             const likedComments = [...state.likedComments];
             likedComments[index] = commentsObject;
             return {
               ...state,
-              likedComments
-            }
+              likedComments,
+            };
           }
         default:
-          
-      } 
+      }
     },
-    handleLogin (state = initialState, action:PayloadAction<any>)  {
-      const {_id, email, likedComments, username, savedRecipes, comments} = action.payload;
+    handleLogin(state = initialState, action: PayloadAction<any>) {
+      const { _id, email, likedComments, username, savedRecipes, comments } =
+        action.payload;
       // console.log(action.payload.user);
       return {
-        ...state, 
+        ...state,
         _id,
         email,
         username,
         likedComments,
         viewMode: state.viewMode || "VIEWING",
-        savedRecipes, 
+        savedRecipes,
         comments,
-      }
+      };
     },
-    handleLogout (state = initialState){
+    handleLogout(state = initialState) {
       return {
-        ...state, 
+        ...state,
         _id: "",
         likedComments: [],
         email: "",
         username: "",
-        viewMode: "VIEWING"
+        viewMode: "VIEWING",
+      };
+    },
+    setViewMode(state = initialState, action: PayloadAction<string>) {
+      // cosnsole.log(action);
+      switch (action.payload) {
+        case "editing-recipe":
+          return {
+            ...state,
+            viewMode: "EDITING",
+          };
+        case "viewing-recipe":
+          return {
+            ...state,
+            viewMode: "VIEWING",
+          };
+        case "creating-recipe":
+          return {
+            ...state,
+            viewMode: "CREATING",
+          };
       }
     },
-    setViewMode(state = initialState, action:PayloadAction<string>){
-      // cosnsole.log(action);
-      switch (action.payload){
-        case "editing-recipe":
-          // console.log("SETTING TO EDITING")
-          return {
-            ...state,
-            viewMode: "EDITING"
-          }
-        case "viewing-recipe": 
-          return {
-            ...state,
-            viewMode: "VIEWING"
-          }
-        case "creating-recipe":
-          // console.log("SETTING TO CREATING")
-
-          return {
-            ...state,
-            viewMode: "CREATING"
-          }
-      }
-    }
   },
-})
+});
 
 // Action creators are generated for each case reducer functionikedCommentsForRecipe
-export const { setLikedComments, setLikedComment, handleLogout, handleLogin, setViewMode} = userSlice.actions
+export const {
+  setLikedComments,
+  setLikedComment,
+  handleLogout,
+  handleLogin,
+  setViewMode,
+} = userSlice.actions;
 
-export default userSlice.reducer
+export default userSlice.reducer;

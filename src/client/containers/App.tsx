@@ -23,7 +23,6 @@ import RecipeCategories from "../components/Browse/RecipeCategories";
 import AdminPage from "../components/AdminPage/AdminPage";
 import RecipeContainer from "../components/Recipe/Viewing/RecipeContainer";
 
-// import "react-quill/dist/quill.snow.css";
 import EditRecipePage from "../components/Recipe/Form/EditRecipePage";
 import ProfilePage from "../components/UserManagement/ProfilePage";
 

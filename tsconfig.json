@@ -25,6 +25,6 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/client/index.tsx", "src/client/contexts/EditableContext.tsx"],
+  "include": ["src/**/*", "src/**/*.tsx", "src/client/index.tsx", "src/client/contexts/EditableContext.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

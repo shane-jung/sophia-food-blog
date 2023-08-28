@@ -49,12 +49,11 @@ export default function ImageUpload({
       const result = await axios.put(signedRequest, imagePreview, {
         headers: { "Content-Type": imagePreview?.type },
       });
-      console.log(result, url);
     } catch (err) {
       console.log(err);
     }
 
-    if(index==-1) dispatch(setRecipe({ type: "set-recipe",  imageUrl: url }));
+    if (index == -1) dispatch(setRecipe({ type: "set-recipe", imageUrl: url }));
     setImage(imagePreview);
     setImageUrl(url);
     handleClose();

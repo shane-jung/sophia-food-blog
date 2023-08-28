@@ -16,12 +16,10 @@ const recipeController = {
               $all: filtersJSON[category].map((el: string) => new ObjectId(el)),
             },
           };
-        console.log(acc);
         return acc;
       },
       {}
     );
-    console.log("FILTERS", filtersJSON);
 
     try {
       const db = await connectToDatabase();
@@ -40,39 +38,24 @@ const recipeController = {
         })
         .sort({ [sortVar]: -1 })
         .toArray();
-      // console.log(recipes);
       return res.status(200).json(recipes);
     } catch (error) {
       console.error(`Error fetching recipes in getAllRecipes: ${error}`);
-      // return res.json(sampleRecipe);
       throw error;
     }
   },
   getRecipesByTag: async (req: Request, res: Response) => {
     const tag = req.params.tag;
-    // console.log(tag);
     try {
       const db = await connectToDatabase();
       const recipeIds = await db
         .collection("Tags")
         .findOne({ value: tag })
         .then((tag) => tag?.recipes);
-      // console.log(recipeIds);
       if (!recipeIds) {
-        console.log("here");
         return res.status(500).json({ message: "Internal server error" });
       }
       return res.status(200).json(recipeIds);
-
-      const recipes = await db
-        .collection("Recipes")
-        .find({ _id: { $in: recipeIds } })
-        .project({ title: 1, titleId: 1, imageUrl: 1, _id: 1 })
-        .toArray();
-
-      // console.log(recipes);
-      if (!recipes) res.status(500).json({ message: "Internal server error" });
-      return res.status(200).json(recipes);
     } catch (error) {
       console.error(`Error fetching recipes in getRecipesByTag: ${error}`);
       throw error;
@@ -96,11 +79,6 @@ const recipeController = {
           .collection("Recipes")
           .findOne({ _id: new ObjectId(recipeId) });
       }
-
-      // if (!recipe) {
-      //   return res.status(500).json({ message: "Internal server error" });
-      // }
-      // console.log(recipe);
       return res.status(200).json(recipe);
     } catch (error) {
       return res.status(500).json({ message: "Internal server error" });
@@ -166,7 +144,7 @@ const recipeController = {
       const result = await db
         .collection("Recipes")
         .findOneAndUpdate(
-          { ...recipe, comments: [], ratings: [], averageRating:0 },
+          { ...recipe, comments: [], ratings: [], averageRating: 0 },
           { $set: {} },
           { upsert: true, returnDocument: "after" }
         );
@@ -183,8 +161,6 @@ const recipeController = {
           }
         );
       }
-
-      console.log(result);
       return res.status(200).json(result);
     } catch (error) {
       console.error(`Error creating recipe in createRecipe: ${error}`);
@@ -205,7 +181,6 @@ const recipeController = {
       datePublished,
       ...recipe
     } = req.body;
-    console.log(req.body);
     if (recipe.body)
       recipe = {
         ...recipe,
@@ -233,7 +208,6 @@ const recipeController = {
           { $set: { ...recipe } },
           { returnDocument: "after" }
         );
-      // console.log(result);
       return res.status(200).json(result);
     } catch (error) {
       console.error(`Error fetching recipe in updateRecipe: ${error}`);
@@ -241,7 +215,6 @@ const recipeController = {
     }
   },
   deleteRecipe: async (req: Request, res: Response) => {
-    console.log(req);
     try {
       const db = await connectToDatabase();
       const result = await db
@@ -264,7 +237,6 @@ const recipeController = {
     }
   },
   rateRecipe: async (req: Request, res: Response) => {
-    console.log(req.body);
     const { userId, recipeId, rating, date } = req.body;
     try {
       const db = await connectToDatabase();
@@ -299,7 +271,6 @@ const recipeController = {
             },
           },
         ]);
-      console.log(result);
       const result2 = await db.collection("Profiles").updateOne(
         { _id: new ObjectId(userId) },
         {
@@ -314,7 +285,6 @@ const recipeController = {
         { arrayFilters: [{ "element.recipeId": new ObjectId(recipeId) }] }
       );
       if (result.modifiedCount === 0) {
-        console.log("Didn't update, pushing new rating");
         const result = await db.collection("Recipes").updateOne(
           { _id: new ObjectId(recipeId) },
           {
@@ -371,9 +341,7 @@ const recipeController = {
             },
           }
         );
-        // console.log(result);
       } else {
-        // console.log(req.body);
         const result = await db.collection("Recipes").updateOne(
           {
             _id: new ObjectId(recipeId),
@@ -396,7 +364,6 @@ const recipeController = {
             ],
           }
         );
-        // console.log(result);
       }
       return res.sendStatus(200);
     } catch (error) {
@@ -436,7 +403,6 @@ const recipeController = {
   },
 
   async searchRecipes(req: Request, res: Response) {
-    // console.log(req.query);
     try {
       const db = await connectToDatabase();
       // const result = await db
@@ -456,11 +422,6 @@ const recipeController = {
                   prefixLength: 3,
                 },
               },
-              // "highlight": {
-              //   "path": "title",
-              //   "maxNumPassages": 1,
-              //   "maxCharsToExamine": 100,
-              // }
             },
           },
           {
@@ -474,7 +435,6 @@ const recipeController = {
           },
         ])
         .toArray();
-      // console.log(result);
       return res.status(200).json(result);
     } catch (err) {
       console.log(err);

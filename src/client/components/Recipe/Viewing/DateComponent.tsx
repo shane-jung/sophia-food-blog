@@ -1,4 +1,3 @@
-
 interface DateComponentProps {
   dateCreated: string;
   dateEdited: string;
@@ -18,9 +17,5 @@ export default function DateComponent(props: DateComponentProps) {
     "en-US",
     dateOptions
   );
-  return (
-    <span className="text-center center">
-      {formattedDateCreated}
-    </span>
-  );
+  return <span className="text-center center">{formattedDateCreated}</span>;
 }

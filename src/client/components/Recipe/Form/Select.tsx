@@ -4,29 +4,35 @@ import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import { useQuery } from "react-query";
 export default function Select({
-  selectedIds = [], 
+  selectedIds = [],
   category,
 }: {
   selectedIds: string[];
-  category:string;
+  category: string;
 }) {
-  
   const tags = useQuery({
     queryKey: ["tags"],
     queryFn: getAllTags,
   }).data;
 
-
-  const [options, setOptions] = useState(tags.filter((tag: any) => tag.category === category).map((tag: any) => ({ value: tag._id, label: tag.label })));
-  const [selected, setSelected] = useState(selectedIds.map((id: string) => tags.find((tag: any) => tag._id === id)).map((tag: any) => ({ value: tag._id, label: tag.label })));
+  const [options, setOptions] = useState(
+    tags
+      .filter((tag: any) => tag.category === category)
+      .map((tag: any) => ({ value: tag._id, label: tag.label }))
+  );
+  const [selected, setSelected] = useState(
+    selectedIds
+      .map((id: string) => tags.find((tag: any) => tag._id === id))
+      .map((tag: any) => ({ value: tag._id, label: tag.label }))
+  );
 
   async function createOption(option: string) {
     try {
       const response = await axios.post(`/tags/create`, {
-            tag:option, category
+        tag: option,
+        category,
       });
-      setOptions([...options, { value: response.data, label: option }] );
-      
+      setOptions([...options, { value: response.data, label: option }]);
     } catch (err) {
       console.log(err);
     }
@@ -35,13 +41,13 @@ export default function Select({
     <div className="mb-4" style={{ position: "relative" }}>
       <Form.Label>{category}</Form.Label>
       <CreatableSelect
-        name= {category}
+        name={category}
         closeMenuOnSelect={false}
         isMulti
-        required = {false}
+        required={false}
         options={options}
         onCreateOption={createOption}
-        defaultValue={selected} 
+        defaultValue={selected}
         onChange={(selected: any) => {
           setSelected(selected);
         }}
@@ -49,7 +55,6 @@ export default function Select({
     </div>
   );
 }
-
 
 async function getAllTags() {
   const { data } = await axios.get(`/tags`);

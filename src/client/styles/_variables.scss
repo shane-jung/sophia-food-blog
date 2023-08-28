@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lora&display=swap");
 
-$font-family-base: 'Lora', serif;
+$font-family-base: "Lora", serif;
 
 // $theme-colors: (
 //   "primary": #f082bf,
@@ -13,11 +13,10 @@ $font-family-base: 'Lora', serif;
 // $primary: #fe63b9;
 // $primary-light: lighten($primary, 10%);
 // $primary-dark: darken($primary, 10%);
-$accent: #e5d5dd;
-$primary: #093824;
-// $success: rgb(113, 154, 0);
-$secondary: #51344D;
-$secondary-light: lighten($secondary, 30%);
+$accent: #fcf8fa;
+$primary: #33482d;
+$success: rgb(3, 154, 0);
+$secondary: #492651;
 $light: white;
 $body-color: $primary;
 $danger: #dc3545;
@@ -27,19 +26,18 @@ $info: #9ca94b;
 $theme-colors: () !default;
 $theme-colors: map-merge(
   (
-    'primary': $primary,
-    'secondary': $secondary,
-    'accent': $accent,
-    'light' : $light,
-    'danger' : $danger,
-    'success' : $success,
-    'info' : $info
+    "primary": $primary,
+    "secondary": $secondary,
+    "accent": $accent,
+    "light": $light,
+    "danger": $danger,
+    "success": $success,
+    "info": $info,
   ),
   $theme-colors
 );
 
-
-// $accent-light: lighten($accent, 10%); 
+// $accent-light: lighten($accent, 10%);
 // $accent-dark: darken($accent, 10%);
 // $font-color: #313131;
 // $font-color-light: #a0a0a0;
@@ -51,15 +49,13 @@ $theme-colors: map-merge(
 // $dimmer-background: rgba(0, 0, 0, 0.6);
 // $error: #f2777a;
 
-
-
 $theme-colors: () !default;
 $theme-colors: map-merge(
   (
-    'primary': $primary,
-    'secondary': $secondary,
-    'accent': #e5d5dd,
-    'light' : #ffffff
+    "primary": $primary,
+    "secondary": $secondary,
+    "accent": #e5d5dd,
+    "light": #ffffff,
   ),
   $theme-colors
 );

@@ -114,41 +114,40 @@
   a {
     text-align: left;
   }
-  &:hover{
+  &:hover {
     background: $accent;
   }
 }
 
-.dropdown-menu {
-  // transform: translate3d(0, 37px, 0) !important;
-}
 .dropdown:hover .dropdown-menu {
   display: block;
   margin-top: 0; /* remove the gap so it doesn't close */
 }
 
-.quill {
-  border: none !important;
-}
-.ql-toolbar.ql-snow + .ql-container.ql-snow {
-  border: none !important;
-  font-family: inherit !important;
-  background-color: var(--bs-body-bg) !important;
-  background-clip: padding-box !important;
-  // border: var(--bs-border-width) solid var(--bs-border-color) !important;
-  appearance: none !important;
-  border-radius: var(--bs-border-radius) !important;
-  // transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+// .quill {
+//   border: none !important;
+// }
+// .ql-toolbar.ql-snow + .ql-container.ql-snow {
+//   border: none !important;
+//   font-family: inherit !important;
+//   background-color: var(--bs-body-bg) !important;
+//   background-clip: padding-box !important;
+//   appearance: none !important;
+//   border-radius: var(--bs-border-radius) !important;
+// }
 
-  &:focus-within {
-    // color: var(--bs-body-color) !important;
-    // background-color: var(--bs-body-bg) !important;
-    // border-color: #86b7fe !important;
-    // outline: 0 !important;
-    // box-shadow:0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important
+.tiptap {
+  button {
+    background: none;
+  }
+  &.ProseMirror {
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 1em;
+    background: white;
   }
 }
-
 .rich-text-input {
   .section-title-input {
     box-shadow: none;
@@ -207,9 +206,6 @@
   }
 }
 
-.dragging {
-}
-
 .dragover,
 .tag-list-item:has(.dragover) {
   background-color: lighten($primary, 20%);
@@ -259,10 +255,10 @@
 }
 
 .bookmark-button {
-  span{
-    font-size:.5em;
-    color:black;
-    filter:none !important;
+  span {
+    font-size: 0.5em;
+    color: black;
+    filter: none !important;
   }
   position: absolute;
   top: 0;
@@ -272,29 +268,26 @@
   color: var(--bs-body-color);
   width: auto;
   color: white;
-  font-size:2em;
-  filter: drop-shadow(0 0 2px rgb(161, 161, 161));
+  font-size: 2em;
   &:hover {
     background: none !important;
-  filter: drop-shadow(0 0 2px rgb(88, 88, 88));
-
   }
-
 
   svg {
+    filter: drop-shadow(0 0 1px rgb(67, 66, 66));
     font-size: 1em;
     transform: scaleY(1.5);
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
   }
-  svg:hover, .active {
+  svg:hover,
+  .active {
     color: $primary;
     transform: scaleY(1.65) scaleX(1.15);
   }
 }
 
-
-.tag{
-  margin: .25em .25em;
-  padding: .5em;
-  font-size:.625em;
+.tag {
+  margin: 0.25em 0.25em;
+  padding: 0.5em;
+  font-size: 0.625em;
 }

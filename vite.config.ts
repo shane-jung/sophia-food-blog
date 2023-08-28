@@ -7,12 +7,12 @@ export default defineConfig({
   base: "sophia-food-blog/",
   plugins: [react()],
   build: {
-    outDir: "public",
+    outDir: "dist",
     rollupOptions: {
       external: ["nock", "mock-aws-s3", "aws-sdk"],
 
       // overwrite default .html entry
-      input: "./src/client/main.tsx",
+      input: "./src/main.tsx",
     },
   },
   server: {

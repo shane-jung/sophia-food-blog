@@ -78,26 +78,21 @@ function LinkedSearchResults({
 }) {
   return (
     <ListGroup className="search-results">
-      {recipes.map((recipe: any) => {
-        {
-          console.log("here");
-        }
-        return (
-          <ListGroup.Item key={recipe.titleId} className="search-result">
-            <Link
-              to={`/recipes/${recipe.titleId}`}
-              className="fs-6 text-decoration-none d-flex gap-2 align-items-center"
-              onClick={() => {
-                setSearchFocus(false);
-                setQuery("");
-              }}
-            >
-              <img src={recipe.imageUrl} alt=""  />
-              {recipe.title}
-            </Link>
-          </ListGroup.Item>
-        );
-      })}
+      {recipes.map((recipe: any) => (
+        <ListGroup.Item key={recipe.titleId} className="search-result">
+          <Link
+            to={`/recipes/${recipe.titleId}`}
+            className="fs-6 text-decoration-none d-flex gap-2 align-items-center"
+            onClick={() => {
+              setSearchFocus(false);
+              setQuery("");
+            }}
+          >
+            <img src={recipe.imageUrl} alt="" />
+            {recipe.title}
+          </Link>
+        </ListGroup.Item>
+      ))}
     </ListGroup>
   );
 }

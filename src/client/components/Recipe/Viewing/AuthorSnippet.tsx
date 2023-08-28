@@ -8,7 +8,10 @@ interface AuthorSnippetProps {
 export default function AuthorSnippet({ author }: AuthorSnippetProps) {
   return (
     <div>
-      By <Link to="/" className="link-primary text-decoration-none">Sophia</Link>
+      By{" "}
+      <Link to="/" className="link-primary text-decoration-none">
+        Sophia
+      </Link>
     </div>
-  ) 
+  );
 }

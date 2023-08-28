@@ -4,6 +4,7 @@ import { useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
+import Tiptap from "./TipTap";
 
 const modules = {
   toolbar: [
@@ -57,11 +58,9 @@ export default function RichTextInput({
       return newBody;
     });
   }
+
   const [props, setProps] = useState({
     defaultValue: value,
-    theme: "snow",
-    modules: modules,
-    formats: formats,
     onChange: onChange,
   });
 
@@ -81,7 +80,7 @@ export default function RichTextInput({
           ></Form.Control>
         </FloatingLabel>
 
-        {/* <FormControl as={ReactQuill} {...props}></FormControl> */}
+        <FormControl as={Tiptap} {...props}></FormControl>
       </Form.Group>
     </>
   );
